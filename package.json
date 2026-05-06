@@ -1,0 +1,30 @@
+{
+  "name": "orbi",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Orbi — ADHD Productivity Companion by GrimmForged",
+  "scripts": {
+    "dev:web": "pnpm --filter @orbi/web dev",
+    "dev:backend": "pnpm --filter @orbi/backend dev",
+    "dev:desktop": "pnpm --filter @orbi/desktop dev",
+    "dev": "concurrently \"pnpm dev:backend\" \"pnpm dev:web\"",
+    "build:web": "pnpm --filter @orbi/web build",
+    "build:backend": "pnpm --filter @orbi/backend build",
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "lint": "pnpm -r lint",
+    "typecheck": "pnpm -r typecheck"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.44.0",
+    "concurrently": "^8.2.2",
+    "typescript": "^5.5.0"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["esbuild"]
+  }
+}
