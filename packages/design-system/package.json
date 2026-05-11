@@ -1,0 +1,32 @@
+{
+  "name": "@orbi/design-system",
+  "version": "1.0.0",
+  "description": "Centralized design tokens and components for all Orbi platforms",
+  "type": "module",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./tokens": "./src/tokens/index.ts",
+    "./components": "./src/components/index.ts"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest",
+    "lint": "eslint src/",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "react": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "typescript": "^5.5.4"
+  },
+  "keywords": [
+    "design-tokens",
+    "design-system",
+    "orbi",
+    "react",
+    "react-native"
+  ]
+}
