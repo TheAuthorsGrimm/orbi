@@ -14,22 +14,13 @@ import { SettingsPage } from './pages/SettingsPage';
 
 export const router = createBrowserRouter([
   {
-    path: '/login',
-    Component: LoginPage,
-  },
-  {
-    path: '/register',
-    Component: RegisterPage,
-  },
-  {
-    path: '/onboarding',
-    Component: OnboardingPage,
-  },
-  {
     path: '/',
     Component: AppLayout,
     children: [
       { index: true, element: <Navigate to="/dashboard" replace /> },
+      { path: 'login', Component: LoginPage },
+      { path: 'register', Component: RegisterPage },
+      { path: 'onboarding', Component: OnboardingPage },
       { path: 'dashboard', Component: DashboardPage },
       { path: 'tasks', Component: TasksPage },
       { path: 'agent', Component: AgentPage },

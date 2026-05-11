@@ -1,4 +1,4 @@
-const { app, BrowserWindow, shell } = require("electron");
+const { app, BrowserWindow, globalShortcut, shell } = require("electron");
 const path = require("path");
 
 const isDev = !app.isPackaged;
@@ -20,6 +20,8 @@ function createMainWindow() {
     },
   });
 
+  mainWindow.maximize();
+
   if (isDev) {
     mainWindow.loadURL(devUrl);
     mainWindow.webContents.openDevTools({ mode: "detach" });
@@ -30,6 +32,10 @@ function createMainWindow() {
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
     shell.openExternal(url);
     return { action: "deny" };
+  });
+
+  globalShortcut.register("F11", () => {
+    mainWindow.setFullScreen(!mainWindow.isFullScreen());
   });
 }
 
@@ -47,4 +53,8 @@ app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
     app.quit();
   }
+});
+
+app.on("will-quit", () => {
+  globalShortcut.unregisterAll();
 });

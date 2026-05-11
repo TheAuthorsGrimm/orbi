@@ -6,7 +6,7 @@
   "homepage": "./",
   "private": true,
   "scripts": {
-    "dev": "concurrently -k \"vite --port 5180\" \"wait-on tcp:5180 && electron .\"",
+    "dev": "concurrently --kill-others-on-fail \"vite --port 5180\" \"wait-on tcp:5180 && electron .\"",
     "build": "vite build && tsc --noEmit",
     "preview": "vite preview",
     "electron": "electron .",
