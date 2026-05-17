@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback } from 'react';
-import { Badge, Button } from '@figma/astraui';
+import { Badge } from '@figma/astraui';
 import { Plus, CheckCircle2, Trash2, Star, Flame, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useReward } from '../RewardSystem';

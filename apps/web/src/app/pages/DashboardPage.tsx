@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { Badge, Button, Avatar, Tooltip } from '@figma/astraui';
+import { Badge, Button, Tooltip } from '@figma/astraui';
 import {
   CheckCircle2, Clock, Flame, Zap, Plus, ArrowRight, Bot,
   Timer, Bell, CalendarDays, Sparkles, Target, Brain,

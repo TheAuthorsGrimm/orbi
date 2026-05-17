@@ -10,7 +10,10 @@ import type {
   CalendarEvent,
 } from "@orbi/types";
 
-const BASE_URL = import.meta.env?.VITE_API_URL ?? "/api";
+const BASE_URL = (() => {
+  const env = (import.meta as ImportMeta & { env?: { VITE_API_URL?: string } }).env;
+  return env?.VITE_API_URL ?? "/api";
+})();
 
 function createClient(): AxiosInstance {
   const client = axios.create({ baseURL: BASE_URL, timeout: 15_000 });
