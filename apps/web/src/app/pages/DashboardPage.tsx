@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { Badge, Button, Tooltip } from '@figma/astraui';
+import { Badge, Button, InputField, Tooltip } from '@figma/astraui';
 import {
   CheckCircle2, Clock, Flame, Zap, Plus, ArrowRight, Bot,
   Timer, Bell, CalendarDays, Sparkles, Target, Brain,
@@ -8,6 +8,7 @@ import {
 import { motion } from 'motion/react';
 import { XPStatsCard } from '../RewardSystem';
 import { useOrbiProfile } from '../OrbiProfileContext';
+import { useAuth } from '../../context/AuthContext';
 
 // Dopamine-boosting affirmations — rotated daily for that returning-user spike
 const AFFIRMATIONS = [
@@ -40,6 +41,12 @@ const priorityVariant: Record<string, 'danger' | 'warning' | 'default' | 'second
 };
 
 const ORBIT_ANGLES = [0, 90, 180, 270];
+const NEW_USER_PROMPT_KEY_PREFIX = 'orbi-new-user-profile-prompted';
+const GUEST_ACCOUNT_KEY = 'guest';
+
+function isProfileMissingRequired(profile: ReturnType<typeof useOrbiProfile>['profile']) {
+  return !profile.preferredName.trim() || !profile.jobTitle.trim() || !profile.currentFocus.trim();
+}
 
 const STAT_CARDS = [
   {
@@ -109,17 +116,104 @@ const QUICK_ACTIONS = [
 
 export function DashboardPage() {
   const navigate = useNavigate();
-  const { profile, isOnboarded } = useOrbiProfile();
+  const { user } = useAuth();
+  const { profile, isOnboarded, updateProfile } = useOrbiProfile();
   const [completedToday] = useState(1);
   const focusMinutes = 47;
   const streak = 4;
+  const [showProfilePrompt, setShowProfilePrompt] = useState(false);
+  const [promptName, setPromptName] = useState(profile.preferredName);
+  const [promptRole, setPromptRole] = useState(profile.jobTitle);
+  const [promptFocus, setPromptFocus] = useState(profile.currentFocus);
 
   const statValues = [completedToday, focusMinutes, streak, 0];
+  const accountKey = user?._id || user?.email || GUEST_ACCOUNT_KEY;
+  const newUserPromptKey = `${NEW_USER_PROMPT_KEY_PREFIX}:${accountKey}`;
+  const todayLabel = new Intl.DateTimeFormat('en-CA', {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  }).format(new Date());
 
-  const greeting = profile.preferredName ? `Good afternoon, ${profile.preferredName} ✦` : 'Good afternoon, Alex ✦';
+  useEffect(() => {
+    const alreadyPrompted = localStorage.getItem(newUserPromptKey) === 'true';
+    if (!alreadyPrompted && isProfileMissingRequired(profile)) {
+      setPromptName(profile.preferredName);
+      setPromptRole(profile.jobTitle);
+      setPromptFocus(profile.currentFocus);
+      setShowProfilePrompt(true);
+      return;
+    }
+
+    setShowProfilePrompt(false);
+  }, [newUserPromptKey, profile]);
+
+  function finishPrompt() {
+    localStorage.setItem(newUserPromptKey, 'true');
+    setShowProfilePrompt(false);
+  }
+
+  function savePromptProfile() {
+    updateProfile({
+      preferredName: promptName.trim(),
+      jobTitle: promptRole.trim(),
+      currentFocus: promptFocus.trim(),
+    });
+    finishPrompt();
+  }
+
+  const greeting = profile.preferredName ? `Good afternoon, ${profile.preferredName} ✦` : 'Good afternoon ✦';
 
   return (
     <div className="p-xl flex flex-col gap-lg min-h-full">
+      {showProfilePrompt && (
+        <div className="fixed inset-0 z-50 grid place-items-center bg-black/60 p-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 8 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            className="w-full max-w-xl rounded-corner-lg border border-white/10 bg-surface-bg p-6 shadow-2xl"
+          >
+            <h2 className="text-heading text-text-primary">One-time setup for new users</h2>
+            <p className="text-label-sm text-text-secondary mt-1 mb-4">
+              Fill this once so Orbi can personalize your dashboard and coaching.
+            </p>
+
+            <div className="grid gap-4">
+              <InputField
+                label="Preferred name"
+                value={promptName}
+                placeholder="How should Orbi address you?"
+                onChange={setPromptName}
+              />
+              <InputField
+                label="Job or role"
+                value={promptRole}
+                placeholder="Designer, student, founder..."
+                onChange={setPromptRole}
+              />
+              <InputField
+                label="Current focus"
+                value={promptFocus}
+                placeholder="What are you trying to get done right now?"
+                onChange={setPromptFocus}
+              />
+            </div>
+
+            <div className="flex gap-3 mt-5">
+              <Button
+                variant="primary"
+                onClick={savePromptProfile}
+                disabled={!promptName.trim() || !promptRole.trim() || !promptFocus.trim()}
+              >
+                Save profile
+              </Button>
+              <Button variant="neutral" onClick={finishPrompt}>Not now</Button>
+            </div>
+          </motion.div>
+        </div>
+      )}
+
       {/* ── Onboarding nudge ── */}
       {!isOnboarded && (
         <motion.div
@@ -155,7 +249,7 @@ export function DashboardPage() {
             {todayAffirmation}
           </p>
           <p className="text-label-sm text-text-tertiary">
-            Sunday, May 10, 2026 · Orbi Full Plan
+            {todayLabel} · Orbi Full Plan
           </p>
         </div>
 
@@ -368,7 +462,7 @@ export function DashboardPage() {
               <Badge label="Agent" variant="brand" />
             </div>
             <p className="text-label-sm text-text-secondary">
-              "Hey Alex! You've got the proposal review as your top priority.
+              "Hey {profile.preferredName || 'there'}! You've got the proposal review as your top priority.
               Want me to break it into smaller steps? Starting small reduces ADHD task paralysis. 🔮"
             </p>
             <button

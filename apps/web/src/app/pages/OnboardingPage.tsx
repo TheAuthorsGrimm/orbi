@@ -96,7 +96,14 @@ export function OnboardingPage() {
                 <Button variant="primary" type="submit" disabled={saving} iconStart={<Sparkles size={16} />}>
                   {saving ? 'Saving…' : 'Start using Orbi'}
                 </Button>
-                <Button variant="neutral" type="button" onClick={() => navigate('/dashboard')}>
+                <Button
+                  variant="neutral"
+                  type="button"
+                  onClick={() => {
+                    markOnboarded();
+                    navigate('/dashboard', { replace: true });
+                  }}
+                >
                   Skip for now
                 </Button>
               </div>

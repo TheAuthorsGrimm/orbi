@@ -13,6 +13,7 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import { motion } from 'motion/react';
+import { useOrbiProfile } from '../../OrbiProfileContext';
 
 const NAV_ITEMS: { icon: LucideIcon; label: string; path: string }[] = [
   { icon: LayoutDashboard, label: 'Dashboard',       path: '/dashboard' },
@@ -86,7 +87,16 @@ function NavButton({
 
 export function OrbiSidebar() {
   const location = useLocation();
+  const { profile } = useOrbiProfile();
   const isActive = (path: string) => location.pathname === path;
+  const initials = (profile.preferredName || 'Orbi')
+    .split(' ')
+    .filter(Boolean)
+    .map((part) => part[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase();
+  const tooltipName = profile.preferredName || 'New user';
 
   return (
     <div
@@ -146,7 +156,7 @@ export function OrbiSidebar() {
       </div>
 
       {/* Avatar */}
-      <Tooltip content="Alex Chen · Orbi Full" position="right">
+      <Tooltip content={`${tooltipName} · Orbi Full`} position="right">
         <motion.button
           className="flex items-center justify-center rounded-full cursor-pointer border-0 mt-sm flex-shrink-0"
           style={{
@@ -158,7 +168,7 @@ export function OrbiSidebar() {
           whileHover={{ scale: 1.08, boxShadow: '0 0 20px rgba(82,80,243,0.6)' }}
           whileTap={{ scale: 0.94 }}
         >
-          <span className="text-white" style={{ fontSize: 13, fontWeight: 600 }}>AC</span>
+          <span className="text-white" style={{ fontSize: 13, fontWeight: 600 }}>{initials}</span>
         </motion.button>
       </Tooltip>
     </div>
