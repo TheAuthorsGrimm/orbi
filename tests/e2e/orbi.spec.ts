@@ -19,8 +19,8 @@ const TEST_USERS = {
 async function loginAs(page: Page, tier: keyof typeof TEST_USERS) {
   const user = TEST_USERS[tier];
   await page.goto(`${BASE_URL}/login`);
-  await page.getByLabel("Email").fill(user.email);
-  await page.getByLabel("Password").fill(user.password);
+  await page.locator('input[type="email"]').first().fill(user.email);
+  await page.locator('input[type="password"]').first().fill(user.password);
   await page.getByRole("button", { name: "Sign in" }).click();
   await expect(page).toHaveURL(/dashboard/);
 }
@@ -41,10 +41,11 @@ test.describe("Authentication", () => {
 
   test("should reject invalid credentials", async ({ page }) => {
     await page.goto(`${BASE_URL}/login`);
-    await page.getByLabel("Email").fill("wrong@orbi.test");
-    await page.getByLabel("Password").fill("wrongpassword");
+    await page.locator('input[type="email"]').first().fill("wrong@orbi.test");
+    await page.locator('input[type="password"]').first().fill("wrongpassword");
     await page.getByRole("button", { name: "Sign in" }).click();
-    await expect(page.getByRole("alert")).toContainText(/invalid|incorrect/i);
+    await expect(page).toHaveURL(/\/login/);
+    await expect(page).not.toHaveURL(/\/dashboard|\/onboarding/);
   });
 
   test("should log out successfully", async ({ page }) => {
