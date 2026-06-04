@@ -107,10 +107,10 @@ export function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen bg-brand-tertiary flex items-center justify-center p-2xl">
-      <div className="w-full max-w-md flex flex-col gap-xl">
+    <div className="min-h-screen bg-brand-tertiary flex items-start justify-center px-lg py-lg md:px-2xl md:py-xl">
+      <div className="w-full max-w-5xl flex flex-col gap-lg">
         {/* Logo + Branding */}
-        <div className="flex flex-col items-center gap-md">
+        <div className="flex flex-col items-center gap-sm">
           <div className="flex items-center gap-md">
             <AstraLogo size={36} />
             <span className="text-title text-text-primary" style={{ fontFamily: 'Instrument Sans, system-ui, sans-serif' }}>
@@ -127,7 +127,7 @@ export function RegisterPage() {
         </div>
 
         {/* Form Card */}
-        <div className="bg-surface-bg rounded-corner-lg p-xl flex flex-col gap-lg">
+        <div className="w-full bg-surface-bg rounded-corner-lg p-xl flex flex-col gap-lg">
           <div className="rounded-corner-md border border-white/10 bg-white/5 p-md flex gap-sm">
             <div className="h-9 w-9 rounded-full grid place-items-center text-white" style={{ background: 'linear-gradient(135deg, #5250f3, #0d9488)' }}>
               <Bot size={16} />
@@ -219,7 +219,11 @@ export function RegisterPage() {
               </div>
             )}
 
-            {error && <p className="text-label-sm text-red-400">{error}</p>}
+            {error && (
+              <p role="alert" className="text-label-sm font-semibold text-red-500" style={{ color: '#ef4444' }}>
+                {error}
+              </p>
+            )}
 
             {affirmation && !error && (
               <p className="text-label-sm text-emerald-300">{affirmation}</p>
