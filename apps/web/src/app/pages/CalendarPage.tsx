@@ -1,32 +1,26 @@
 import { useState } from 'react';
+import { useCalendar } from '../hooks/useCalendar';
 import { Button, Badge } from '@figma/astraui';
 import { ChevronLeft, ChevronRight, Plus, Clock, CalendarDays } from 'lucide-react';
 
-interface CalendarEvent {
+type EventDisplayType = 'task' | 'focus' | 'google' | 'personal' | 'orbi';
+
+interface DisplayEvent {
   id: string;
   title: string;
   startHour: number;
   endHour: number;
-  type: 'task' | 'focus' | 'google' | 'personal';
+  type: EventDisplayType;
   date: number;
 }
 
-const EVENTS: CalendarEvent[] = [
-  { id: '1', title: 'Team standup',      startHour: 9,  endHour: 9.5,  type: 'google',   date: 10 },
-  { id: '2', title: 'Review proposal',   startHour: 10, endHour: 10.5, type: 'focus',    date: 10 },
-  { id: '3', title: 'Lunch break',       startHour: 12, endHour: 13,   type: 'personal', date: 10 },
-  { id: '4', title: 'Sprint planning',   startHour: 14, endHour: 15.5, type: 'google',   date: 10 },
-  { id: '5', title: 'Read book',         startHour: 19, endHour: 19.5, type: 'task',     date: 10 },
-  { id: '6', title: 'Doctor appointment',startHour: 11, endHour: 12,   type: 'personal', date: 14 },
-  { id: '7', title: 'Deep work block',   startHour: 9,  endHour: 11,   type: 'focus',    date: 12 },
-];
-
 // Gradient event styles
-const EVENT_STYLES: Record<CalendarEvent['type'], { bg: string; color: string }> = {
+const EVENT_STYLES: Record<EventDisplayType, { bg: string; color: string }> = {
   task:     { bg: 'linear-gradient(135deg, #3730a3, #5250f3)', color: '#fff' },
   focus:    { bg: 'linear-gradient(135deg, #92400e, #d97706)', color: '#fff' },
   google:   { bg: 'linear-gradient(135deg, #064e3b, #059669)', color: '#fff' },
   personal: { bg: 'linear-gradient(135deg, #1e1b4b, #312e81)', color: '#c4b5fd' },
+  orbi:     { bg: 'linear-gradient(135deg, #3730a3, #5250f3)', color: '#fff' },
 };
 
 const LEGEND = [
@@ -56,6 +50,22 @@ export function CalendarPage() {
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [currentMonth, setCurrentMonth] = useState(today.getMonth());
   const [selectedDay, setSelectedDay] = useState(today.getDate());
+
+  const { events: apiEvents } = useCalendar(currentYear, currentMonth);
+
+  // Map API events to display shape
+  const EVENTS: DisplayEvent[] = apiEvents.map(e => {
+    const start = new Date(e.startAt);
+    const end = new Date(e.endAt);
+    return {
+      id: e.id,
+      title: e.title,
+      startHour: start.getHours() + start.getMinutes() / 60,
+      endHour: end.getHours() + end.getMinutes() / 60,
+      type: (e.source === 'google' ? 'google' : e.linkedTaskId ? 'task' : 'orbi') as EventDisplayType,
+      date: start.getDate(),
+    };
+  });
 
   const daysInMonth = getDaysInMonth(currentYear, currentMonth);
   const firstDayOffset = getFirstDayOfMonth(currentYear, currentMonth);

@@ -1,8 +1,9 @@
 {
   "name": "@orbi/iphone",
   "version": "1.0.0",
-  "description": "Orbi ADHD Companion - iOS App",
+  "description": "Orbi ADHD Companion - iOS & Android App",
   "private": true,
+  "main": "index.js",
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",

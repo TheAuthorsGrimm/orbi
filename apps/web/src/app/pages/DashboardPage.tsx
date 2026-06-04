@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useTasks } from '../hooks/useTasks';
 import { useNavigate } from 'react-router';
-import { Badge, Button, Avatar, Tooltip } from '@figma/astraui';
+import { Badge, Button, Tooltip } from '@figma/astraui';
 import {
   CheckCircle2, Clock, Flame, Zap, Plus, ArrowRight, Bot,
   Timer, Bell, CalendarDays, Sparkles, Target, Brain,
@@ -22,22 +22,6 @@ const AFFIRMATIONS = [
 
 const todayAffirmation = AFFIRMATIONS[new Date().getDay()];
 
-const MOCK_TASKS = [
-  { id: '1', title: 'Review project proposal', priority: 'urgent', status: 'in_progress', estimatedMinutes: 30 },
-  { id: '2', title: 'Reply to team Slack messages', priority: 'high', status: 'pending', estimatedMinutes: 15 },
-  { id: '3', title: 'Update task list for next sprint', priority: 'medium', status: 'pending', estimatedMinutes: 20 },
-  { id: '4', title: 'Take medication reminder', priority: 'urgent', status: 'complete', estimatedMinutes: 5 },
-  { id: '5', title: 'Read 10 pages of current book', priority: 'low', status: 'pending', estimatedMinutes: 25 },
-];
-
-const ORBIT_TASKS = MOCK_TASKS.slice(0, 4);
-
-const priorityVariant: Record<string, 'danger' | 'warning' | 'default' | 'secondary'> = {
-  urgent: 'danger',
-  high: 'warning',
-  medium: 'default',
-  low: 'secondary',
-};
 
 const ORBIT_ANGLES = [0, 90, 180, 270];
 
@@ -110,11 +94,29 @@ const QUICK_ACTIONS = [
 export function DashboardPage() {
   const navigate = useNavigate();
   const { profile, isOnboarded } = useOrbiProfile();
-  const [completedToday] = useState(1);
-  const focusMinutes = 47;
-  const streak = 4;
+  const { needs, wants } = useTasks();
+
+  const allTasks = [...needs, ...wants];
+  const completedToday = allTasks.filter(t => t.status === 'complete').length;
+  const focusMinutes = 0;
+  const streak = 0;
 
   const statValues = [completedToday, focusMinutes, streak, 0];
+
+  // Use real tasks for orbit display
+  const ORBIT_TASKS = allTasks.slice(0, 4).map(t => ({
+    id: t._id,
+    title: t.title,
+    priority: t.priority,
+    status: t.status,
+  }));
+
+  const priorityVariantOrbit: Record<string, 'danger' | 'warning' | 'default' | 'secondary'> = {
+    urgent: 'danger',
+    high: 'warning',
+    medium: 'default',
+    low: 'secondary',
+  };
 
   const greeting = profile.preferredName ? `Good afternoon, ${profile.preferredName} ✦` : 'Good afternoon, Alex ✦';
 
@@ -306,7 +308,7 @@ export function DashboardPage() {
                         onClick={() => navigate('/tasks')}
                       >
                         <p className="text-video-title text-text-primary truncate">{task.title}</p>
-                        <Badge label={task.priority} variant={priorityVariant[task.priority]} />
+                        <Badge label={task.priority} variant={priorityVariantOrbit[task.priority]} />
                       </div>
                     </Tooltip>
                   </motion.div>
@@ -397,9 +399,9 @@ export function DashboardPage() {
             </div>
 
             <div className="flex flex-col gap-sm flex-1">
-              {MOCK_TASKS.map((task) => (
+              {allTasks.slice(0, 5).map((task) => (
                 <motion.div
-                  key={task.id}
+                  key={task._id}
                   className="flex items-center gap-md px-md py-sm rounded-corner-md cursor-pointer transition-all"
                   style={{
                     background: task.status === 'complete'
@@ -425,8 +427,8 @@ export function DashboardPage() {
                       {task.title}
                     </p>
                     <div className="flex items-center gap-xs">
-                      <Badge label={task.priority} variant={priorityVariant[task.priority]} />
-                      <span className="text-video-title text-text-tertiary">{task.estimatedMinutes}m</span>
+                      <Badge label={task.priority} variant={priorityVariantOrbit[task.priority]} />
+                      {task.estimatedMinutes && <span className="text-video-title text-text-tertiary">{task.estimatedMinutes}m</span>}
                     </div>
                   </div>
                 </motion.div>

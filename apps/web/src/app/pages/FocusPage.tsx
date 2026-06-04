@@ -1,15 +1,10 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { useFocus } from '../hooks/useFocus';
 import { Button, Badge, SelectField, Tooltip } from '@figma/astraui';
 import { Play, Pause, RotateCcw, CheckCircle2, Coffee, Zap } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useReward } from '../RewardSystem';
 
-const TASKS = [
-  { value: '1', label: 'Review project proposal (~30 min)' },
-  { value: '2', label: 'Reply to team Slack messages (~15 min)' },
-  { value: '3', label: 'Update sprint task list (~20 min)' },
-  { value: '5', label: 'Read 10 pages of book (~25 min)' },
-];
 
 const DURATIONS = [
   { value: '10', label: '10 minutes' },
@@ -48,15 +43,27 @@ const CARD_AMBER = {
 
 export function FocusPage() {
   const { triggerReward } = useReward();
-  const [selectedTask, setSelectedTask] = useState('1');
+  const { tasks, activeSessions, loadTasks, startSession, completeSession } = useFocus();
+  const [activeSessionId, setActiveSessionId] = useState<string | undefined>();
+  const [selectedTask, setSelectedTask] = useState('');
   const [durationMinutes, setDurationMinutes] = useState('25');
   const [energyLevel, setEnergyLevel] = useState('3');
   const [secondsLeft, setSecondsLeft] = useState(25 * 60);
   const [isRunning, setIsRunning] = useState(false);
   const [phase, setPhase] = useState<'setup' | 'focus' | 'break' | 'complete'>('setup');
-  const [completedSessions, setCompletedSessions] = useState(2);
+  const [completedSessions, setCompletedSessions] = useState(0);
   const [interruptions, setInterruptions] = useState(0);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  useEffect(() => { loadTasks(); }, [loadTasks]);
+  useEffect(() => {
+    setCompletedSessions(activeSessions.length);
+  }, [activeSessions]);
+
+  const TASKS = tasks.map(t => ({
+    value: t._id,
+    label: `${t.title}${t.estimatedMinutes ? ` (~${t.estimatedMinutes} min)` : ''}`,
+  }));
 
   const totalSeconds = parseInt(durationMinutes) * 60;
   const progress = ((totalSeconds - secondsLeft) / totalSeconds) * 100;
@@ -80,12 +87,15 @@ export function FocusPage() {
     return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
   }, [isRunning, secondsLeft]);
 
-  const handleStart = () => {
-    setSecondsLeft(parseInt(durationMinutes) * 60);
+  const handleStart = useCallback(async () => {
+    const duration = parseInt(durationMinutes);
+    const session = await startSession(selectedTask || undefined, duration);
+    setActiveSessionId(session._id);
+    setSecondsLeft(duration * 60);
     setPhase('focus');
     setIsRunning(true);
     setInterruptions(0);
-  };
+  }, [durationMinutes, selectedTask, startSession]);
 
   const handlePause = () => setIsRunning(!isRunning);
 
@@ -95,13 +105,18 @@ export function FocusPage() {
     setSecondsLeft(parseInt(durationMinutes) * 60);
   };
 
-  const handleComplete = () => {
-    setCompletedSessions(prev => prev + 1);
+  const handleComplete = useCallback(async () => {
+    if (activeSessionId) {
+      await completeSession(activeSessionId, {
+        interruptionCount: interruptions,
+        energyLevel: parseInt(energyLevel) as 1|2|3|4|5,
+      });
+    }
     setPhase('break');
     setIsRunning(false);
     setSecondsLeft(5 * 60);
     triggerReward('focus_complete');
-  };
+  }, [activeSessionId, interruptions, energyLevel, completeSession, triggerReward]);
 
   const phaseColor = phase === 'focus'
     ? '#a78bfa'

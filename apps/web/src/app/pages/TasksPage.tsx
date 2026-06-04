@@ -1,8 +1,10 @@
 import { useState, useRef, useCallback } from 'react';
-import { Badge, Button } from '@figma/astraui';
+import { Badge } from '@figma/astraui';
 import { Plus, CheckCircle2, Trash2, Star, Flame, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useReward } from '../RewardSystem';
+import { useTasks } from '../hooks/useTasks';
+import type { OrbiTask, TaskPriority } from '@orbi/types';
 
 type Priority = 'low' | 'medium' | 'high' | 'urgent';
 
@@ -13,6 +15,10 @@ interface Task {
   done: boolean;
 }
 
+function toDisplay(t: OrbiTask): Task {
+  return { id: t._id, title: t.title, priority: t.priority as Priority, done: t.status === 'complete' };
+}
+
 const priorityVariant: Record<Priority, 'danger' | 'warning' | 'default' | 'secondary'> = {
   urgent: 'danger',
   high: 'warning',
@@ -21,17 +27,6 @@ const priorityVariant: Record<Priority, 'danger' | 'warning' | 'default' | 'seco
 };
 
 const PRIORITY_OPTIONS: Priority[] = ['urgent', 'high', 'medium', 'low'];
-
-const SEED_NEEDS: Task[] = [
-  { id: 'n1', title: 'Review project proposal', priority: 'urgent', done: false },
-  { id: 'n2', title: 'Take medication', priority: 'urgent', done: true },
-  { id: 'n3', title: 'Reply to team Slack messages', priority: 'high', done: false },
-];
-
-const SEED_WANTS: Task[] = [
-  { id: 'w1', title: 'Read 10 pages of current book', priority: 'medium', done: false },
-  { id: 'w2', title: 'Plan next week sprint', priority: 'low', done: false },
-];
 
 function TaskCard({
   task,
@@ -230,64 +225,42 @@ function TaskColumn({
 
 export function TasksPage() {
   const { triggerReward } = useReward();
-  const [needs, setNeeds] = useState<Task[]>(SEED_NEEDS);
-  const [wants, setWants] = useState<Task[]>(SEED_WANTS);
+  const { needs: rawNeeds, wants: rawWants, loading, addTask: apiAdd, toggleTask: apiToggle, deleteTask: apiDelete } = useTasks();
 
-  const addTask = useCallback((list: 'needs' | 'wants') => (title: string, priority: Priority) => {
-    const newTask: Task = { id: Date.now().toString(), title, priority, done: false };
-    if (list === 'needs') setNeeds(p => [newTask, ...p]);
-    else setWants(p => [newTask, ...p]);
-    // Reward for capturing a task
+  const needs = rawNeeds.map(toDisplay);
+  const wants = rawWants.map(toDisplay);
+
+  const addTask = useCallback((list: 'needs' | 'wants') => async (title: string, priority: Priority) => {
+    await apiAdd(title, priority as TaskPriority, list);
     triggerReward('task_added');
-  }, [triggerReward]);
+  }, [apiAdd, triggerReward]);
 
-  const toggleTask = useCallback((list: 'needs' | 'wants') => (id: string) => {
-    if (list === 'needs') {
-      const task = needs.find(t => t.id === id);
-      const wasCompleting = task ? !task.done : false;
-      const next = needs.map(t => t.id === id ? { ...t, done: !t.done } : t);
-      setNeeds(next);
-
-      if (wasCompleting) {
-        triggerReward('task_completed');
-        const allNeedsDone = next.every(t => t.done) && next.length > 0;
-        if (allNeedsDone) {
-          setTimeout(() => {
-            triggerReward('all_needs_done');
-            if (wants.every(t => t.done) && wants.length > 0) {
-              setTimeout(() => triggerReward('all_tasks_done'), 800);
-            }
-          }, 600);
-        }
-      }
-    } else {
-      const task = wants.find(t => t.id === id);
-      const wasCompleting = task ? !task.done : false;
-      const next = wants.map(t => t.id === id ? { ...t, done: !t.done } : t);
-      setWants(next);
-
-      if (wasCompleting) {
-        triggerReward('task_completed');
-        const allWantsDone = next.every(t => t.done) && next.length > 0;
-        if (allWantsDone) {
-          setTimeout(() => {
-            triggerReward('all_wants_done');
-            if (needs.every(t => t.done) && needs.length > 0) {
-              setTimeout(() => triggerReward('all_tasks_done'), 800);
-            }
-          }, 600);
-        }
+  const toggleTask = useCallback((list: 'needs' | 'wants') => async (id: string) => {
+    const source = list === 'needs' ? needs : wants;
+    const task = source.find(t => t.id === id);
+    const wasCompleting = task ? !task.done : false;
+    await apiToggle(id, list);
+    if (wasCompleting) {
+      triggerReward('task_completed');
+      const updated = source.map(t => t.id === id ? { ...t, done: true } : t);
+      if (updated.every(t => t.done) && updated.length > 0) {
+        setTimeout(() => triggerReward(list === 'needs' ? 'all_needs_done' : 'all_wants_done'), 600);
       }
     }
-  }, [needs, wants, triggerReward]);
+  }, [needs, wants, apiToggle, triggerReward]);
 
-  const deleteTask = useCallback((list: 'needs' | 'wants') => (id: string) => {
-    if (list === 'needs') setNeeds(p => p.filter(t => t.id !== id));
-    else setWants(p => p.filter(t => t.id !== id));
-  }, []);
+  const deleteTask = useCallback((list: 'needs' | 'wants') => async (id: string) => {
+    await apiDelete(id, list);
+  }, [apiDelete]);
 
   const totalDone = [...needs, ...wants].filter(t => t.done).length;
   const totalTasks = needs.length + wants.length;
+
+  if (loading) return (
+    <div className="p-xl flex items-center justify-center min-h-full">
+      <p className="text-label-sm text-text-secondary">Loading tasks...</p>
+    </div>
+  );
 
   return (
     <div className="p-xl flex flex-col gap-xl min-h-full">

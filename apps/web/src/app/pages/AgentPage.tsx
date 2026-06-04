@@ -2,39 +2,9 @@ import { useState } from 'react';
 import { PromptPane, ChatBubbles, Avatar, Badge, Button } from '@figma/astraui';
 import { Sparkles, Lock } from 'lucide-react';
 import { useNavigate } from 'react-router';
-
-interface Message {
-  id: string;
-  role: 'user' | 'ai';
-  text: string;
-}
-
-const INITIAL_MESSAGES: Message[] = [
-  {
-    id: '1',
-    role: 'ai',
-    text: "Hey Alex! 🔮 I'm Orbi — your ADHD productivity companion. I notice you have a few tasks orbiting right now. The proposal review is marked urgent — want me to break it down into manageable micro-steps so it doesn't feel so heavy?",
-  },
-  {
-    id: '2',
-    role: 'user',
-    text: "Yes please, the proposal feels overwhelming",
-  },
-  {
-    id: '3',
-    role: 'ai',
-    text: `Got it. Here's a low-friction breakdown for "Review project proposal":
-
-1. 🟢 Open the doc (2 min) — just look, don't judge
-2. 🔵 Read exec summary only (5 min) — skip the rest for now
-3. 🟡 Comment on ONE section (10 min) — set a 10-min timer
-4. ☕ Take a 5-min break — you earned it
-5. 🔵 Comment on remaining sections (10 min)
-6. ✅ Send feedback — done!
-
-I've added these as steps to your task. Want me to set a 10-min focus timer for step 3?`,
-  },
-];
+import { useChat } from '../hooks/useChat';
+import { useAuth } from '../../context/AuthContext';
+import { OrbiTier } from '@orbi/types';
 
 const SUGGESTIONS = [
   { label: 'Break down a task', prompt: 'Help me break down my top priority task into micro-steps' },
@@ -44,27 +14,20 @@ const SUGGESTIONS = [
 
 export function AgentPage() {
   const navigate = useNavigate();
-  const [messages, setMessages] = useState<Message[]>(INITIAL_MESSAGES);
+  const { user } = useAuth();
+  const { messages, sending, sendMessage } = useChat();
   const [input, setInput] = useState('');
-  const [tier] = useState<'agent' | 'free'>('agent');
 
-  const handleSend = () => {
-    if (!input.trim()) return;
+  const tier = user?.tier ?? OrbiTier.FREE;
 
-    const userMsg: Message = { id: Date.now().toString(), role: 'user', text: input };
-    const aiMsg: Message = {
-      id: (Date.now() + 1).toString(),
-      role: 'ai',
-      text: `I hear you, Alex. Let me help with that. "${input}" — I'm thinking through the best approach for your ADHD brain. Give me a moment... 
-
-Based on what you've shared, I'd suggest starting with the smallest possible first action. What's the single tiniest step that would move this forward?`,
-    };
-
-    setMessages(prev => [...prev, userMsg, aiMsg]);
+  const handleSend = async () => {
+    if (!input.trim() || sending) return;
+    const text = input;
     setInput('');
+    await sendMessage(text);
   };
 
-  if (tier === 'free') {
+  if (tier === OrbiTier.FREE) {
     return (
       <div className="p-2xl flex flex-col gap-xl items-center justify-center min-h-full">
         <div className="bg-surface-bg rounded-corner-lg p-xl max-w-md flex flex-col items-center gap-lg text-center">
@@ -108,8 +71,8 @@ Based on what you've shared, I'd suggest starting with the smallest possible fir
         </div>
       </div>
 
-      {/* Suggestion chips (show when few messages) */}
-      {messages.length <= 3 && (
+      {/* Suggestion chips (show when no messages yet) */}
+      {messages.length === 0 && (
         <div className="px-xl pt-xl flex gap-md flex-wrap">
           {SUGGESTIONS.map(s => (
             <button
@@ -133,17 +96,17 @@ Based on what you've shared, I'd suggest starting with the smallest possible fir
           value={input}
           onChange={setInput}
           onSend={handleSend}
-          placeholder="Tell Orbi what's on your mind..."
+          placeholder={sending ? 'Orbi is thinking...' : 'Tell Orbi what\'s on your mind...'}
           className="h-full"
         >
           {messages.map(msg => (
             <ChatBubbles
-              key={msg.id}
+              key={msg._id}
               type={msg.role === 'user' ? 'user' : 'ai'}
-              text={msg.text}
+              text={msg.content}
               userAvatar={
                 msg.role === 'user'
-                  ? <Avatar type="initial" initials="AC" size="small" shape="circle" />
+                  ? <Avatar type="initial" initials={user?.displayName?.slice(0, 2).toUpperCase() ?? 'ME'} size="small" shape="circle" />
                   : undefined
               }
             />

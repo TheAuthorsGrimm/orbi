@@ -1,5 +1,7 @@
-import { useState } from 'react';
-import { Button, Badge, SwitchField, InputField, SelectField } from '@figma/astraui';
+import { useState, useCallback } from 'react';
+import { useReminders } from '../hooks/useReminders';
+import type { Reminder as ApiReminder } from '@orbi/types';
+import { Button, Badge, InputField, SelectField } from '@figma/astraui';
 import { Bell, Plus, Trash2, Clock, Brain, Zap, CheckCircle2, Pill } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useReward } from '../RewardSystem';
@@ -251,71 +253,49 @@ function MedicationTracker() {
 
 // ─── Reminders ───────────────────────────────────────────────────────────────
 
-interface Reminder {
-  id: string;
-  title: string;
-  triggerType: 'time' | 'context' | 'ai';
-  triggerAt?: string;
-  recurrence?: string;
-  enabled: boolean;
-}
+type ReminderTriggerType = 'time' | 'context' | 'ai';
 
-const INITIAL_REMINDERS: Reminder[] = [
-  { id: '2', title: 'Check in on project proposal', triggerType: 'ai', enabled: true },
-  { id: '3', title: 'End of work day wrap-up', triggerType: 'time', triggerAt: '17:30', recurrence: 'weekdays', enabled: true },
-  { id: '4', title: 'Drink water', triggerType: 'context', enabled: false },
-];
-
-const TRIGGER_ICONS: Record<Reminder['triggerType'], typeof Bell> = {
+const TRIGGER_ICONS: Record<ReminderTriggerType, typeof Bell> = {
   time: Clock,
   context: Zap,
   ai: Brain,
 };
 
-const TRIGGER_BADGE: Record<Reminder['triggerType'], 'default' | 'brand' | 'warning'> = {
+const TRIGGER_BADGE: Record<ReminderTriggerType, 'default' | 'brand' | 'warning'> = {
   time: 'default',
   context: 'warning',
   ai: 'brand',
 };
 
-const TRIGGER_GRADIENT: Record<Reminder['triggerType'], string> = {
+const TRIGGER_GRADIENT: Record<ReminderTriggerType, string> = {
   time: 'linear-gradient(135deg, #1e1b4b, #13122f)',
   context: 'linear-gradient(135deg, #1a1000, #120900)',
   ai: 'linear-gradient(135deg, #031a17, #021210)',
 };
 
-const TRIGGER_BORDER: Record<Reminder['triggerType'], string> = {
+const TRIGGER_BORDER: Record<ReminderTriggerType, string> = {
   time: 'rgba(82,80,243,0.3)',
   context: 'rgba(217,119,6,0.35)',
   ai: 'rgba(13,148,136,0.3)',
 };
 
 export function RemindersPage() {
-  const [reminders, setReminders] = useState<Reminder[]>(INITIAL_REMINDERS);
+  const { reminders, loading, addReminder: apiAdd, removeReminder: apiRemove } = useReminders();
   const [showAdd, setShowAdd] = useState(false);
   const [newTitle, setNewTitle] = useState('');
   const [newTrigger, setNewTrigger] = useState('time');
   const [newTime, setNewTime] = useState('09:00');
 
-  const toggleReminder = (id: string) =>
-    setReminders(prev => prev.map(r => r.id === id ? { ...r, enabled: !r.enabled } : r));
-
-  const removeReminder = (id: string) =>
-    setReminders(prev => prev.filter(r => r.id !== id));
-
-  const addReminder = () => {
+  const addReminder = useCallback(async () => {
     if (!newTitle.trim()) return;
-    const r: Reminder = {
-      id: Date.now().toString(),
+    await apiAdd({
       title: newTitle,
-      triggerType: newTrigger as Reminder['triggerType'],
-      triggerAt: newTrigger === 'time' ? newTime : undefined,
-      enabled: true,
-    };
-    setReminders(prev => [r, ...prev]);
+      triggerType: newTrigger as ApiReminder['triggerType'],
+      triggerAt: newTrigger === 'time' ? new Date(`1970-01-01T${newTime}:00`) : undefined,
+    });
     setNewTitle('');
     setShowAdd(false);
-  };
+  }, [newTitle, newTrigger, newTime, apiAdd]);
 
   return (
     <div className="p-xl flex flex-col gap-xl">
@@ -324,7 +304,7 @@ export function RemindersPage() {
         <div className="flex flex-col gap-xs">
           <h1 className="text-title text-text-primary">Reminders</h1>
           <p className="text-label-sm text-text-secondary">
-            {reminders.filter(r => r.enabled).length} active reminders · AI-powered nudges
+            {reminders.length} active reminders · AI-powered nudges
           </p>
         </div>
         <Button variant="primary" iconStart={<Plus size={16} />} onClick={() => setShowAdd(!showAdd)}>
@@ -394,58 +374,51 @@ export function RemindersPage() {
       )}
 
       {/* Reminders List */}
-      <div className="flex flex-col gap-lg">
-        {reminders.map(reminder => {
-          const Icon = TRIGGER_ICONS[reminder.triggerType];
-          return (
-            <div
-              key={reminder.id}
-              className={`rounded-corner-lg p-xl flex items-center gap-xl transition-all ${!reminder.enabled ? 'opacity-50' : ''}`}
-              style={{
-                background: TRIGGER_GRADIENT[reminder.triggerType],
-                border: `1px solid ${TRIGGER_BORDER[reminder.triggerType]}`,
-              }}
-            >
+      {loading ? (
+        <p className="text-label-sm text-text-secondary">Loading reminders...</p>
+      ) : (
+        <div className="flex flex-col gap-lg">
+          {reminders.map(reminder => {
+            const triggerType = (reminder.triggerType ?? 'time') as ReminderTriggerType;
+            const Icon = TRIGGER_ICONS[triggerType];
+            return (
               <div
-                className="w-10 h-10 rounded-corner-md flex items-center justify-center flex-shrink-0"
-                style={{ background: 'rgba(255,255,255,0.08)' }}
+                key={reminder._id}
+                className="rounded-corner-lg p-xl flex items-center gap-xl transition-all"
+                style={{
+                  background: TRIGGER_GRADIENT[triggerType],
+                  border: `1px solid ${TRIGGER_BORDER[triggerType]}`,
+                }}
               >
-                <Icon size={18} className="text-brand-primary" />
-              </div>
-
-              <div className="flex-1 flex flex-col gap-xs">
-                <span className="text-label text-text-primary">{reminder.title}</span>
-                <div className="flex items-center gap-xs">
-                  <Badge label={reminder.triggerType} variant={TRIGGER_BADGE[reminder.triggerType]} />
-                  {reminder.triggerAt && (
-                    <span className="text-label-sm text-text-secondary">{reminder.triggerAt}</span>
-                  )}
-                  {reminder.recurrence && <Badge label={reminder.recurrence} variant="secondary" />}
-                  {reminder.triggerType === 'ai' && (
-                    <span className="text-label-sm text-text-secondary">Orbi will decide timing</span>
-                  )}
+                <div
+                  className="w-10 h-10 rounded-corner-md flex items-center justify-center flex-shrink-0"
+                  style={{ background: 'rgba(255,255,255,0.08)' }}
+                >
+                  <Icon size={18} className="text-brand-primary" />
                 </div>
-              </div>
 
-              <div className="flex items-center gap-lg">
-                <SwitchField
-                  label=""
-                  hasDescription={false}
-                  showLabel={false}
-                  defaultSelected={reminder.enabled}
-                  onChange={() => toggleReminder(reminder.id)}
-                />
+                <div className="flex-1 flex flex-col gap-xs">
+                  <span className="text-label text-text-primary">{reminder.title}</span>
+                  <div className="flex items-center gap-xs">
+                    <Badge label={triggerType} variant={TRIGGER_BADGE[triggerType]} />
+                    {reminder.recurrence && <Badge label={reminder.recurrence} variant="secondary" />}
+                    {triggerType === 'ai' && (
+                      <span className="text-label-sm text-text-secondary">Orbi will decide timing</span>
+                    )}
+                  </div>
+                </div>
+
                 <button
-                  onClick={() => removeReminder(reminder.id)}
+                  onClick={() => apiRemove(reminder._id)}
                   className="text-text-tertiary hover:text-red-400 transition-colors"
                 >
                   <Trash2 size={16} />
                 </button>
               </div>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
+      )}
 
       {/* Hyperfocus tip */}
       <div
