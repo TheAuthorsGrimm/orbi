@@ -1,4 +1,4 @@
-import { createBrowserRouter, Navigate } from 'react-router';
+import { createHashRouter, Navigate } from 'react-router';
 import { AppLayout } from './components/layout/AppLayout';
 import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
@@ -12,7 +12,7 @@ import { RemindersPage } from './pages/RemindersPage';
 import { PricingPage } from './pages/PricingPage';
 import { SettingsPage } from './pages/SettingsPage';
 
-export const router = createBrowserRouter([
+export const router = createHashRouter([
   {
     path: '/',
     Component: AppLayout,
