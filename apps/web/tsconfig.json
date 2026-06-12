@@ -18,8 +18,7 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@orbi/types": ["../../packages/types/src/index.ts"],
-      "@orbi/api-client": ["../../packages/api-client/src/index.ts"]
+      "@orbi/types": ["../../packages/types/src/index.ts"]
     }
   },
   "include": ["src", "vite.config.ts"],
