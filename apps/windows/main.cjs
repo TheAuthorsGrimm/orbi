@@ -1,3 +1,7 @@
+// pnpm installs the electron npm package locally, which can end up in the module
+// cache before Electron's own Module._load interceptor runs. Clearing it first
+// ensures require("electron") returns Electron's built-in API, not the path string.
+try { delete require.cache[require.resolve("electron")]; } catch (_) {}
 const { app, BrowserWindow, globalShortcut, shell } = require("electron");
 const path = require("path");
 
