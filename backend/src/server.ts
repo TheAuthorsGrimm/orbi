@@ -31,13 +31,25 @@ const PORT = process.env.PORT || 3001;
 // Security Middleware
 // -----------------------------------------------------------
 app.use(helmet());
+
+const staticAllowedOrigins = new Set([
+  process.env.WEB_URL || "http://localhost:5173",
+  "http://localhost:5173",
+  "https://grimmforged.ca",
+  "https://www.grimmforged.ca",
+  "tauri://localhost",                             // Tauri desktop app
+  "http://tauri.localhost",
+]);
+
 app.use(cors({
-  origin: [
-    process.env.WEB_URL || "http://localhost:5173",
-    "https://grimmforged.ca",
-    "tauri://localhost",                             // Tauri desktop app
-    "http://tauri.localhost",
-  ],
+  origin: (origin, callback) => {
+    // Allow same-origin / curl / mobile apps with no Origin header
+    if (!origin) return callback(null, true);
+    if (staticAllowedOrigins.has(origin)) return callback(null, true);
+    // Vercel deployments: production + preview URLs for this project
+    if (/^https:\/\/[a-z0-9-]+\.vercel\.app$/i.test(origin)) return callback(null, true);
+    return callback(new Error(`CORS: origin ${origin} not allowed`));
+  },
   credentials: true,
 }));
 
