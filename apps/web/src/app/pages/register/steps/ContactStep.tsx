@@ -29,8 +29,8 @@ export function ContactStep({
       orbiMessage="Add your email so your workspace stays secure and connected to your account."
     >
       <div className="flex flex-col gap-xs">
-        <h2 className="text-heading text-text-primary">Contact info</h2>
-        <p className="text-label-sm text-text-secondary">
+        <h2 className="text-heading text-white font-bold">Contact info</h2>
+        <p className="text-label-sm text-gray-300">
           We'll use this for your account — no spam, ever.
         </p>
       </div>

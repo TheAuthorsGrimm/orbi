@@ -30,9 +30,9 @@ export function OrbiCharacter({ message }: OrbiMessageProps) {
         initial={{ opacity: 0, x: -6 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.3 }}
-        className="rounded-corner-md border border-white/10 bg-white/5 p-md flex-1"
+        className="rounded-corner-md border border-white/20 bg-white/10 p-md flex-1"
       >
-        <p className="text-label-sm text-text-secondary leading-relaxed">{message}</p>
+        <p className="text-label-sm text-gray-300 leading-relaxed">{message}</p>
       </motion.div>
     </motion.div>
   );

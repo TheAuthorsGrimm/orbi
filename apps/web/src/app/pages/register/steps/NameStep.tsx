@@ -31,12 +31,12 @@ export function NameStep({
       orbiMessage={
         firstName.trim()
           ? `Nice to meet you, ${firstName.trim()}! What's your last name?`
-          : 'Let's start with your name — I'll use it to personalize your experience.'
+          : "Let's start with your name \u2014 I'll use it to personalize your experience."
       }
     >
       <div className="flex flex-col gap-xs">
-        <h2 className="text-heading text-text-primary">What's your name?</h2>
-        <p className="text-label-sm text-text-secondary">
+        <h2 className="text-heading text-white font-bold">What&apos;s your name?</h2>
+        <p className="text-label-sm text-gray-300">
           Just so Orbi knows what to call you.
         </p>
       </div>

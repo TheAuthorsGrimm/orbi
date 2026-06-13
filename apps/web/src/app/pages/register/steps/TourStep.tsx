@@ -12,7 +12,7 @@ interface TourStepProps {
 const options: { id: TourChoice; label: string; desc: string; icon: React.ReactNode }[] = [
   {
     id: 'self-explore',
-    label: 'I'll explore on my own',
+    label: "I'll explore on my own",
     desc: 'Jump straight into your dashboard.',
     icon: <Compass size={20} />,
   },
@@ -33,21 +33,21 @@ const options: { id: TourChoice; label: string; desc: string; icon: React.ReactN
 /** Page 8: Post-signup tour prompt */
 export function TourStep({ firstName, onChoose }: TourStepProps) {
   return (
-    <div className="min-h-screen bg-brand-tertiary flex items-center justify-center px-lg py-lg">
+    <div className="min-h-screen bg-orbi-dark flex items-center justify-center px-lg py-lg">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.4 }}
         className="w-full max-w-md flex flex-col gap-lg"
       >
-        <div className="bg-surface-bg rounded-corner-lg p-xl flex flex-col gap-lg">
+          <div className="bg-orbi-surface rounded-corner-lg p-xl flex flex-col gap-lg border border-orbi-border">
           <OrbiCharacter
             message={`Welcome aboard, ${firstName || 'friend'}! 🎉 Your workspace is ready. How would you like to get started?`}
           />
 
           <div className="flex flex-col gap-xs">
-            <h2 className="text-heading text-text-primary text-center">You're in!</h2>
-            <p className="text-label-sm text-text-secondary text-center">
+            <h2 className="text-heading text-white text-center">You're in!</h2>
+            <p className="text-label-sm text-gray-300 text-center">
               Choose how you'd like to explore Orbi.
             </p>
           </div>
@@ -68,7 +68,7 @@ export function TourStep({ firstName, onChoose }: TourStepProps) {
                   {opt.icon}
                   <div className="text-left">
                     <span className="block">{opt.label}</span>
-                    <span className="block text-video-title text-text-secondary font-normal">
+                    <span className="block text-video-title text-gray-400 font-normal">
                       {opt.desc}
                     </span>
                   </div>

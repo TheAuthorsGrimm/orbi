@@ -14,14 +14,14 @@ interface StepShellProps {
 /** Consistent shell wrapping every signup step: logo, Orbi, progress, content */
 export function StepShell({ step, totalSteps, orbiMessage, children }: StepShellProps) {
   return (
-    <div className="min-h-screen bg-brand-tertiary flex items-center justify-center px-lg py-lg md:px-2xl md:py-xl">
+    <div className="min-h-screen bg-orbi-dark flex items-center justify-center px-lg py-lg md:px-2xl md:py-xl">
       <div className="w-full max-w-md flex flex-col gap-lg">
         {/* Logo */}
         <div className="flex flex-col items-center gap-xs">
           <div className="flex items-center gap-md">
             <AstraLogo size={32} />
             <span
-              className="text-title text-text-primary"
+              className="text-title text-white font-bold"
               style={{ fontFamily: 'Instrument Sans, system-ui, sans-serif' }}
             >
               Orbi
@@ -29,12 +29,12 @@ export function StepShell({ step, totalSteps, orbiMessage, children }: StepShell
           </div>
           <div className="flex items-center gap-xs">
             <Sparkles size={10} className="text-brand-primary" />
-            <span className="text-video-title text-text-secondary">by GrimmForged AI Solutions</span>
+            <span className="text-video-title text-gray-400">by GrimmForged AI Solutions</span>
           </div>
         </div>
 
         {/* Card */}
-        <div className="w-full bg-surface-bg rounded-corner-lg p-xl flex flex-col gap-lg">
+        <div className="w-full bg-orbi-surface rounded-corner-lg p-xl flex flex-col gap-lg border border-orbi-border">
           {/* Orbi character */}
           <OrbiCharacter message={orbiMessage} />
 
@@ -50,7 +50,7 @@ export function StepShell({ step, totalSteps, orbiMessage, children }: StepShell
                       ? 'linear-gradient(135deg, #5250f3, #0d9488)'
                       : i === step
                         ? '#5250f3'
-                        : 'rgba(255,255,255,0.15)',
+                        : 'rgba(255,255,255,0.3)',
                   transform: i === step ? 'scale(1.3)' : 'scale(1)',
                 }}
               />

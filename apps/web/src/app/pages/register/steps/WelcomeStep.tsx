@@ -12,7 +12,7 @@ export function WelcomeStep({ onNext }: WelcomeStepProps) {
   const words = ['Plan.', 'Focus.', 'Thrive.'];
 
   return (
-    <div className="min-h-screen bg-brand-tertiary flex items-center justify-center px-lg py-lg">
+    <div className="min-h-screen bg-orbi-dark flex items-center justify-center px-lg py-lg">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -33,14 +33,14 @@ export function WelcomeStep({ onNext }: WelcomeStepProps) {
         <div className="flex items-center gap-md">
           <AstraLogo size={36} />
           <span
-            className="text-title text-text-primary"
+            className="text-title text-white font-bold"
             style={{ fontFamily: 'Instrument Sans, system-ui, sans-serif', fontSize: '2rem' }}
           >
             Orbi
           </span>
         </div>
 
-        <p className="text-label text-text-secondary">Your ADHD productivity companion</p>
+        <p className="text-label text-gray-300">Your ADHD productivity companion</p>
 
         {/* Animated tagline words */}
         <div className="flex gap-md justify-center">
@@ -50,7 +50,7 @@ export function WelcomeStep({ onNext }: WelcomeStepProps) {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 + i * 0.3, duration: 0.4, ease: 'easeOut' }}
-              className="text-heading text-text-primary"
+              className="text-heading text-white"
               style={{
                 background: 'linear-gradient(135deg, #5250f3, #0d9488)',
                 WebkitBackgroundClip: 'text',
@@ -66,7 +66,7 @@ export function WelcomeStep({ onNext }: WelcomeStepProps) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.8, duration: 0.5 }}
-          className="text-label-sm text-text-secondary max-w-xs"
+          className="text-label-sm text-gray-300 max-w-xs"
         >
           I'm Orbi — I'll guide you through setting up your account. One step at a time, no rush.
         </motion.p>

@@ -32,8 +32,8 @@ export function PasswordStep({
       orbiMessage="Almost there! Create a strong password so your data stays protected."
     >
       <div className="flex flex-col gap-xs">
-        <h2 className="text-heading text-text-primary">Secure your account</h2>
-        <p className="text-label-sm text-text-secondary">
+        <h2 className="text-heading text-white font-bold">Secure your account</h2>
+        <p className="text-label-sm text-gray-300">
           Pick something strong — Orbi will keep it safe.
         </p>
       </div>
@@ -54,7 +54,7 @@ export function PasswordStep({
         ].map((c) => (
           <p
             key={c.text}
-            className={`text-label-sm ${c.ok ? 'text-emerald-400' : 'text-text-secondary'}`}
+            className={`text-label-sm ${c.ok ? 'text-emerald-400' : 'text-gray-400'}`}
           >
             <CheckCircle2 size={12} className="inline mr-1" />
             {c.text}
