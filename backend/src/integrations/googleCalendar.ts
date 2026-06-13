@@ -3,8 +3,10 @@
 // Available on: Orbi Full tier only
 // =============================================================
 
-import type { IUser } from "../models/User";
+import type { UserRow } from "../db/schema";
 import type { CalendarEvent } from "@orbi/types";
+
+type IUser = UserRow;
 
 const GOOGLE_CALENDAR_BASE = "https://www.googleapis.com/calendar/v3";
 const GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token";

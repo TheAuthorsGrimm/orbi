@@ -5,8 +5,10 @@
 
 import Anthropic from "@anthropic-ai/sdk";
 import { OrbiTier } from "@orbi/types";
-import type { IUser } from "../models/User";
-import type { IChatMessage } from "../models/Chat";
+import type { UserRow, ChatMessageRow } from "../db/schema";
+
+type IUser = UserRow;
+type IChatMessage = Pick<ChatMessageRow, "role" | "content">;
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
@@ -77,7 +79,7 @@ Always end task-related responses with a clear, single next action the user can 
 // -----------------------------------------------------------
 export interface ChatCompletionOptions {
   user: IUser;
-  messages: Pick<IChatMessage, "role" | "content">[];
+  messages: IChatMessage[];
   stream?: boolean;
 }
 

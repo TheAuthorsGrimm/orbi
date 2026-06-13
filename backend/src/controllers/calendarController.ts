@@ -1,9 +1,12 @@
 import { Request, Response } from "express";
-import { User } from "../models/User";
+import { eq } from "drizzle-orm";
+import { getDb } from "../db/client";
+import { users } from "../db/schema";
 import { getUpcomingEvents } from "../integrations/googleCalendar";
 
 export async function getEvents(req: Request, res: Response): Promise<void> {
-  const user = await User.findById(req.userId);
+  const db = getDb();
+  const [user] = await db.select().from(users).where(eq(users.id, req.userId)).limit(1);
   if (!user?.googleRefreshToken) {
     res.status(400).json({ success: false, error: "Google Calendar not connected. Connect via /api/auth/google." });
     return;
@@ -18,7 +21,7 @@ export async function getAuthUrl(_req: Request, res: Response): Promise<void> {
   const oauth2Client = new OAuth2Client(
     process.env.GOOGLE_CLIENT_ID,
     process.env.GOOGLE_CLIENT_SECRET,
-    process.env.GOOGLE_REDIRECT_URI
+    process.env.GOOGLE_REDIRECT_URI,
   );
   const url = oauth2Client.generateAuthUrl({
     access_type: "offline",
@@ -36,12 +39,17 @@ export async function handleCallback(req: Request, res: Response): Promise<void>
   const oauth2Client = new OAuth2Client(
     process.env.GOOGLE_CLIENT_ID,
     process.env.GOOGLE_CLIENT_SECRET,
-    process.env.GOOGLE_REDIRECT_URI
+    process.env.GOOGLE_REDIRECT_URI,
   );
   const { tokens } = await oauth2Client.getToken(code);
-  await User.findByIdAndUpdate(req.userId, {
-    googleAccessToken: tokens.access_token,
-    googleRefreshToken: tokens.refresh_token,
-  });
+  const db = getDb();
+  await db
+    .update(users)
+    .set({
+      googleAccessToken: tokens.access_token ?? null,
+      googleRefreshToken: tokens.refresh_token ?? null,
+      updatedAt: new Date(),
+    })
+    .where(eq(users.id, req.userId));
   res.json({ success: true, message: "Google Calendar connected" });
 }

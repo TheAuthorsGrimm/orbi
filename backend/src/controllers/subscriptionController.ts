@@ -1,31 +1,48 @@
 import { Request, Response } from "express";
 import Stripe from "stripe";
-import { User } from "../models/User";
-import { OrbiTier } from "@orbi/types";
+import { eq } from "drizzle-orm";
+import { getDb } from "../db/client";
+import { users } from "../db/schema";
 
 function getStripe(): Stripe {
   return new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: "2024-04-10" });
 }
 
 export async function getSubscription(req: Request, res: Response): Promise<void> {
-  const user = await User.findById(req.userId).select("tier stripeCustomerId stripeSubscriptionId");
+  const db = getDb();
+  const [user] = await db
+    .select({
+      tier: users.tier,
+      stripeCustomerId: users.stripeCustomerId,
+      stripeSubscriptionId: users.stripeSubscriptionId,
+    })
+    .from(users)
+    .where(eq(users.id, req.userId))
+    .limit(1);
   res.json({ success: true, data: user });
 }
 
 export async function createCheckout(req: Request, res: Response): Promise<void> {
   const { tier } = req.body as { tier: "agent" | "full" };
   const priceId = tier === "agent" ? process.env.STRIPE_PRICE_AGENT : process.env.STRIPE_PRICE_FULL;
-  if (!priceId) { res.status(500).json({ success: false, error: "Stripe price not configured" }); return; }
+  if (!priceId) {
+    res.status(500).json({ success: false, error: "Stripe price not configured" });
+    return;
+  }
 
-  const user = await User.findById(req.userId);
-  if (!user) { res.status(404).json({ success: false, error: "User not found" }); return; }
+  const db = getDb();
+  const [user] = await db.select().from(users).where(eq(users.id, req.userId)).limit(1);
+  if (!user) {
+    res.status(404).json({ success: false, error: "User not found" });
+    return;
+  }
 
   const stripe = getStripe();
   let customerId = user.stripeCustomerId;
   if (!customerId) {
     const customer = await stripe.customers.create({ email: user.email, name: user.displayName });
     customerId = customer.id;
-    await User.findByIdAndUpdate(req.userId, { stripeCustomerId: customerId });
+    await db.update(users).set({ stripeCustomerId: customerId }).where(eq(users.id, req.userId));
   }
 
   const session = await stripe.checkout.sessions.create({
@@ -41,7 +58,8 @@ export async function createCheckout(req: Request, res: Response): Promise<void>
 }
 
 export async function createPortal(req: Request, res: Response): Promise<void> {
-  const user = await User.findById(req.userId);
+  const db = getDb();
+  const [user] = await db.select().from(users).where(eq(users.id, req.userId)).limit(1);
   if (!user?.stripeCustomerId) {
     res.status(400).json({ success: false, error: "No active subscription" });
     return;

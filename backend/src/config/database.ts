@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import { pingDatabase, runMigrations } from "../db/client";
 
 export type DbStatus = "disconnected" | "connecting" | "connected" | "error";
 
@@ -10,43 +10,27 @@ export function getDbStatus(): { status: DbStatus; lastError: string | null } {
 }
 
 export async function connectDatabase(): Promise<void> {
-  const uri = process.env.MONGODB_URI;
-
-  if (!uri) {
+  if (!process.env.DATABASE_URL) {
     status = "error";
-    lastError = "MONGODB_URI environment variable is not set";
+    lastError = "DATABASE_URL environment variable is not set";
     throw new Error(lastError);
   }
 
   status = "connecting";
   lastError = null;
 
-  mongoose.connection.on("error", (err) => {
-    status = "error";
-    lastError = err?.message ?? String(err);
-    console.error("MongoDB error:", err);
-  });
-
-  mongoose.connection.on("disconnected", () => {
-    status = "disconnected";
-    console.warn("MongoDB disconnected");
-  });
-
-  mongoose.connection.on("connected", () => {
+  try {
+    await pingDatabase();
+    if (process.env.RUN_MIGRATIONS_ON_BOOT === "true") {
+      console.log("Running pending database migrations...");
+      await runMigrations();
+      console.log("Migrations complete.");
+    }
     status = "connected";
-    lastError = null;
-  });
-
-  await mongoose.connect(uri, {
-    dbName: "orbi",
-    serverApi: {
-      version: "1",
-      strict: true,
-      deprecationErrors: true,
-    },
-    serverSelectionTimeoutMS: 10_000,
-  });
-
-  status = "connected";
-  console.log("MongoDB connected — Orbi database ready");
+    console.log("Postgres connected — Orbi database ready");
+  } catch (err) {
+    status = "error";
+    lastError = err instanceof Error ? err.message : String(err);
+    throw err;
+  }
 }
