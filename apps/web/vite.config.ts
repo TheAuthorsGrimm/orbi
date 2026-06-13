@@ -9,6 +9,7 @@ export default defineConfig({
     alias: {
       "@": path.resolve(__dirname, "./src"),
       "@orbi/types": path.resolve(__dirname, "../../packages/types/src/index.ts"),
+      "@orbi/api-client": path.resolve(__dirname, "../../packages/api-client/src/index.ts"),
     },
   },
   server: {
