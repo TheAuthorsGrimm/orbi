@@ -10,6 +10,11 @@ export async function connectDatabase(): Promise<void> {
   try {
     await mongoose.connect(uri, {
       dbName: "orbi",
+      serverApi: {
+        version: "1",
+        strict: true,
+        deprecationErrors: true,
+      },
     });
     console.log("✅ MongoDB connected — Orbi database ready");
   } catch (error) {
