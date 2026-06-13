@@ -10,13 +10,8 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
-    "paths": {
-      "@orbi/types": ["../packages/types/src/index.ts"]
-    },
-    "baseUrl": "."
+    "noEmitOnError": false,
+    "sourceMap": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
