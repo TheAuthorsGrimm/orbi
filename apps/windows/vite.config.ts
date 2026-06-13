@@ -7,6 +7,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "../web/src"),
+      "@orbi/api-client": path.resolve(__dirname, "../../packages/api-client/src/index.ts"),
       "@orbi/types": path.resolve(__dirname, "../../packages/types/src/index.ts"),
       "@orbi/design-system": path.resolve(
         __dirname,

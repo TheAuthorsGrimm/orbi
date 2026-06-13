@@ -1,4 +1,5 @@
-import { createContext, useContext, useState, useCallback, type ReactNode } from 'react';
+import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from 'react';
+import { useAuth } from '../context/AuthContext';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -88,18 +89,40 @@ export const EMPTY_PROFILE: OrbiProfile = {
 
 // ─── Persistence ──────────────────────────────────────────────────────────────
 
-const STORAGE_KEY = 'orbi-profile';
+const PROFILE_KEY_PREFIX = 'orbi-profile';
+const ONBOARDED_KEY_PREFIX = 'orbi-onboarded';
+const GUEST_ACCOUNT_KEY = 'guest';
 
-function loadProfile(): OrbiProfile {
+function getProfileStorageKey(accountKey: string) {
+  return `${PROFILE_KEY_PREFIX}:${accountKey}`;
+}
+
+function getOnboardedStorageKey(accountKey: string) {
+  return `${ONBOARDED_KEY_PREFIX}:${accountKey}`;
+}
+
+function loadProfile(accountKey: string): OrbiProfile {
   try {
-    const stored = localStorage.getItem(STORAGE_KEY);
+    const stored = localStorage.getItem(getProfileStorageKey(accountKey));
     if (stored) return { ...EMPTY_PROFILE, ...JSON.parse(stored) };
   } catch { /* ignore */ }
   return { ...EMPTY_PROFILE };
 }
 
-function saveProfile(p: OrbiProfile) {
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(p)); } catch { /* ignore */ }
+function saveProfile(accountKey: string, profile: OrbiProfile) {
+  try { localStorage.setItem(getProfileStorageKey(accountKey), JSON.stringify(profile)); } catch { /* ignore */ }
+}
+
+function loadOnboarded(accountKey: string): boolean {
+  try {
+    return localStorage.getItem(getOnboardedStorageKey(accountKey)) === 'true';
+  } catch {
+    return false;
+  }
+}
+
+function saveOnboarded(accountKey: string, value: boolean) {
+  try { localStorage.setItem(getOnboardedStorageKey(accountKey), String(value)); } catch { /* ignore */ }
 }
 
 // ─── Context ──────────────────────────────────────────────────────────────────
@@ -120,23 +143,28 @@ export function useOrbiProfile() {
 }
 
 export function OrbiProfileProvider({ children }: { children: ReactNode }) {
-  const [profile, setProfile] = useState<OrbiProfile>(loadProfile);
-  const [isOnboarded, setIsOnboarded] = useState<boolean>(() => {
-    try { return localStorage.getItem('orbi-onboarded') === 'true'; } catch { return false; }
-  });
+  const { user } = useAuth();
+  const accountKey = user?._id || user?.email || GUEST_ACCOUNT_KEY;
+  const [profile, setProfile] = useState<OrbiProfile>(() => loadProfile(accountKey));
+  const [isOnboarded, setIsOnboarded] = useState<boolean>(() => loadOnboarded(accountKey));
+
+  useEffect(() => {
+    setProfile(loadProfile(accountKey));
+    setIsOnboarded(loadOnboarded(accountKey));
+  }, [accountKey]);
 
   const updateProfile = useCallback((patch: Partial<OrbiProfile>) => {
     setProfile(prev => {
       const next = { ...prev, ...patch };
-      saveProfile(next);
+      saveProfile(accountKey, next);
       return next;
     });
-  }, []);
+  }, [accountKey]);
 
   const markOnboarded = useCallback(() => {
     setIsOnboarded(true);
-    try { localStorage.setItem('orbi-onboarded', 'true'); } catch { /* ignore */ }
-  }, []);
+    saveOnboarded(accountKey, true);
+  }, [accountKey]);
 
   return (
     <ProfileContext.Provider value={{ profile, updateProfile, isOnboarded, markOnboarded }}>
