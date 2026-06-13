@@ -4,7 +4,7 @@ import { User } from "../models/User";
 import { OrbiTier } from "@orbi/types";
 
 function getStripe(): Stripe {
-  return new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: "2025-03-31.basil" });
+  return new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: "2024-04-10" });
 }
 
 export async function getSubscription(req: Request, res: Response): Promise<void> {
