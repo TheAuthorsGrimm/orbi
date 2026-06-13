@@ -25,7 +25,7 @@ async function refreshAccessToken(refreshToken: string): Promise<string> {
   });
 
   if (!res.ok) throw new Error("Failed to refresh Google access token");
-  const data = await res.json();
+  const data = (await res.json()) as { access_token: string };
   return data.access_token;
 }
 
@@ -63,7 +63,7 @@ export async function getUpcomingEvents(
 
   if (!res.ok) throw new Error("Failed to fetch Google Calendar events");
 
-  const data = await res.json();
+  const data = (await res.json()) as { items?: Record<string, unknown>[] };
   return (data.items || []).map(mapGoogleEvent);
 }
 
@@ -96,7 +96,7 @@ export async function createEventFromTask(
   });
 
   if (!res.ok) throw new Error("Failed to create Google Calendar event");
-  const created = await res.json();
+  const created = (await res.json()) as { id: string };
   return created.id;
 }
 

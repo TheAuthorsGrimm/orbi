@@ -9,7 +9,7 @@ import cors from "cors";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 
-import { connectDatabase } from "./config/database";
+import { connectDatabase, getDbStatus } from "./config/database";
 import { errorHandler } from "./middleware/errorHandler";
 import { authMiddleware } from "./middleware/auth";
 
@@ -25,7 +25,30 @@ import subscriptionRoutes from "./routes/subscriptions";
 import webhookRoutes from "./routes/webhooks";
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = Number(process.env.PORT) || 3001;
+const HOST = "0.0.0.0";
+
+// -----------------------------------------------------------
+// Boot-time env audit (logged once, never crashes)
+// -----------------------------------------------------------
+function logEnvAudit(): void {
+  const required = ["MONGODB_URI", "JWT_SECRET"];
+  const optional = [
+    "WEB_URL",
+    "ANTHROPIC_API_KEY",
+    "STRIPE_SECRET_KEY",
+    "STRIPE_PRICE_AGENT",
+    "STRIPE_PRICE_FULL",
+    "STRIPE_WEBHOOK_SECRET",
+    "GOOGLE_CLIENT_ID",
+    "GOOGLE_CLIENT_SECRET",
+    "GOOGLE_REDIRECT_URI",
+  ];
+  const present = (k: string) => (process.env[k] ? "set" : "MISSING");
+  console.log("Orbi backend env audit:");
+  for (const k of required) console.log(`  [required] ${k}: ${present(k)}`);
+  for (const k of optional) console.log(`  [optional] ${k}: ${present(k)}`);
+}
 
 // -----------------------------------------------------------
 // Security Middleware
@@ -37,16 +60,14 @@ const staticAllowedOrigins = new Set([
   "http://localhost:5173",
   "https://grimmforged.ca",
   "https://www.grimmforged.ca",
-  "tauri://localhost",                             // Tauri desktop app
+  "tauri://localhost",
   "http://tauri.localhost",
 ]);
 
 app.use(cors({
   origin: (origin, callback) => {
-    // Allow same-origin / curl / mobile apps with no Origin header
     if (!origin) return callback(null, true);
     if (staticAllowedOrigins.has(origin)) return callback(null, true);
-    // Vercel deployments: production + preview URLs for this project
     if (/^https:\/\/[a-z0-9-]+\.vercel\.app$/i.test(origin)) return callback(null, true);
     return callback(new Error(`CORS: origin ${origin} not allowed`));
   },
@@ -62,15 +83,15 @@ app.use(express.json({ limit: "1mb" }));
 // Rate Limiting
 // -----------------------------------------------------------
 const globalLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,   // 15 minutes
+  windowMs: 15 * 60 * 1000,
   max: 200,
   standardHeaders: true,
   legacyHeaders: false,
 });
 
 const aiLimiter = rateLimit({
-  windowMs: 60 * 1000,         // 1 minute
-  max: 20,                     // AI calls are expensive
+  windowMs: 60 * 1000,
+  max: 20,
   message: { success: false, error: "Too many AI requests, slow down a bit!" },
 });
 
@@ -78,10 +99,23 @@ app.use("/api", globalLimiter);
 app.use("/api/chat", aiLimiter);
 
 // -----------------------------------------------------------
-// Health Check (no auth needed)
+// Health & Readiness (no auth)
 // -----------------------------------------------------------
+// /health = liveness: process is up. Render uses this to decide if it's running.
 app.get("/health", (_req, res) => {
   res.json({ status: "ok", service: "orbi-backend", timestamp: new Date().toISOString() });
+});
+
+// /ready = readiness: dependencies (Mongo) are usable.
+app.get("/ready", (_req, res) => {
+  const db = getDbStatus();
+  const ok = db.status === "connected";
+  res.status(ok ? 200 : 503).json({
+    status: ok ? "ready" : "not-ready",
+    db: db.status,
+    dbError: db.lastError,
+    timestamp: new Date().toISOString(),
+  });
 });
 
 // -----------------------------------------------------------
@@ -109,12 +143,36 @@ app.use(errorHandler);
 // -----------------------------------------------------------
 // Start
 // -----------------------------------------------------------
-(async () => {
-  await connectDatabase();
-  app.listen(PORT, () => {
-    console.log(`\n🔮 Orbi Backend running on http://localhost:${PORT}`);
-    console.log(`📡 Environment: ${process.env.NODE_ENV || "development"}\n`);
-  });
-})();
+logEnvAudit();
+
+// Listen FIRST so /health responds even if Mongo is misconfigured.
+app.listen(PORT, HOST, () => {
+  console.log(`Orbi backend listening on http://${HOST}:${PORT}`);
+  console.log(`Environment: ${process.env.NODE_ENV || "development"}`);
+});
+
+// Connect Mongo in background with retry. Do NOT exit on failure —
+// /ready will report the bad state, /health stays green so the platform
+// keeps the container alive and you can see logs.
+async function connectWithRetry(): Promise<void> {
+  const maxAttempts = 5;
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      await connectDatabase();
+      return;
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      console.error(`MongoDB connect attempt ${attempt}/${maxAttempts} failed: ${msg}`);
+      if (attempt === maxAttempts) {
+        console.error("MongoDB unreachable. /ready will return 503 until this is fixed.");
+        return;
+      }
+      const backoffMs = Math.min(30_000, 2_000 * 2 ** (attempt - 1));
+      await new Promise((r) => setTimeout(r, backoffMs));
+    }
+  }
+}
+
+void connectWithRetry();
 
 export default app;

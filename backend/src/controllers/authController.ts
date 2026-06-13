@@ -51,7 +51,7 @@ export async function me(req: Request, res: Response): Promise<void> {
 }
 
 function sanitize(user: InstanceType<typeof User>) {
-  const obj = user.toObject() as Record<string, unknown>;
+  const obj = user.toObject() as unknown as Record<string, unknown>;
   delete obj.passwordHash;
   return obj;
 }

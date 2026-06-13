@@ -3,7 +3,7 @@ services:
     name: orbi-backend
     runtime: node
     plan: free
-    buildCommand: pnpm install
+    buildCommand: corepack enable && pnpm install --frozen-lockfile=false && pnpm --filter @orbi/types build && pnpm --filter @orbi/backend build
     startCommand: pnpm --filter @orbi/backend start
     envVars:
       # ── Required ──────────────────────────────────────────

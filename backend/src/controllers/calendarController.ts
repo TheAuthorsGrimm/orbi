@@ -1,15 +1,15 @@
 import { Request, Response } from "express";
 import { User } from "../models/User";
-import { listCalendarEvents } from "../integrations/googleCalendar";
+import { getUpcomingEvents } from "../integrations/googleCalendar";
 
 export async function getEvents(req: Request, res: Response): Promise<void> {
   const user = await User.findById(req.userId);
-  if (!user?.googleAccessToken) {
+  if (!user?.googleRefreshToken) {
     res.status(400).json({ success: false, error: "Google Calendar not connected. Connect via /api/auth/google." });
     return;
   }
-  const { timeMin, timeMax } = req.query as { timeMin?: string; timeMax?: string };
-  const events = await listCalendarEvents(user.googleAccessToken, user.googleRefreshToken, timeMin, timeMax);
+  const daysAhead = Number(req.query.daysAhead) || 7;
+  const events = await getUpcomingEvents(user, daysAhead);
   res.json({ success: true, data: events });
 }
 
