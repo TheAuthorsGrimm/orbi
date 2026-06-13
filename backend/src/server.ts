@@ -34,6 +34,7 @@ app.use(helmet());
 app.use(cors({
   origin: [
     process.env.WEB_URL || "http://localhost:5173",
+    "https://grimmforged.ca",
     "tauri://localhost",                             // Tauri desktop app
     "http://tauri.localhost",
   ],
