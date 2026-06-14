@@ -9,12 +9,14 @@ services:
       # ── Required ──────────────────────────────────────────
       - key: NODE_ENV
         value: production
-      - key: MONGODB_URI
-        sync: false                       # Set manually on Render dashboard
+      - key: DATABASE_URL
+        sync: false                       # Neon Postgres connection string
       - key: JWT_SECRET
         generateValue: true               # Render auto-generates a secure value
       - key: WEB_URL
         value: https://grimmforged.ca
+      - key: RUN_MIGRATIONS_ON_BOOT
+        value: "true"
 
       # ── Optional (features degrade gracefully without these) ──
       - key: ANTHROPIC_API_KEY

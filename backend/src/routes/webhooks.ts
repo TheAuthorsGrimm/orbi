@@ -1,7 +1,9 @@
 import { Router, Request, Response } from "express";
 import Stripe from "stripe";
-import { User } from "../models/User";
+import { eq } from "drizzle-orm";
 import { OrbiTier } from "@orbi/types";
+import { getDb } from "../db/client";
+import { users } from "../db/schema";
 
 const router = Router();
 
@@ -17,24 +19,30 @@ router.post("/stripe", async (req: Request, res: Response) => {
     return;
   }
 
+  const db = getDb();
+
   switch (event.type) {
     case "checkout.session.completed": {
       const session = event.data.object as Stripe.Checkout.Session;
       const { userId, tier } = session.metadata || {};
       if (userId && tier) {
-        await User.findByIdAndUpdate(userId, {
-          tier: tier as OrbiTier,
-          stripeSubscriptionId: session.subscription,
-        });
+        await db
+          .update(users)
+          .set({
+            tier: tier as OrbiTier,
+            stripeSubscriptionId: typeof session.subscription === "string" ? session.subscription : null,
+            updatedAt: new Date(),
+          })
+          .where(eq(users.id, userId));
       }
       break;
     }
     case "customer.subscription.deleted": {
       const sub = event.data.object as Stripe.Subscription;
-      await User.findOneAndUpdate(
-        { stripeSubscriptionId: sub.id },
-        { tier: OrbiTier.FREE, stripeSubscriptionId: null }
-      );
+      await db
+        .update(users)
+        .set({ tier: OrbiTier.FREE, stripeSubscriptionId: null, updatedAt: new Date() })
+        .where(eq(users.stripeSubscriptionId, sub.id));
       break;
     }
   }

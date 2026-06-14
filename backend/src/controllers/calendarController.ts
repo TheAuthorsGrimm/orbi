@@ -18,7 +18,7 @@ export async function getAuthUrl(_req: Request, res: Response): Promise<void> {
   const oauth2Client = new OAuth2Client(
     process.env.GOOGLE_CLIENT_ID,
     process.env.GOOGLE_CLIENT_SECRET,
-    process.env.GOOGLE_REDIRECT_URI
+    process.env.GOOGLE_REDIRECT_URI,
   );
   const url = oauth2Client.generateAuthUrl({
     access_type: "offline",
@@ -36,12 +36,17 @@ export async function handleCallback(req: Request, res: Response): Promise<void>
   const oauth2Client = new OAuth2Client(
     process.env.GOOGLE_CLIENT_ID,
     process.env.GOOGLE_CLIENT_SECRET,
-    process.env.GOOGLE_REDIRECT_URI
+    process.env.GOOGLE_REDIRECT_URI,
   );
   const { tokens } = await oauth2Client.getToken(code);
-  await User.findByIdAndUpdate(req.userId, {
-    googleAccessToken: tokens.access_token,
-    googleRefreshToken: tokens.refresh_token,
-  });
+  const db = getDb();
+  await db
+    .update(users)
+    .set({
+      googleAccessToken: tokens.access_token ?? null,
+      googleRefreshToken: tokens.refresh_token ?? null,
+      updatedAt: new Date(),
+    })
+    .where(eq(users.id, req.userId));
   res.json({ success: true, message: "Google Calendar connected" });
 }
