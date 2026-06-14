@@ -32,7 +32,7 @@ const HOST = "0.0.0.0";
 // Boot-time env audit (logged once, never crashes)
 // -----------------------------------------------------------
 function logEnvAudit(): void {
-  const required = ["MONGODB_URI", "JWT_SECRET"];
+  const required = ["DATABASE_URL", "JWT_SECRET"];
   const optional = [
     "WEB_URL",
     "ANTHROPIC_API_KEY",
@@ -106,7 +106,7 @@ app.get("/health", (_req, res) => {
   res.json({ status: "ok", service: "orbi-backend", timestamp: new Date().toISOString() });
 });
 
-// /ready = readiness: dependencies (Mongo) are usable.
+// /ready = readiness: dependencies (Postgres) are usable.
 app.get("/ready", (_req, res) => {
   const db = getDbStatus();
   const ok = db.status === "connected";
@@ -145,13 +145,13 @@ app.use(errorHandler);
 // -----------------------------------------------------------
 logEnvAudit();
 
-// Listen FIRST so /health responds even if Mongo is misconfigured.
+// Listen FIRST so /health responds even if Postgres is misconfigured.
 app.listen(PORT, HOST, () => {
   console.log(`Orbi backend listening on http://${HOST}:${PORT}`);
   console.log(`Environment: ${process.env.NODE_ENV || "development"}`);
 });
 
-// Connect Mongo in background with retry. Do NOT exit on failure —
+// Connect Postgres in background with retry. Do NOT exit on failure —
 // /ready will report the bad state, /health stays green so the platform
 // keeps the container alive and you can see logs.
 async function connectWithRetry(): Promise<void> {
@@ -162,9 +162,9 @@ async function connectWithRetry(): Promise<void> {
       return;
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
-      console.error(`MongoDB connect attempt ${attempt}/${maxAttempts} failed: ${msg}`);
+      console.error(`Postgres connect attempt ${attempt}/${maxAttempts} failed: ${msg}`);
       if (attempt === maxAttempts) {
-        console.error("MongoDB unreachable. /ready will return 503 until this is fixed.");
+        console.error("Postgres unreachable. /ready will return 503 until this is fixed.");
         return;
       }
       const backoffMs = Math.min(30_000, 2_000 * 2 ** (attempt - 1));
