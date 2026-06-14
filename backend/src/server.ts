@@ -32,7 +32,7 @@ const HOST = "0.0.0.0";
 // Boot-time env audit (logged once, never crashes)
 // -----------------------------------------------------------
 function logEnvAudit(): void {
-  const required = ["DATABASE_URL", "JWT_SECRET"];
+  const required = ["MONGODB_URI", "JWT_SECRET"];
   const optional = [
     "WEB_URL",
     "ANTHROPIC_API_KEY",
@@ -162,9 +162,9 @@ async function connectWithRetry(): Promise<void> {
       return;
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
-      console.error(`Postgres connect attempt ${attempt}/${maxAttempts} failed: ${msg}`);
+      console.error(`MongoDB connect attempt ${attempt}/${maxAttempts} failed: ${msg}`);
       if (attempt === maxAttempts) {
-        console.error("Postgres unreachable. /ready will return 503 until this is fixed.");
+        console.error("MongoDB unreachable. /ready will return 503 until this is fixed.");
         return;
       }
       const backoffMs = Math.min(30_000, 2_000 * 2 ** (attempt - 1));

@@ -1,12 +1,9 @@
 import { Request, Response } from "express";
-import { eq } from "drizzle-orm";
-import { getDb } from "../db/client";
-import { users } from "../db/schema";
+import { User } from "../models/User";
 import { getUpcomingEvents } from "../integrations/googleCalendar";
 
 export async function getEvents(req: Request, res: Response): Promise<void> {
-  const db = getDb();
-  const [user] = await db.select().from(users).where(eq(users.id, req.userId)).limit(1);
+  const user = await User.findById(req.userId);
   if (!user?.googleRefreshToken) {
     res.status(400).json({ success: false, error: "Google Calendar not connected. Connect via /api/auth/google." });
     return;
