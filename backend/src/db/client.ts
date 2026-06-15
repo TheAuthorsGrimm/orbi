@@ -26,7 +26,9 @@ export async function pingDatabase(): Promise<void> {
 
 export async function runMigrations(): Promise<void> {
   const db = getDb();
-  const migrationsFolder = path.resolve(__dirname, "../../drizzle");
+  // When run via `tsx src/server.ts` from backend/, cwd is backend/ → drizzle/.
+  // When run via `node dist/server.js`, __dirname is backend/dist/db → ../../drizzle.
+  const migrationsFolder = path.resolve(process.cwd(), "drizzle");
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   await migrate(db as any, { migrationsFolder });
 }
