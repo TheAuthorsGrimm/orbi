@@ -70,7 +70,7 @@ jobs:
       - name: Run migrations on preview branch
         run: pnpm --filter @orbi/backend db:migrate
         env:
-          DATABASE_URL: ${{ steps.create_neon_branch.outputs.db_url_with_pooler }}
+          DATABASE_URL: ${{ steps.create_neon_branch.outputs.db_url }}
 
       # ─── Optional: Post schema diff as a PR comment ─────────────────────────
       # Requires these permissions on the job:
