@@ -1,179 +1,56 @@
-# 🔮 Orbi — ADHD Productivity Companion
-### by GrimmForged AI Solutions
+# Orbi — ADHD productivity companion
 
-> *Built for the ADHD brain. Not around it.*
+Next.js 15 (App Router) + Drizzle + Neon Postgres + Stripe + Anthropic. Deploys on Vercel.
 
----
+## Architecture
 
-## What is Orbi?
+- `src/app/` — Next.js App Router. The root page mounts the SPA; `src/app/api/*` are the backend routes.
+- `src/spa/` — React SPA (lifted from the old Vite frontend). Uses React Router's hash router so it doesn't fight Next.js routing.
+- `src/lib/` — backend code: DB client, auth (JWT in httpOnly cookie via `jose`), Stripe.
+- `src/styles/` — Tailwind v4 + theme.
+- `drizzle/` — committed migrations. Applied at deploy time via `pnpm db:migrate`.
 
-Orbi is an AI-powered productivity companion designed specifically for people with ADHD.
-Unlike generic task managers, Orbi understands executive dysfunction, dopamine-driven motivation,
-and the unique way ADHD brains work — and works *with* that, not against it.
+## Local dev
 
----
+```sh
+cp .env.example .env.local
+# Fill in DATABASE_URL, AUTH_SECRET, ANTHROPIC_API_KEY at minimum
 
-## Tech Stack
-
-| Layer | Technology |
-|---|---|
-| Web Frontend | React 18 + Vite + TypeScript |
-| Desktop | Tauri v2 + React (shared frontend) |
-| Backend | Node.js + Express + TypeScript |
-| Database | MongoDB Atlas (Mongoose) |
-| AI | Anthropic Claude (claude-sonnet-4) |
-| Auth | JWT (custom) |
-| Billing | Stripe (CAD) |
-| Integrations | Google Calendar, Gmail |
-| Testing | Playwright E2E |
-| Monorepo | pnpm workspaces |
-
----
-
-## Subscription Tiers
-
-| Tier | Price | Features |
-|---|---|---|
-| **Free** | $0 CAD | Task Planner, Calendar, 5 active tasks |
-| **Orbi Agent** | $9.99 CAD/mo | + AI Agent (Claude), proactive check-ins, unlimited tasks |
-| **Orbi Full** | $24.99 CAD/mo | + Smart Reminders, Tailored Persona, Google Calendar, Gmail, Insights |
-
----
-
-## Project Structure
-
-```
-orbi/
-├── apps/
-│   ├── web/              # React + Vite web app
-│   └── desktop/          # Tauri desktop app
-├── packages/
-│   ├── types/            # Shared TypeScript types
-│   ├── ui/               # Shared component library (for Copilot)
-│   └── api-client/       # Typed API client
-├── backend/
-│   └── src/
-│       ├── config/       # DB connection, env
-│       ├── controllers/  # Route handlers
-│       ├── integrations/ # Google Calendar, Gmail
-│       ├── middleware/   # Auth, tier-gating, error handling
-│       ├── models/       # MongoDB/Mongoose models
-│       ├── routes/       # Express routers
-│       └── services/     # Orbi AI agent, Stripe billing
-├── tests/
-│   └── e2e/              # Playwright test scenarios
-├── .env.example
-├── package.json          # pnpm workspace root
-├── playwright.config.ts
-└── pnpm-workspace.yaml
-```
-
----
-
-## Architecture Diagram
-
-```
-┌─────────────────────────────────────────────────────┐
-│                    CLIENTS                          │
-│  ┌──────────────┐        ┌──────────────────────┐  │
-│  │  Web App     │        │  Desktop App (Tauri)  │  │
-│  │  React+Vite  │        │  React (shared UI)    │  │
-│  └──────┬───────┘        └──────────┬────────────┘  │
-└─────────┼────────────────────────────┼───────────────┘
-          │ HTTP / REST                │ HTTP / REST
-          ▼                            ▼
-┌─────────────────────────────────────────────────────┐
-│              ORBI BACKEND (Express)                 │
-│                                                     │
-│  ┌──────────┐  ┌──────────┐  ┌─────────────────┐  │
-│  │   Auth   │  │  Tasks   │  │  AI Agent Chat  │  │
-│  │  /login  │  │  /tasks  │  │  /chat          │  │
-│  └──────────┘  └──────────┘  └────────┬────────┘  │
-│                                        │            │
-│  ┌──────────┐  ┌──────────┐  ┌────────▼────────┐  │
-│  │  Focus   │  │Reminders │  │  Anthropic API  │  │
-│  │ Sessions │  │ /remind  │  │  Claude Sonnet  │  │
-│  └──────────┘  └──────────┘  └─────────────────┘  │
-│                                                     │
-│  ┌──────────┐  ┌──────────┐  ┌─────────────────┐  │
-│  │ Calendar │  │  Stripe  │  │  Tier Gating    │  │
-│  │ /gcal    │  │ Billing  │  │  Middleware     │  │
-│  └────┬─────┘  └────┬─────┘  └─────────────────┘  │
-└───────┼─────────────┼──────────────────────────────┘
-        │             │
-        ▼             ▼
-┌───────────┐  ┌──────────────┐
-│  Google   │  │  MongoDB     │
-│  Calendar │  │  Atlas       │
-│  Gmail    │  │  (orbi db)   │
-└───────────┘  └──────────────┘
-```
-
----
-
-## Getting Started
-
-### Prerequisites
-- Node.js 20+
-- pnpm 9+
-- MongoDB Atlas account (free tier works)
-- Anthropic API key
-- Stripe account (for billing)
-- Google Cloud project (for Calendar/Gmail, Full tier only)
-
-### Setup
-
-```bash
-# Clone and install
-git clone https://github.com/grimmforged/orbi
-cd orbi
 pnpm install
-
-# Configure environment
-cp .env.example backend/.env
-# Fill in your values in backend/.env
-
-# Run development (web + backend)
+pnpm db:migrate
 pnpm dev
-
-# Run desktop
-pnpm dev:desktop
-
-# Run tests
-pnpm test
-
-# Run tests with UI
-pnpm test:ui
 ```
 
----
+Open http://localhost:3000.
 
-## UI/UX Notes for Copilot Agents
+## Required env vars
 
-The UI should embody the Orbi design principles:
-- **Orbital metaphor** — tasks orbit around a central focus node
-- **Dopamine-aware** — every completion should feel rewarding (animation, sound, colour)
-- **Low cognitive load** — never more than one decision at a time
-- **Dark by default** — easier on ADHD/sensory-sensitive users
-- **GrimmForged aesthetic** — industrial/forge-inspired, cyberpunk accents, deep purples/teals
+| Variable | Where to get it |
+|---|---|
+| `DATABASE_URL` | Neon dashboard → connection string |
+| `AUTH_SECRET` | `openssl rand -base64 32` |
+| `ANTHROPIC_API_KEY` | console.anthropic.com |
+| `STRIPE_SECRET_KEY` | dashboard.stripe.com |
+| `STRIPE_PRICE_AGENT` | Stripe → Products → your $9.99/mo product → price ID |
+| `STRIPE_PRICE_FULL` | Stripe → Products → your $24.99/mo product → price ID |
+| `STRIPE_WEBHOOK_SECRET` | Stripe → Webhooks → endpoint signing secret |
+| `NEXT_PUBLIC_APP_URL` | Your deployed URL, e.g. `https://grimmforged.ca` |
 
-Component library lives in `packages/ui/` — build all shared components there
-so both web and desktop use identical UI.
+## Deploy (Vercel)
 
----
+1. Connect this repo to Vercel.
+2. Add the env vars above under Project Settings → Environment Variables.
+3. After first deploy, set `NEXT_PUBLIC_APP_URL` to the live URL and redeploy.
+4. Configure the Stripe webhook to point at `https://<your-domain>/api/stripe/webhook`, copy the signing secret into `STRIPE_WEBHOOK_SECRET`.
 
-## Playwright Tests
+The build runs `pnpm db:migrate` is **not** automatic — run it manually once after the first deploy (`pnpm db:migrate` locally with prod `DATABASE_URL` works, or `npx drizzle-kit push`).
 
-Tests are organized by tier and cover:
-- Auth flows (register, login, logout)
-- Free tier: planner, calendar, task limits, upgrade prompts
-- Agent tier: AI chat, task decomposition, focus sessions
-- Full tier: persona customization, reminders, calendar sync
-- Subscription: pricing display, upgrade flow, Stripe redirect
+## API surface
 
-Run: `pnpm test`
-UI Mode: `pnpm test:ui`
+Health: `GET /api/health`
+Auth:   `POST /api/auth/{login,register,logout}`, `GET /api/auth/me`
+Tasks:  `GET/POST /api/tasks`, `PATCH/DELETE /api/tasks/[id]`
+Chat:   `GET/POST /api/chat/sessions`, `GET /api/chat/sessions/[id]`, `POST /api/chat`
+Stripe: `POST /api/stripe/{checkout,portal}`, `POST /api/stripe/webhook`
 
----
-
-*Built with ❤️ and hyperfocus by GrimmForged*
+All responses use `{ success: boolean, data?, error? }`. Mongo-style `_id` is aliased to the UUID id for compatibility with the existing SPA.
