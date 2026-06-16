@@ -64,11 +64,8 @@ jobs:
       - name: Install
         run: pnpm install --frozen-lockfile=false
 
-      - name: Build @orbi/types
-        run: pnpm --filter @orbi/types build
-
       - name: Run migrations on preview branch
-        run: pnpm --filter @orbi/backend db:migrate
+        run: pnpm db:migrate
         env:
           DATABASE_URL: ${{ steps.create_neon_branch.outputs.db_url }}
 

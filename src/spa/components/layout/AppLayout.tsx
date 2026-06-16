@@ -1,0 +1,54 @@
+import { Navigate, Outlet, useLocation } from 'react-router';
+import { OrbiSidebar } from './OrbiSidebar';
+import { useAuth } from '@/spa/context/AuthContext';
+import { useOrbiProfile } from '../../OrbiProfileContext';
+
+export function AppLayout() {
+  const { user, loading } = useAuth();
+  const { isOnboarded } = useOrbiProfile();
+  const location = useLocation();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen grid place-items-center bg-brand-tertiary">
+        <div className="h-8 w-8 rounded-full border-2 border-brand-primary border-t-transparent animate-spin" />
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (!isOnboarded && location.pathname !== '/onboarding') {
+    return <Navigate to="/onboarding" replace />;
+  }
+
+  if (isOnboarded && location.pathname === '/onboarding') {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  if (location.pathname === '/onboarding') {
+    return (
+      <main
+        className="min-h-screen overflow-y-auto"
+        style={{ background: 'linear-gradient(160deg, #080814 0%, #0a0a1a 50%, #080e14 100%)' }}
+      >
+        <Outlet />
+      </main>
+    );
+  }
+
+  return (
+    <div className="flex h-screen overflow-hidden">
+      <OrbiSidebar />
+
+      <main
+        className="flex-1 overflow-y-auto"
+        style={{ background: 'linear-gradient(160deg, #080814 0%, #0a0a1a 50%, #080e14 100%)' }}
+      >
+        <Outlet />
+      </main>
+    </div>
+  );
+}
