@@ -18,7 +18,7 @@ export function StepShell({ step, totalSteps, orbiMessage, children }: StepShell
       <div
         className="w-full flex flex-col"
         style={{
-          maxWidth: 'min(92vw, 48rem)',
+          maxWidth: 'min(92vw, 64rem)',
           gap: 'clamp(1rem, 2.5vw, 2rem)',
         }}
       >
