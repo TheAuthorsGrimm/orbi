@@ -9,7 +9,7 @@ export function LoginPage() {
   const navigate = useNavigate();
   const { login, user, loading: authLoading } = useAuth();
   const { isOnboarded } = useOrbiProfile();
-  const [email, setEmail] = useState('alex@example.com');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);

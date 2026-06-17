@@ -4,6 +4,8 @@ import { Plus, CheckCircle2, Trash2, Star, Flame, ArrowRight } from 'lucide-reac
 import { motion, AnimatePresence } from 'motion/react';
 import { useReward } from '../RewardSystem';
 import { useTasks } from '../hooks/useTasks';
+import { useAuth } from '@/spa/context/AuthContext';
+import { useOrbiProfile } from '../OrbiProfileContext';
 import type { OrbiTask, TaskPriority } from '@/spa/types';
 
 type Priority = 'low' | 'medium' | 'high' | 'urgent';
@@ -226,6 +228,9 @@ function TaskColumn({
 export function TasksPage() {
   const { triggerReward } = useReward();
   const { needs: rawNeeds, wants: rawWants, loading, addTask: apiAdd, toggleTask: apiToggle, deleteTask: apiDelete } = useTasks();
+  const { user } = useAuth();
+  const { profile } = useOrbiProfile();
+  const displayedName = profile.preferredName || user?.displayName?.split(' ')[0] || 'friend';
 
   const needs = rawNeeds.map(toDisplay);
   const wants = rawWants.map(toDisplay);
@@ -269,7 +274,7 @@ export function TasksPage() {
         <div className="flex flex-col gap-xs">
           <h1 className="text-title text-text-primary">Task Planner</h1>
           <p className="text-label-sm text-text-secondary">
-            What do you want to accomplish today, Alex?
+            What do you want to accomplish today, {displayedName}?
           </p>
         </div>
         {/* Progress summary */}

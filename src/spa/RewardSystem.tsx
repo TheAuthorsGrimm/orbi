@@ -114,7 +114,7 @@ const REWARDS: Record<RewardType, RewardConfig> = {
       'That\'s what I\'m talking about! Task CRUSHED! 💪',
       'One down! Your ADHD brain is absolutely cooking! ✨',
       'You showed up and DELIVERED! 🏆',
-      'Tasks fear you, Alex! 🌟',
+      'Tasks fear you! 🌟',
       'Done and DONE. Nothing can stop you now! 🚀',
       'ADHD and WINNING — that\'s your story! 🎯',
       'Tick! That felt amazing, right? It should! 🎉',
