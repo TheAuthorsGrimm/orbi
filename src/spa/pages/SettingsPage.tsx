@@ -13,6 +13,7 @@ import {
   type TaskCategory,
   type OrbiProfile,
 } from '../OrbiProfileContext';
+import { useAuth } from '@/spa/context/AuthContext';
 
 type SettingsSection = 'profile' | 'context' | 'preferences' | 'notifications' | 'billing' | 'persona';
 
@@ -334,7 +335,7 @@ function MyContextSection() {
           label="Preferred name (how Orbi addresses you)"
           value={profile.preferredName}
           onChange={v => updateProfile({ preferredName: v })}
-          placeholder="Alex"
+          placeholder="Your name"
         />
         <ChipSingleSelect
           label="Pronouns"
@@ -547,10 +548,11 @@ function MyContextSection() {
 // ─── Main Settings page ───────────────────────────────────────────────────────
 
 export function SettingsPage() {
+  const { user } = useAuth();
   const [activeSection, setActiveSection] = useState<SettingsSection>('profile');
-  const [displayName, setDisplayName] = useState('Alex Chen');
-  const [email, setEmail] = useState('alex@example.com');
-  const [timezone, setTimezone] = useState('america_toronto');
+  const [displayName, setDisplayName] = useState(user?.displayName ?? '');
+  const [email, setEmail] = useState(user?.email ?? '');
+  const [timezone, setTimezone] = useState((user as { preferences?: { timezone?: string } } | null)?.preferences?.timezone ?? 'america_toronto');
   const [focusDuration, setFocusDuration] = useState('25');
   const [breakDuration, setBreakDuration] = useState('5');
   const [notifications, setNotifications] = useState(true);

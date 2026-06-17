@@ -8,6 +8,7 @@ import {
 import { motion } from 'motion/react';
 import { XPStatsCard } from '../RewardSystem';
 import { useOrbiProfile } from '../OrbiProfileContext';
+import { useAuth } from '@/spa/context/AuthContext';
 
 // Dopamine-boosting affirmations — rotated daily for that returning-user spike
 const AFFIRMATIONS = [
@@ -94,7 +95,9 @@ const QUICK_ACTIONS = [
 export function DashboardPage() {
   const navigate = useNavigate();
   const { profile, isOnboarded } = useOrbiProfile();
+  const { user } = useAuth();
   const { needs, wants } = useTasks();
+  const displayedName = profile.preferredName || user?.displayName?.split(' ')[0] || 'friend';
 
   const allTasks = [...needs, ...wants];
   const completedToday = allTasks.filter(t => t.status === 'complete').length;
@@ -118,7 +121,7 @@ export function DashboardPage() {
     low: 'secondary',
   };
 
-  const greeting = profile.preferredName ? `Good afternoon, ${profile.preferredName} ✦` : 'Good afternoon, Alex ✦';
+  const greeting = `Good afternoon, ${displayedName} ✦`;
 
   return (
     <div className="p-xl flex flex-col gap-lg min-h-full">
@@ -370,8 +373,9 @@ export function DashboardPage() {
               <Badge label="Agent" variant="brand" />
             </div>
             <p className="text-label-sm text-text-secondary">
-              "Hey Alex! You've got the proposal review as your top priority.
-              Want me to break it into smaller steps? Starting small reduces ADHD task paralysis. 🔮"
+              {allTasks.length > 0
+                ? `Hey ${displayedName}! You've got ${allTasks.length} task${allTasks.length === 1 ? '' : 's'} on the go. Want me to help you break the next one into smaller steps? Starting small reduces ADHD task paralysis. 🔮`
+                : `Hey ${displayedName}! Ready to capture what's on your mind? Add a task and I'll help you break it down into ADHD-friendly micro-steps. 🔮`}
             </p>
             <button
               className="flex items-center justify-center gap-sm px-md py-sm rounded-corner-md text-white cursor-pointer border-0"

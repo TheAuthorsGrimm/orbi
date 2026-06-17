@@ -4,6 +4,8 @@ import { Button, Badge, SelectField, Tooltip } from '@figma/astraui';
 import { Play, Pause, RotateCcw, CheckCircle2, Coffee, Zap } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useReward } from '../RewardSystem';
+import { useAuth } from '@/spa/context/AuthContext';
+import { useOrbiProfile } from '../OrbiProfileContext';
 
 
 const DURATIONS = [
@@ -44,6 +46,9 @@ const CARD_AMBER = {
 export function FocusPage() {
   const { triggerReward } = useReward();
   const { tasks, activeSessions, loadTasks, startSession, completeSession } = useFocus();
+  const { user } = useAuth();
+  const { profile } = useOrbiProfile();
+  const displayedName = profile.preferredName || user?.displayName?.split(' ')[0] || 'friend';
   const [activeSessionId, setActiveSessionId] = useState<string | undefined>();
   const [selectedTask, setSelectedTask] = useState('');
   const [durationMinutes, setDurationMinutes] = useState('25');
@@ -211,7 +216,7 @@ export function FocusPage() {
 
             {phase === 'focus' && (
               <p className="text-label-sm text-text-secondary text-center max-w-xs">
-                🔮 You're in the zone, Alex. Orbi's got your back — one step at a time.
+                🔮 You're in the zone, {displayedName}. Orbi's got your back — one step at a time.
               </p>
             )}
             {phase === 'complete' && (
