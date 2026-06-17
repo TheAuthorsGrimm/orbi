@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useFocus } from '../hooks/useFocus';
-import { Button, Badge, SelectField, Tooltip } from '@figma/astraui';
+import { Button, Badge, Tooltip } from '@figma/astraui';
+import { NativeSelectField as SelectField } from '../components/forms/NativeSelectField';
 import { Play, Pause, RotateCcw, CheckCircle2, Coffee, Zap } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useReward } from '../RewardSystem';

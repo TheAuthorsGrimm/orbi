@@ -1,7 +1,8 @@
 import { useState, useCallback } from 'react';
 import { useReminders } from '../hooks/useReminders';
 import type { Reminder as ApiReminder } from '@/spa/types';
-import { Button, Badge, InputField, SelectField } from '@figma/astraui';
+import { Button, Badge, InputField } from '@figma/astraui';
+import { NativeSelectField as SelectField } from '../components/forms/NativeSelectField';
 import { Bell, Plus, Trash2, Clock, Brain, Zap, CheckCircle2, Pill } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useReward } from '../RewardSystem';
