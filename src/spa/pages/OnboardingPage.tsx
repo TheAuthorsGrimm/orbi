@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { useNavigate } from 'react-router';
-import { Button, InputField, SelectField, AstraLogo } from '@figma/astraui';
+import { Button, InputField, AstraLogo } from '@figma/astraui';
+import { NativeSelectField as SelectField } from '../components/forms/NativeSelectField';
 import { Sparkles, Brain, Target, Timer } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useOrbiProfile } from '../OrbiProfileContext';

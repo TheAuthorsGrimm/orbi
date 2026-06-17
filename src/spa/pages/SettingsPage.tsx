@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import {
-  SecondaryNav, SecondaryNavItem, InputField, SelectField, SwitchField,
+  SecondaryNav, SecondaryNavItem, InputField, SwitchField,
   Button, ButtonGroup, Avatar, Badge, useTheme,
 } from '@figma/astraui';
 import {
@@ -14,6 +14,7 @@ import {
   type OrbiProfile,
 } from '../OrbiProfileContext';
 import { useAuth } from '@/spa/context/AuthContext';
+import { NativeSelectField as SelectField } from '../components/forms/NativeSelectField';
 
 type SettingsSection = 'profile' | 'context' | 'preferences' | 'notifications' | 'billing' | 'persona';
 

@@ -11,6 +11,8 @@ import { CalendarPage } from './pages/CalendarPage';
 import { RemindersPage } from './pages/RemindersPage';
 import { PricingPage } from './pages/PricingPage';
 import { SettingsPage } from './pages/SettingsPage';
+import { TermsPage } from './pages/TermsPage';
+import { PrivacyPage } from './pages/PrivacyPage';
 
 export const router = createHashRouter([
   {
@@ -29,6 +31,8 @@ export const router = createHashRouter([
       { path: 'reminders', Component: RemindersPage },
       { path: 'pricing', Component: PricingPage },
       { path: 'settings', Component: SettingsPage },
+      { path: 'terms', Component: TermsPage },
+      { path: 'privacy', Component: PrivacyPage },
     ],
   },
 ]);

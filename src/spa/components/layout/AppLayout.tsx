@@ -16,7 +16,7 @@ export function AppLayout() {
     );
   }
 
-  const PUBLIC_PATHS = ['/login', '/register'];
+  const PUBLIC_PATHS = ['/login', '/register', '/terms', '/privacy'];
   const isPublic = PUBLIC_PATHS.includes(location.pathname);
 
   if (!user && !isPublic) {

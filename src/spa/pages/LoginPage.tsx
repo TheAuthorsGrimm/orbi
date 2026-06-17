@@ -113,6 +113,17 @@ export function LoginPage() {
         <p className="text-video-title text-text-tertiary text-center italic">
           Built for the ADHD brain. Not around it.
         </p>
+
+        {/* Legal links */}
+        <div className="flex items-center justify-center gap-md text-text-tertiary">
+          <Link to="/terms" className="hover:text-text-primary transition" style={{ fontSize: 'clamp(0.7rem, 1vw, 0.8rem)' }}>
+            Terms
+          </Link>
+          <span style={{ opacity: 0.4 }}>·</span>
+          <Link to="/privacy" className="hover:text-text-primary transition" style={{ fontSize: 'clamp(0.7rem, 1vw, 0.8rem)' }}>
+            Privacy
+          </Link>
+        </div>
       </div>
     </div>
   );
