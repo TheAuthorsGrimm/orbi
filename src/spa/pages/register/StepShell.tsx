@@ -14,8 +14,14 @@ interface StepShellProps {
 /** Consistent shell wrapping every signup step: logo, Orbi, progress, content */
 export function StepShell({ step, totalSteps, orbiMessage, children }: StepShellProps) {
   return (
-    <div className="min-h-screen bg-orbi-dark flex items-center justify-center px-lg py-lg md:px-2xl md:py-xl">
-      <div className="w-full max-w-md flex flex-col gap-lg">
+    <div className="min-h-screen bg-orbi-dark flex items-center justify-center px-[clamp(1rem,4vw,4rem)] py-[clamp(1rem,4vw,4rem)]">
+      <div
+        className="w-full flex flex-col"
+        style={{
+          maxWidth: 'min(92vw, 64rem)',
+          gap: 'clamp(1rem, 2.5vw, 2rem)',
+        }}
+      >
         {/* Logo */}
         <div className="flex flex-col items-center gap-xs">
           <div className="flex items-center gap-md">
