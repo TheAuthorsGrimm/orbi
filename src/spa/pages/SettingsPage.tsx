@@ -307,7 +307,7 @@ function MyContextSection() {
   };
 
   return (
-    <div className="flex flex-col gap-xl max-w-2xl">
+    <div className="flex flex-col gap-xl w-full" style={{ maxWidth: "min(92vw, 64rem)" }}>
       <div className="flex items-start justify-between">
         <div className="flex flex-col gap-xs">
           <h1 className="text-title text-text-primary">My Context</h1>
@@ -606,7 +606,7 @@ export function SettingsPage() {
 
         {/* ── Profile ── */}
         {activeSection === 'profile' && (
-          <div className="flex flex-col gap-xl max-w-xl">
+          <div className="flex flex-col gap-xl w-full" style={{ maxWidth: "min(92vw, 48rem)" }}>
             <div className="flex flex-col gap-xs">
               <h1 className="text-title text-text-primary">Profile</h1>
               <p className="text-label-sm text-text-secondary mt-xs">Manage your account information</p>
@@ -672,7 +672,7 @@ export function SettingsPage() {
 
         {/* ── Preferences ── */}
         {activeSection === 'preferences' && (
-          <div className="flex flex-col gap-xl max-w-xl">
+          <div className="flex flex-col gap-xl w-full" style={{ maxWidth: "min(92vw, 48rem)" }}>
             <div className="flex flex-col gap-xs">
               <h1 className="text-title text-text-primary">Preferences</h1>
               <p className="text-label-sm text-text-secondary mt-xs">Customise Orbi to work with your brain</p>
@@ -725,7 +725,7 @@ export function SettingsPage() {
 
         {/* ── Notifications ── */}
         {activeSection === 'notifications' && (
-          <div className="flex flex-col gap-xl max-w-xl">
+          <div className="flex flex-col gap-xl w-full" style={{ maxWidth: "min(92vw, 48rem)" }}>
             <div className="flex flex-col gap-xs">
               <h1 className="text-title text-text-primary">Notifications</h1>
               <p className="text-label-sm text-text-secondary mt-xs">Control when and how Orbi reaches out</p>
@@ -746,7 +746,7 @@ export function SettingsPage() {
 
         {/* ── Orbi Persona ── */}
         {activeSection === 'persona' && (
-          <div className="flex flex-col gap-xl max-w-xl">
+          <div className="flex flex-col gap-xl w-full" style={{ maxWidth: "min(92vw, 48rem)" }}>
             <div className="flex flex-col gap-xs">
               <h1 className="text-title text-text-primary">Orbi Persona</h1>
               <p className="text-label-sm text-text-secondary mt-xs">Tailor your AI companion's personality</p>
@@ -778,7 +778,7 @@ export function SettingsPage() {
 
         {/* ── Billing ── */}
         {activeSection === 'billing' && (
-          <div className="flex flex-col gap-xl max-w-xl">
+          <div className="flex flex-col gap-xl w-full" style={{ maxWidth: "min(92vw, 48rem)" }}>
             <div className="flex flex-col gap-xs">
               <h1 className="text-title text-text-primary">Billing</h1>
               <p className="text-label-sm text-text-secondary mt-xs">Manage your subscription and payment</p>

@@ -36,8 +36,14 @@ export function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-brand-tertiary flex items-center justify-center p-2xl">
-      <div className="w-full max-w-md flex flex-col gap-xl">
+    <div className="min-h-screen bg-brand-tertiary flex items-center justify-center" style={{ padding: 'clamp(1rem,4vw,4rem)' }}>
+      <div
+        className="w-full flex flex-col"
+        style={{
+          maxWidth: 'min(92vw, 36rem)',
+          gap: 'clamp(1.25rem, 3vw, 2.5rem)',
+        }}
+      >
         {/* Logo + Branding */}
         <div className="flex flex-col items-center gap-md">
           <div className="flex items-center gap-md">
