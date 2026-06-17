@@ -16,19 +16,38 @@ export function AppLayout() {
     );
   }
 
-  if (!user) {
+  const PUBLIC_PATHS = ['/login', '/register'];
+  const isPublic = PUBLIC_PATHS.includes(location.pathname);
+
+  if (!user && !isPublic) {
     return <Navigate to="/login" replace />;
   }
 
-  if (!isOnboarded && location.pathname !== '/onboarding') {
+  if (user && isPublic) {
+    return <Navigate to={isOnboarded ? '/dashboard' : '/onboarding'} replace />;
+  }
+
+  if (user && !isOnboarded && location.pathname !== '/onboarding') {
     return <Navigate to="/onboarding" replace />;
   }
 
-  if (isOnboarded && location.pathname === '/onboarding') {
+  if (user && isOnboarded && location.pathname === '/onboarding') {
     return <Navigate to="/dashboard" replace />;
   }
 
   if (location.pathname === '/onboarding') {
+    return (
+      <main
+        className="min-h-screen overflow-y-auto"
+        style={{ background: 'linear-gradient(160deg, #080814 0%, #0a0a1a 50%, #080e14 100%)' }}
+      >
+        <Outlet />
+      </main>
+    );
+  }
+
+  // Public pages (login, register): full-screen, no sidebar.
+  if (isPublic) {
     return (
       <main
         className="min-h-screen overflow-y-auto"
