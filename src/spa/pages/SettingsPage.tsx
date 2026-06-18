@@ -546,6 +546,148 @@ function MyContextSection() {
   );
 }
 
+// ─── Billing section ──────────────────────────────────────────────────────────
+
+const TIER_LABELS: Record<string, { name: string; price: string; description: string }> = {
+  free: {
+    name: 'Free',
+    price: '$0 CAD',
+    description: 'Task planner, calendar, basic task breakdown.',
+  },
+  agent: {
+    name: 'Orbi Agent',
+    price: '$9.99 CAD / month',
+    description: 'AI-powered ADHD support with Claude.',
+  },
+  full: {
+    name: 'Orbi Full',
+    price: '$24.99 CAD / month',
+    description: 'The complete ADHD companion experience.',
+  },
+};
+
+function BillingSection() {
+  const { user } = useAuth();
+  const [opening, setOpening] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const tierId = (user?.tier ?? 'free') as 'free' | 'agent' | 'full';
+  const tier = TIER_LABELS[tierId];
+  const hasActiveSubscription = tierId !== 'free';
+
+  async function openPortal() {
+    setOpening(true);
+    setError(null);
+    try {
+      const { subscriptions } = await import('@/spa/api-client');
+      const res = await subscriptions.portal();
+      const url = res.data.data?.url;
+      if (url) {
+        window.location.href = url;
+        return;
+      }
+      setError('Could not open the billing portal. Try again in a moment.');
+    } catch (err: unknown) {
+      const message = (err as { response?: { data?: { error?: string } } })?.response?.data?.error;
+      setError(message ?? 'Failed to open billing portal.');
+    } finally {
+      setOpening(false);
+    }
+  }
+
+  function goToPricing() {
+    window.location.hash = '#/pricing';
+  }
+
+  return (
+    <div className="flex flex-col gap-xl w-full" style={{ maxWidth: 'min(92vw, 48rem)' }}>
+      <div className="flex flex-col gap-xs">
+        <h1 className="text-title text-text-primary">Billing</h1>
+        <p className="text-label-sm text-text-secondary mt-xs">
+          Manage your Orbi subscription and payment method.
+        </p>
+      </div>
+
+      {error && (
+        <div
+          className="rounded-corner-md p-md"
+          style={{
+            background: 'rgba(220, 38, 38, 0.12)',
+            border: '1.5px solid rgba(220, 38, 38, 0.4)',
+            color: '#fca5a5',
+          }}
+        >
+          {error}
+        </div>
+      )}
+
+      <div
+        className="rounded-corner-lg p-xl flex flex-col gap-lg"
+        style={{
+          background: hasActiveSubscription
+            ? 'linear-gradient(145deg, #031a17 0%, #021210 100%)'
+            : 'linear-gradient(145deg, #0f0e2a 0%, #0a0a18 100%)',
+          border: hasActiveSubscription
+            ? '1px solid rgba(13,148,136,0.35)'
+            : '1px solid rgba(82,80,243,0.25)',
+        }}
+      >
+        <div className="flex items-center justify-between">
+          <h2 className="text-label text-text-primary">Current plan</h2>
+          {hasActiveSubscription ? (
+            <Badge label="Active" variant="success" />
+          ) : (
+            <Badge label="Free" variant="brand" />
+          )}
+        </div>
+
+        <div
+          className="rounded-corner-md p-lg flex flex-col gap-md"
+          style={{
+            background: hasActiveSubscription ? 'rgba(13,148,136,0.08)' : 'rgba(82,80,243,0.06)',
+            border: hasActiveSubscription
+              ? '1px solid rgba(13,148,136,0.2)'
+              : '1px solid rgba(82,80,243,0.18)',
+          }}
+        >
+          <div className="flex items-center gap-md">
+            <Sparkles size={20} className="text-brand-primary" />
+            <div className="flex flex-col gap-xs">
+              <span className="text-label text-text-primary">{tier.name}</span>
+              <span className="text-label-sm text-text-secondary">{tier.price}</span>
+            </div>
+          </div>
+          <p className="text-label-sm text-text-secondary">{tier.description}</p>
+        </div>
+
+        <div className="flex gap-md flex-wrap">
+          {hasActiveSubscription ? (
+            <Button
+              variant="neutral"
+              size="small"
+              disabled={opening}
+              onClick={openPortal}
+            >
+              {opening ? 'Opening…' : 'Manage subscription'}
+            </Button>
+          ) : (
+            <Button variant="primary" size="small" onClick={goToPricing}>
+              See paid plans
+            </Button>
+          )}
+        </div>
+
+        {hasActiveSubscription && (
+          <p className="text-label-sm text-text-tertiary">
+            "Manage subscription" opens the secure Stripe billing portal where you can change
+            plans, update payment methods, download invoices, or cancel.
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ─── Main Settings page ───────────────────────────────────────────────────────
 
 export function SettingsPage() {
@@ -780,47 +922,7 @@ export function SettingsPage() {
         )}
 
         {/* ── Billing ── */}
-        {activeSection === 'billing' && (
-          <div className="flex flex-col gap-xl w-full" style={{ maxWidth: "min(92vw, 48rem)" }}>
-            <div className="flex flex-col gap-xs">
-              <h1 className="text-title text-text-primary">Billing</h1>
-              <p className="text-label-sm text-text-secondary mt-xs">Manage your subscription and payment</p>
-            </div>
-            <div className="rounded-corner-lg p-xl flex flex-col gap-lg" style={{ background: 'linear-gradient(145deg, #031a17 0%, #021210 100%)', border: '1px solid rgba(13,148,136,0.35)', boxShadow: '0 4px 24px rgba(13,148,136,0.12)' }}>
-              <div className="flex items-center justify-between">
-                <h2 className="text-label text-text-primary">Current plan</h2>
-                <Badge label="Active" variant="success" />
-              </div>
-              <div className="rounded-corner-md p-lg flex flex-col gap-md" style={{ background: 'rgba(13,148,136,0.08)', border: '1px solid rgba(13,148,136,0.2)' }}>
-                <div className="flex items-center gap-md">
-                  <Sparkles size={20} className="text-brand-primary" />
-                  <div className="flex flex-col gap-xs">
-                    <span className="text-label text-text-primary">Orbi Full</span>
-                    <span className="text-label-sm text-text-secondary">$24.99 CAD / month</span>
-                  </div>
-                </div>
-                <p className="text-label-sm text-text-secondary">Next billing date: June 10, 2026</p>
-              </div>
-              <div className="flex gap-md">
-                <Button variant="neutral" size="small">Manage plan</Button>
-                <Button variant="subtle" size="small">Cancel subscription</Button>
-              </div>
-            </div>
-            <div className="rounded-corner-lg p-xl flex flex-col gap-lg" style={{ background: 'linear-gradient(145deg, #0f0e2a 0%, #0a0a18 100%)', border: '1px solid rgba(82,80,243,0.25)' }}>
-              <h2 className="text-label text-text-primary">Payment method</h2>
-              <div className="flex items-center gap-md">
-                <div className="rounded-corner-md p-md" style={{ background: 'rgba(82,80,243,0.15)', border: '1px solid rgba(82,80,243,0.3)' }}>
-                  <CreditCard size={18} className="text-brand-primary" />
-                </div>
-                <div className="flex flex-col gap-xs">
-                  <span className="text-label-sm text-text-primary">Visa ending in 4242</span>
-                  <span className="text-label-sm text-text-tertiary">Expires 09/2027</span>
-                </div>
-              </div>
-              <Button variant="neutral" size="small">Update payment method</Button>
-            </div>
-          </div>
-        )}
+        {activeSection === 'billing' && <BillingSection />}
       </main>
     </div>
   );
