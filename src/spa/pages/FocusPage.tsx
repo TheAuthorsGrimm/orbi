@@ -133,7 +133,7 @@ export function FocusPage() {
     : 'rgba(255,255,255,0.3)';
 
   return (
-    <div className="p-xl flex flex-col gap-xl">
+    <div className="p-md md:p-xl flex flex-col gap-xl">
       {/* Header */}
       <div className="flex flex-col gap-xs">
         <h1 className="text-title text-text-primary">Focus Session</h1>
@@ -142,7 +142,7 @@ export function FocusPage() {
         </p>
       </div>
 
-      <div className="flex gap-xl">
+      <div className="flex flex-col md:flex-row gap-xl">
         {/* ── Main Timer ── */}
         <div className="flex-1 flex flex-col gap-xl">
 
@@ -259,7 +259,7 @@ export function FocusPage() {
         </div>
 
         {/* ── Settings Panel ── */}
-        <div className="w-[280px] flex flex-col gap-xl">
+        <div className="w-full md:w-[280px] flex flex-col gap-xl">
           <div className="rounded-corner-lg p-xl flex flex-col gap-lg" style={CARD_PURPLE}>
             <h2 className="text-label text-text-primary">Session setup</h2>
             <SelectField label="Task to focus on" options={TASKS} value={selectedTask} onChange={setSelectedTask} disabled={phase === 'focus'} />

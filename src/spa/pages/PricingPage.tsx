@@ -71,7 +71,7 @@ const TIERS = [
 
 export function PricingPage() {
   return (
-    <div className="p-xl flex flex-col gap-xl">
+    <div className="p-md md:p-xl flex flex-col gap-xl">
       {/* Header */}
       <div className="flex flex-col items-center gap-xs text-center">
         <h1 className="text-title text-text-primary">Plans built for the ADHD brain</h1>

@@ -262,13 +262,13 @@ export function TasksPage() {
   const totalTasks = needs.length + wants.length;
 
   if (loading) return (
-    <div className="p-xl flex items-center justify-center min-h-full">
+    <div className="p-md md:p-xl flex items-center justify-center min-h-full">
       <p className="text-label-sm text-text-secondary">Loading tasks...</p>
     </div>
   );
 
   return (
-    <div className="p-xl flex flex-col gap-xl min-h-full">
+    <div className="p-md md:p-xl flex flex-col gap-xl min-h-full">
       {/* Header */}
       <div className="flex items-start justify-between">
         <div className="flex flex-col gap-xs">
