@@ -13,6 +13,8 @@ import { PricingPage } from './pages/PricingPage';
 import { SettingsPage } from './pages/SettingsPage';
 import { TermsPage } from './pages/TermsPage';
 import { PrivacyPage } from './pages/PrivacyPage';
+import { ForgotPasswordPage } from './pages/ForgotPasswordPage';
+import { ResetPasswordPage } from './pages/ResetPasswordPage';
 
 export const router = createHashRouter([
   {
@@ -33,6 +35,8 @@ export const router = createHashRouter([
       { path: 'settings', Component: SettingsPage },
       { path: 'terms', Component: TermsPage },
       { path: 'privacy', Component: PrivacyPage },
+      { path: 'forgot-password', Component: ForgotPasswordPage },
+      { path: 'reset-password', Component: ResetPasswordPage },
     ],
   },
 ]);

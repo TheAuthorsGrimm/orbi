@@ -39,7 +39,7 @@ export function AppLayout() {
     );
   }
 
-  const PUBLIC_PATHS = ['/login', '/register', '/terms', '/privacy'];
+  const PUBLIC_PATHS = ['/login', '/register', '/terms', '/privacy', '/forgot-password', '/reset-password'];
   const isPublic = PUBLIC_PATHS.includes(location.pathname);
 
   if (!user && !isPublic) {

@@ -50,6 +50,12 @@ export const auth = {
   logout: () => http.post<ApiResponse>("/auth/logout"),
 
   me: () => http.get<ApiResponse<OrbiUser>>("/auth/me"),
+
+  forgotPassword: (email: string) =>
+    http.post<ApiResponse>("/auth/forgot-password", { email }),
+
+  resetPassword: (token: string, password: string) =>
+    http.post<ApiResponse>("/auth/reset-password", { token, password }),
 };
 
 // ------------------------------------------------------------------

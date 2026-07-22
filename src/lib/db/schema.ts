@@ -82,6 +82,23 @@ export const chatMessages = pgTable(
   }),
 );
 
+export const passwordResetTokens = pgTable(
+  "password_reset_tokens",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: uuid("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+    // sha256(token) — the raw token only lives in the email link, never at rest.
+    tokenHash: text("token_hash").notNull().unique(),
+    expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+    usedAt: timestamp("used_at", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => ({
+    tokenHashIdx: index("password_reset_tokens_token_hash_idx").on(t.tokenHash),
+    userIdIdx: index("password_reset_tokens_user_id_idx").on(t.userId),
+  }),
+);
+
 // -----------------------------------------------------------
 // Inferred types
 // -----------------------------------------------------------
@@ -90,4 +107,5 @@ export type Task = typeof tasks.$inferSelect;
 export type NewTask = typeof tasks.$inferInsert;
 export type ChatSession = typeof chatSessions.$inferSelect;
 export type ChatMessage = typeof chatMessages.$inferSelect;
+export type PasswordResetToken = typeof passwordResetTokens.$inferSelect;
 export type Tier = "free" | "agent" | "full";
