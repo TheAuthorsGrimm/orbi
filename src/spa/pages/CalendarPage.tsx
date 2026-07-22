@@ -84,7 +84,7 @@ export function CalendarPage() {
   const HOURS = Array.from({ length: 14 }, (_, i) => i + 8);
 
   return (
-    <div className="p-xl flex flex-col gap-xl">
+    <div className="p-md md:p-xl flex flex-col gap-xl">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex flex-col gap-xs">
@@ -97,9 +97,9 @@ export function CalendarPage() {
         </div>
       </div>
 
-      <div className="flex gap-xl">
+      <div className="flex flex-col md:flex-row gap-xl">
         {/* ── Mini Calendar ── */}
-        <div className="rounded-corner-lg p-xl flex flex-col gap-lg flex-shrink-0" style={{ ...CARD_PURPLE, width: 300 }}>
+        <div className="rounded-corner-lg p-xl flex flex-col gap-lg w-full md:w-[300px] md:flex-shrink-0" style={CARD_PURPLE}>
           {/* Month nav */}
           <div className="flex items-center justify-between">
             <button onClick={prevMonth} className="text-text-secondary hover:text-text-primary transition-colors p-xs">

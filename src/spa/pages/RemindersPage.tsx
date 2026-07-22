@@ -299,7 +299,7 @@ export function RemindersPage() {
   }, [newTitle, newTrigger, newTime, apiAdd]);
 
   return (
-    <div className="p-xl flex flex-col gap-xl">
+    <div className="p-md md:p-xl flex flex-col gap-xl">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex flex-col gap-xs">
@@ -317,7 +317,7 @@ export function RemindersPage() {
       <MedicationTracker />
 
       {/* Reminder type cards */}
-      <div className="grid grid-cols-3 gap-lg">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-lg">
         {[
           { type: 'time', label: 'Time-based', desc: 'Triggers at a specific time', icon: Clock, accent: '#a5b4fc', gradient: 'linear-gradient(145deg, #0f0e2a 0%, #0a0a18 100%)', border: 'rgba(82,80,243,0.25)' },
           { type: 'context', label: 'Context-aware', desc: 'Based on your activity', icon: Zap, accent: '#fcd34d', gradient: 'linear-gradient(145deg, #1a0e00 0%, #110900 100%)', border: 'rgba(217,119,6,0.25)' },

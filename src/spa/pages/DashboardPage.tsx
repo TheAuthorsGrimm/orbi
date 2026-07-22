@@ -124,7 +124,7 @@ export function DashboardPage() {
   const greeting = `Good afternoon, ${displayedName} ✦`;
 
   return (
-    <div className="p-xl flex flex-col gap-lg min-h-full">
+    <div className="p-md md:p-xl flex flex-col gap-lg min-h-full">
       {/* ── Onboarding nudge ── */}
       {!isOnboarded && (
         <motion.div
@@ -192,7 +192,7 @@ export function DashboardPage() {
       </div>
 
       {/* ── Gradient Stat Cards ── */}
-      <div className="grid grid-cols-4 gap-lg">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-lg">
         {STAT_CARDS.map((stat, i) => (
           <motion.div
             key={stat.label}
@@ -224,7 +224,7 @@ export function DashboardPage() {
       </div>
 
       {/* ── Main Row: Orbital + Right Panel ── */}
-      <div className="flex gap-lg flex-1 min-h-0">
+      <div className="flex flex-col md:flex-row gap-lg flex-1 min-h-0">
 
         {/* ── Left: Orbital + Quick Actions ── */}
         <div className="flex flex-col gap-lg flex-1 min-w-0">
@@ -321,7 +321,7 @@ export function DashboardPage() {
           </div>
 
           {/* Quick Actions — fills the space below the orbital */}
-          <div className="grid grid-cols-4 gap-md">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-md">
             {QUICK_ACTIONS.map((action, i) => (
               <motion.button
                 key={action.label}
@@ -345,7 +345,7 @@ export function DashboardPage() {
         </div>
 
         {/* ── Right Panel ── */}
-        <div className="flex flex-col gap-lg w-[300px] flex-shrink-0">
+        <div className="flex flex-col gap-lg w-full md:w-[300px] md:flex-shrink-0">
 
           {/* XP / Level card */}
           <XPStatsCard />

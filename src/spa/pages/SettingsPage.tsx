@@ -199,7 +199,7 @@ function CategoryManager({ profile, update }: { profile: OrbiProfile; update: (p
       </p>
 
       {/* Default categories grid */}
-      <div className="grid grid-cols-5 gap-md">
+      <div className="grid grid-cols-3 sm:grid-cols-5 gap-md">
         {DEFAULT_TASK_CATEGORIES.map(cat => {
           const on = selected.includes(cat.id);
           return (
@@ -601,7 +601,7 @@ export function SettingsPage() {
       </SecondaryNav>
 
       <main
-        className="flex-1 p-2xl overflow-y-auto"
+        className="flex-1 p-md md:p-2xl overflow-y-auto"
         style={{ background: 'linear-gradient(160deg, #080814 0%, #0a0a1a 50%, #080e14 100%)' }}
       >
         {/* ── My Context ── */}
