@@ -89,9 +89,12 @@ export function LoginPage() {
             </div>
 
             <div className="flex justify-end">
-              <button type="button" className="text-label-sm text-brand-primary hover:opacity-80 transition-opacity bg-transparent border-none cursor-pointer">
+              <Link
+                to="/forgot-password"
+                className="text-label-sm text-brand-primary hover:opacity-80 transition-opacity"
+              >
                 Forgot password?
-              </button>
+              </Link>
             </div>
 
             {error && <p className="text-label-sm text-red-400">{error}</p>}
