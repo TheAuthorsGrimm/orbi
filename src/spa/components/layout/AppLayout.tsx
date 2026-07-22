@@ -1,20 +1,35 @@
 import { useState, useEffect } from 'react';
-import { Navigate, Outlet, useLocation } from 'react-router';
-import { Menu, X } from 'lucide-react';
+import { Navigate, Outlet, useLocation, useNavigate } from 'react-router';
+import { Menu, X, ArrowLeft } from 'lucide-react';
 import { OrbiSidebar } from './OrbiSidebar';
 import { useAuth } from '@/spa/context/AuthContext';
 import { useOrbiProfile } from '../../OrbiProfileContext';
+
+// Pages that are treated as top-level "home" surfaces — no back button
+// because there's nowhere sensible to go back to.
+const TOP_LEVEL_PATHS = new Set(['/dashboard']);
 
 export function AppLayout() {
   const { user, loading } = useAuth();
   const { isOnboarded } = useOrbiProfile();
   const location = useLocation();
+  const navigate = useNavigate();
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   // Close the mobile drawer whenever the route changes (post-navigation).
   useEffect(() => {
     setMobileNavOpen(false);
   }, [location.pathname]);
+
+  function handleBack() {
+    // If there is history to pop, pop it. Otherwise land on the dashboard
+    // so people never get stuck.
+    if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate('/dashboard', { replace: true });
+    }
+  }
 
   if (loading) {
     return (
@@ -109,6 +124,19 @@ export function AppLayout() {
           >
             {mobileNavOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
+
+          {!TOP_LEVEL_PATHS.has(location.pathname) && (
+            <button
+              type="button"
+              aria-label="Go back"
+              onClick={handleBack}
+              className="flex items-center justify-center rounded-corner-md text-white"
+              style={{ width: 44, height: 44, background: 'rgba(255,255,255,0.06)' }}
+            >
+              <ArrowLeft size={20} />
+            </button>
+          )}
+
           <span
             className="text-white font-bold"
             style={{
@@ -120,6 +148,26 @@ export function AppLayout() {
             Orbi
           </span>
         </div>
+
+        {/* Desktop-only inline back button. Shows on md+ when not on a
+            top-level page. Stays out of the way visually — small, floats
+            over the top-left corner of the content, matches the theme. */}
+        {!TOP_LEVEL_PATHS.has(location.pathname) && (
+          <button
+            type="button"
+            aria-label="Go back"
+            onClick={handleBack}
+            className="hidden md:flex absolute top-lg left-lg z-10 items-center gap-xs px-md py-sm rounded-corner-md text-text-secondary hover:text-white transition"
+            style={{
+              background: 'rgba(255,255,255,0.05)',
+              border: '1px solid rgba(255,255,255,0.08)',
+              backdropFilter: 'blur(8px)',
+            }}
+          >
+            <ArrowLeft size={14} />
+            <span className="text-label-sm">Back</span>
+          </button>
+        )}
 
         <Outlet />
       </main>
