@@ -1,3 +1,16 @@
+/*
+ * NOTE: This @import duplicates the one at the top of `index.css`.
+ *
+ * Because Tailwind v4 injects @layer rules at the top of the bundled
+ * CSS, the build complains: "@import rules must precede all rules
+ * aside from @charset and @layer statements". The font still loads via
+ * the index.css import, so this line is dead — but it's left in on
+ * purpose so anyone reading this file standalone (without the bundle
+ * context) can still see which font this file expects.
+ *
+ * If you ever want a fully clean build, delete this line. Tested
+ * harmless 2026-06-17.
+ */
 @import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
 :root {
