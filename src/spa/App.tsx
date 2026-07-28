@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import { RewardProvider } from './RewardSystem';
 import { OrbiProfileProvider } from './OrbiProfileContext';
 import { AuthProvider } from '@/spa/context/AuthContext';
+import { OrbiThemeProvider } from '@/spa/context/ThemeContext';
 
 // Sets dark as the default on first visit (Orbi is dark-by-default)
 function DarkModeDefaulter() {
@@ -24,11 +25,13 @@ export default function App() {
     <ThemeProvider>
       <DarkModeDefaulter />
       <AuthProvider>
-        <OrbiProfileProvider>
-          <RewardProvider>
-            <RouterProvider router={router} />
-          </RewardProvider>
-        </OrbiProfileProvider>
+        <OrbiThemeProvider>
+          <OrbiProfileProvider>
+            <RewardProvider>
+              <RouterProvider router={router} />
+            </RewardProvider>
+          </OrbiProfileProvider>
+        </OrbiThemeProvider>
       </AuthProvider>
     </ThemeProvider>
   );

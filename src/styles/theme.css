@@ -119,6 +119,70 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
+/* ── Orbi theme system ─────────────────────────────────────────────────────── */
+
+/* Shared reward + categorical palette — constant across all four themes */
+:root,
+[data-orbi-theme] {
+  --reward-accent: #f59e0b;
+  --category-1: #6366f1;
+  --category-2: #14b8a6;
+  --category-3: #f97162;
+  --category-4: #f59e0b;
+  --category-5: #8b5cf6;
+  --category-6: #ec4899;
+  --category-7: #06b6d4;
+  --category-8: #84cc16;
+}
+
+/* Focus — deep navy, indigo + teal accents (default) */
+[data-orbi-theme="focus"] {
+  --orbi-base:         #0b0a18;
+  --orbi-surface:      #0f0e28;
+  --orbi-surface-2:    #14122e;
+  --orbi-primary:      #5250f3;
+  --orbi-secondary:    #0d9488;
+  --orbi-text:         #f0efff;
+  --orbi-text-muted:   rgba(240,239,255,0.55);
+  --orbi-border:       rgba(82,80,243,0.25);
+}
+
+/* Warm — cozy plum, violet + rose accents */
+[data-orbi-theme="warm"] {
+  --orbi-base:         #1a1224;
+  --orbi-surface:      #231830;
+  --orbi-surface-2:    #2c1e3c;
+  --orbi-primary:      #8b5cf6;
+  --orbi-secondary:    #ec4899;
+  --orbi-text:         #faf0ff;
+  --orbi-text-muted:   rgba(250,240,255,0.55);
+  --orbi-border:       rgba(139,92,246,0.25);
+}
+
+/* Fresh — warm off-white, sage + coral accents (light mode) */
+[data-orbi-theme="fresh"] {
+  --orbi-base:         #faf8f4;
+  --orbi-surface:      #ffffff;
+  --orbi-surface-2:    #f3f1ed;
+  --orbi-primary:      #059669;
+  --orbi-secondary:    #f97162;
+  --orbi-text:         #1a1a1a;
+  --orbi-text-muted:   rgba(26,26,26,0.55);
+  --orbi-border:       rgba(5,150,105,0.2);
+}
+
+/* High-contrast — true black, electric blue + teal (WCAG AAA) */
+[data-orbi-theme="high-contrast"] {
+  --orbi-base:         #000000;
+  --orbi-surface:      #0a0a0a;
+  --orbi-surface-2:    #111111;
+  --orbi-primary:      #3b82f6;
+  --orbi-secondary:    #14b8a6;
+  --orbi-text:         #ffffff;
+  --orbi-text-muted:   rgba(255,255,255,0.7);
+  --orbi-border:       rgba(59,130,246,0.35);
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

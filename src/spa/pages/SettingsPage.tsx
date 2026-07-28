@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import {
   SecondaryNav, SecondaryNavItem, InputField, SwitchField,
-  Button, ButtonGroup, Avatar, Badge, useTheme,
+  Button, ButtonGroup, Avatar, Badge,
 } from '@figma/astraui';
+import { useOrbiTheme, type OrbiTheme } from '@/spa/context/ThemeContext';
 import {
   User, CreditCard, Bell, Sliders, Sparkles, Brain, Plus, X, Check,
 } from 'lucide-react';
@@ -159,6 +160,83 @@ function ChipSingleSelect({
           );
         })}
       </div>
+    </div>
+  );
+}
+
+// ─── Theme picker ─────────────────────────────────────────────────────────────
+
+const THEME_PRESETS: Array<{
+  id: OrbiTheme;
+  name: string;
+  description: string;
+  base: string;
+  primary: string;
+  secondary: string;
+  text: string;
+}> = [
+  { id: 'focus',         name: 'Focus',         description: 'Deep navy · Indigo + Teal',   base: '#0b0a18', primary: '#5250f3', secondary: '#0d9488', text: '#f0efff' },
+  { id: 'warm',          name: 'Warm',           description: 'Cozy plum · Violet + Rose',   base: '#1a1224', primary: '#8b5cf6', secondary: '#ec4899', text: '#faf0ff' },
+  { id: 'fresh',         name: 'Fresh',          description: 'Off-white · Sage + Coral',    base: '#faf8f4', primary: '#059669', secondary: '#f97162', text: '#1a1a1a' },
+  { id: 'high-contrast', name: 'High Contrast',  description: 'True black · Blue + Teal',   base: '#000000', primary: '#3b82f6', secondary: '#14b8a6', text: '#ffffff' },
+];
+
+function ThemePicker({ current, onPick }: { current: OrbiTheme; onPick: (t: OrbiTheme) => void }) {
+  return (
+    <div className="flex flex-col gap-md">
+      <label className="text-label-sm text-text-secondary">Theme</label>
+      <div className="grid grid-cols-2 gap-md">
+        {THEME_PRESETS.map(preset => {
+          const active = current === preset.id;
+          return (
+            <motion.button
+              key={preset.id}
+              onClick={() => onPick(preset.id)}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.97 }}
+              className="flex flex-col gap-sm rounded-corner-md p-md text-left"
+              style={{
+                background: preset.base,
+                border: active ? `2px solid ${preset.primary}` : '2px solid rgba(255,255,255,0.08)',
+                boxShadow: active ? `0 0 16px ${preset.primary}55` : 'none',
+                cursor: 'pointer',
+                position: 'relative',
+              }}
+            >
+              {/* Color strip preview */}
+              <div className="flex gap-xs" style={{ height: 8 }}>
+                <div style={{ flex: 1, borderRadius: 4, background: preset.base, border: '1px solid rgba(255,255,255,0.15)' }} />
+                <div style={{ flex: 1, borderRadius: 4, background: preset.primary }} />
+                <div style={{ flex: 1, borderRadius: 4, background: preset.secondary }} />
+                <div style={{ flex: 1, borderRadius: 4, background: '#f59e0b' }} />
+              </div>
+
+              {/* Labels */}
+              <div className="flex flex-col gap-xs">
+                <span className="text-label-sm" style={{ color: preset.text, fontWeight: 600, fontSize: '0.8rem' }}>
+                  {preset.name}
+                </span>
+                <span style={{ color: preset.text, opacity: 0.55, fontSize: '0.7rem' }}>
+                  {preset.description}
+                </span>
+              </div>
+
+              {/* Active checkmark */}
+              {active && (
+                <div
+                  className="absolute top-sm right-sm flex items-center justify-center rounded-full"
+                  style={{ width: 18, height: 18, background: preset.primary }}
+                >
+                  <Check size={10} className="text-white" />
+                </div>
+              )}
+            </motion.button>
+          );
+        })}
+      </div>
+      <p className="text-label-sm text-text-tertiary" style={{ fontSize: '0.72rem' }}>
+        Amber ✦ is the shared reward accent — streak & task-complete animations stay consistent across themes.
+      </p>
     </div>
   );
 }
@@ -557,7 +635,7 @@ export function SettingsPage() {
   const [focusDuration, setFocusDuration] = useState('25');
   const [breakDuration, setBreakDuration] = useState('5');
   const [notifications, setNotifications] = useState(true);
-  const { theme, setTheme } = useTheme();
+  const { theme: orbiTheme, setTheme: setOrbiTheme } = useOrbiTheme();
 
   return (
     <div className="flex h-full">
@@ -682,15 +760,7 @@ export function SettingsPage() {
             </div>
             <div className="rounded-corner-lg p-xl flex flex-col gap-lg" style={{ background: 'linear-gradient(145deg, #0f0e2a 0%, #0a0a18 100%)', border: '1px solid rgba(82,80,243,0.25)' }}>
               <h2 className="text-label text-text-primary">Appearance</h2>
-              <SelectField
-                label="Theme"
-                value={theme === 'dark' ? 'dark' : 'light'}
-                options={[
-                  { value: 'dark', label: 'Dark (recommended for ADHD)' },
-                  { value: 'light', label: 'Light' },
-                ]}
-                onChange={(val) => setTheme(val as 'dark' | 'light')}
-              />
+              <ThemePicker current={orbiTheme} onPick={setOrbiTheme} />
             </div>
             <div className="rounded-corner-lg p-xl flex flex-col gap-lg" style={{ background: 'linear-gradient(145deg, #0f0e2a 0%, #0a0a18 100%)', border: '1px solid rgba(82,80,243,0.25)' }}>
               <h2 className="text-label text-text-primary">Focus sessions</h2>

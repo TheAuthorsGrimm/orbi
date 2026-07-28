@@ -70,7 +70,7 @@ export interface OrbiPersona {
 }
 
 export interface UserPreferences {
-  theme: "dark" | "light" | "system";
+  theme: "dark" | "light" | "system" | "focus" | "warm" | "fresh" | "high-contrast";
   accentColor: string;
   notificationsEnabled: boolean;
   focusSessionDuration: number;    // minutes

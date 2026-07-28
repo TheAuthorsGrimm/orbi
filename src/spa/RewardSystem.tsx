@@ -105,9 +105,9 @@ const REWARDS: Record<RewardType, RewardConfig> = {
     xp: 30,
     icon: '🔥',
     big: true,
-    color: '#fcd34d',
+    color: '#f59e0b',
     bg: 'linear-gradient(135deg, #451a03 0%, #92400e 60%, #b45309 100%)',
-    border: 'rgba(217,119,6,0.6)',
+    border: 'rgba(245,158,11,0.6)',
     confetti: true,
     messages: [
       'BOOM! You did that! 🔥',
@@ -231,9 +231,9 @@ const REWARDS: Record<RewardType, RewardConfig> = {
     xp: 30,
     icon: '🔥',
     big: false,
-    color: '#fcd34d',
+    color: '#f59e0b',
     bg: 'linear-gradient(135deg, #431407 0%, #92400e 100%)',
-    border: 'rgba(217,119,6,0.5)',
+    border: 'rgba(245,158,11,0.5)',
     confetti: false,
     messages: [
       'Day streak extended! Consistency is your superpower! 🔥',
@@ -271,7 +271,7 @@ function ConfettiCanvas({ id }: { id: string }) {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    const COLORS = ['#a78bfa', '#5eead4', '#fcd34d', '#fb923c', '#f472b6', '#6ee7b7', '#818cf8', '#38bdf8', '#4ade80'];
+    const COLORS = ['#a78bfa', '#5eead4', '#f59e0b', '#fb923c', '#f472b6', '#6ee7b7', '#818cf8', '#38bdf8', '#4ade80'];
     const ox = canvas.width / 2;
     const oy = canvas.height * 0.35;
 
