@@ -68,8 +68,8 @@ export function SignupFlow() {
 
       next(); // → Tour step
     } catch (err: unknown) {
-      const msg =
-        err instanceof Error ? err.message : 'Something went wrong. Please try again.';
+      const axiosMsg = (err as { response?: { data?: { error?: string } } }).response?.data?.error;
+      const msg = axiosMsg ?? (err instanceof Error ? err.message : 'Something went wrong. Please try again.');
       setError(msg);
     } finally {
       setLoading(false);
