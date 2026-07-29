@@ -62,7 +62,7 @@ export function AppLayout() {
     return (
       <main
         className="min-h-screen overflow-y-auto"
-        style={{ background: 'linear-gradient(160deg, #080814 0%, #0a0a1a 50%, #080e14 100%)' }}
+        style={{ background: 'var(--orbi-gradient)' }}
       >
         <Outlet />
       </main>
@@ -74,7 +74,7 @@ export function AppLayout() {
     return (
       <main
         className="min-h-screen overflow-y-auto"
-        style={{ background: 'linear-gradient(160deg, #080814 0%, #0a0a1a 50%, #080e14 100%)' }}
+        style={{ background: 'var(--orbi-gradient)' }}
       >
         <Outlet />
       </main>
@@ -104,15 +104,15 @@ export function AppLayout() {
 
       <main
         className="flex-1 overflow-y-auto relative"
-        style={{ background: 'linear-gradient(160deg, #080814 0%, #0a0a1a 50%, #080e14 100%)' }}
+        style={{ background: 'var(--orbi-gradient)' }}
       >
         {/* Mobile-only top bar with hamburger. Hidden on md+. */}
         <div
           className="md:hidden sticky top-0 z-20 flex items-center gap-md px-md py-sm border-b"
           style={{
-            background: 'rgba(8, 8, 20, 0.85)',
+            background: 'var(--orbi-glass)',
             backdropFilter: 'blur(12px)',
-            borderColor: 'rgba(82, 80, 243, 0.18)',
+            borderColor: 'var(--orbi-border)',
           }}
         >
           <button

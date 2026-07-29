@@ -57,8 +57,8 @@ function NavButton({
           <motion.div
             className="absolute inset-0 rounded-corner-md"
             style={{
-              background: 'linear-gradient(135deg, #5250f3 0%, #0d9488 100%)',
-              boxShadow: '0 0 16px rgba(82,80,243,0.6), 0 0 6px rgba(13,148,136,0.4)',
+              background: 'linear-gradient(135deg, var(--orbi-primary) 0%, var(--orbi-secondary) 100%)',
+              boxShadow: 'var(--orbi-shadow-primary)',
             }}
             layoutId="activePill"
             transition={{ type: 'spring', stiffness: 380, damping: 32 }}
@@ -69,7 +69,7 @@ function NavButton({
         {!active && (
           <motion.div
             className="absolute inset-0 rounded-corner-md opacity-0"
-            style={{ background: 'rgba(82,80,243,0.15)' }}
+            style={{ background: 'color-mix(in srgb, var(--orbi-primary) 15%, transparent)' }}
             whileHover={{ opacity: 1 }}
             transition={{ duration: 0.15 }}
           />
@@ -78,7 +78,7 @@ function NavButton({
         <Icon
           size={18}
           className="relative z-10"
-          style={{ color: active ? '#ffffff' : 'rgba(255,255,255,0.45)', strokeWidth: 1.6 }}
+          style={{ color: active ? '#ffffff' : 'var(--orbi-text-muted)', strokeWidth: 1.6 }}
         />
       </motion.button>
     </Tooltip>
@@ -103,9 +103,9 @@ export function OrbiSidebar() {
       className="flex flex-col items-center py-xl gap-sm flex-shrink-0"
       style={{
         width: 64,
-        background: 'linear-gradient(180deg, #0f0e2a 0%, #0a0a18 60%, #080e14 100%)',
-        borderRight: '1px solid rgba(82,80,243,0.25)',
-        boxShadow: '4px 0 40px rgba(82,80,243,0.18), 2px 0 12px rgba(13,148,136,0.08)',
+        background: 'var(--orbi-sidebar-gradient)',
+        borderRight: '1px solid var(--orbi-border)',
+        boxShadow: 'var(--orbi-shadow-primary)',
       }}
     >
       {/* Orbi logo mark */}
@@ -114,14 +114,14 @@ export function OrbiSidebar() {
         style={{
           width: 40,
           height: 40,
-          background: 'linear-gradient(135deg, #5250f3 0%, #0d9488 100%)',
-          boxShadow: '0 0 20px rgba(82,80,243,0.5), 0 0 8px rgba(13,148,136,0.4)',
+          background: 'linear-gradient(135deg, var(--orbi-primary) 0%, var(--orbi-secondary) 100%)',
+          boxShadow: 'var(--orbi-shadow-primary)',
         }}
         animate={{
           boxShadow: [
-            '0 0 16px rgba(82,80,243,0.5), 0 0 6px rgba(13,148,136,0.3)',
-            '0 0 28px rgba(82,80,243,0.7), 0 0 12px rgba(13,148,136,0.5)',
-            '0 0 16px rgba(82,80,243,0.5), 0 0 6px rgba(13,148,136,0.3)',
+            'var(--orbi-shadow-primary)',
+            'var(--orbi-shadow-primary)',
+            'var(--orbi-shadow-primary)',
           ],
         }}
         transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
@@ -132,7 +132,7 @@ export function OrbiSidebar() {
       {/* Top divider */}
       <div
         className="w-8 mb-sm flex-shrink-0"
-        style={{ height: 1, background: 'linear-gradient(90deg, transparent, rgba(82,80,243,0.5), transparent)' }}
+        style={{ height: 1, background: 'linear-gradient(90deg, transparent, var(--orbi-primary), transparent)' }}
       />
 
       {/* Main nav */}
@@ -145,7 +145,7 @@ export function OrbiSidebar() {
       {/* Bottom divider */}
       <div
         className="w-8 mt-sm mb-sm flex-shrink-0"
-        style={{ height: 1, background: 'linear-gradient(90deg, transparent, rgba(82,80,243,0.5), transparent)' }}
+        style={{ height: 1, background: 'linear-gradient(90deg, transparent, var(--orbi-primary), transparent)' }}
       />
 
       {/* Footer nav */}
@@ -162,10 +162,10 @@ export function OrbiSidebar() {
           style={{
             width: 36,
             height: 36,
-            background: 'linear-gradient(135deg, #5250f3 0%, #7c3aed 100%)',
-            boxShadow: '0 0 12px rgba(82,80,243,0.4)',
+            background: 'linear-gradient(135deg, var(--orbi-primary) 0%, var(--orbi-secondary) 100%)',
+            boxShadow: 'var(--orbi-shadow-primary)',
           }}
-          whileHover={{ scale: 1.08, boxShadow: '0 0 20px rgba(82,80,243,0.6)' }}
+          whileHover={{ scale: 1.08 }}
           whileTap={{ scale: 0.94 }}
         >
           <span className="text-white" style={{ fontSize: 13, fontWeight: 600 }}>{initials}</span>

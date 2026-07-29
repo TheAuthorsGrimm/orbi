@@ -150,8 +150,18 @@
  * All Tailwind bg-background / text-foreground / bg-card etc. classes
  * automatically pick up the active theme through this bridge.
  * Never edit this for new themes — only edit the per-theme blocks below.
+ *
+ * Gradient vars (define per-theme for custom looks; defaults fall back to orbi-base):
+ *   --orbi-gradient          main page background gradient
+ *   --orbi-sidebar-gradient  sidebar background gradient
+ *   --orbi-glass             frosted-glass overlay (mobile top bar etc.)
+ *   --orbi-shadow-primary    primary-colour glow shadow
  */
 [data-orbi-theme] {
+  --orbi-gradient:         var(--orbi-base);
+  --orbi-sidebar-gradient: var(--orbi-surface);
+  --orbi-glass:            color-mix(in srgb, var(--orbi-base) 85%, transparent);
+  --orbi-shadow-primary:   0 0 16px color-mix(in srgb, var(--orbi-primary) 60%, transparent), 0 0 6px color-mix(in srgb, var(--orbi-secondary) 40%, transparent);
   --background:              var(--orbi-base);
   --foreground:              var(--orbi-text);
   --card:                    var(--orbi-surface);
@@ -186,51 +196,60 @@
 
 /* Focus — deep navy, indigo + teal (default) */
 [data-orbi-theme="focus"] {
-  --orbi-base:        #0b0a18;
-  --orbi-surface:     #0f0e28;
-  --orbi-surface-2:   #14122e;
-  --orbi-primary:     #5250f3;
-  --orbi-secondary:   #0d9488;
-  --orbi-text:        #f0efff;
-  --orbi-text-muted:  rgba(240,239,255,0.55);
-  --orbi-border:      rgba(82,80,243,0.25);
+  --orbi-base:             #0b0a18;
+  --orbi-surface:          #0f0e28;
+  --orbi-surface-2:        #14122e;
+  --orbi-primary:          #5250f3;
+  --orbi-secondary:        #0d9488;
+  --orbi-text:             #f0efff;
+  --orbi-text-muted:       rgba(240,239,255,0.55);
+  --orbi-border:           rgba(82,80,243,0.25);
+  --orbi-gradient:         linear-gradient(160deg, #080814 0%, #0a0a1a 50%, #080e14 100%);
+  --orbi-sidebar-gradient: linear-gradient(180deg, #0f0e2a 0%, #0a0a18 60%, #080e14 100%);
 }
 
 /* Warm — cozy plum, violet + rose */
 [data-orbi-theme="warm"] {
-  --orbi-base:        #1a1224;
-  --orbi-surface:     #231830;
-  --orbi-surface-2:   #2c1e3c;
-  --orbi-primary:     #8b5cf6;
-  --orbi-secondary:   #ec4899;
-  --orbi-text:        #faf0ff;
-  --orbi-text-muted:  rgba(250,240,255,0.55);
-  --orbi-border:      rgba(139,92,246,0.25);
+  --orbi-base:             #1a1224;
+  --orbi-surface:          #231830;
+  --orbi-surface-2:        #2c1e3c;
+  --orbi-primary:          #8b5cf6;
+  --orbi-secondary:        #ec4899;
+  --orbi-text:             #faf0ff;
+  --orbi-text-muted:       rgba(250,240,255,0.55);
+  --orbi-border:           rgba(139,92,246,0.25);
+  --orbi-gradient:         linear-gradient(160deg, #110a1c 0%, #1a1224 50%, #0f0a14 100%);
+  --orbi-sidebar-gradient: linear-gradient(180deg, #1c1030 0%, #1a1224 60%, #110a1c 100%);
 }
 
 /* Fresh — warm off-white, sage + coral (light) */
 [data-orbi-theme="fresh"] {
-  --orbi-base:        #faf8f4;
-  --orbi-surface:     #ffffff;
-  --orbi-surface-2:   #f3f1ed;
-  --orbi-primary:     #059669;
-  --orbi-secondary:   #f97162;
-  --orbi-text:        #1a1a1a;
-  --orbi-text-muted:  rgba(26,26,26,0.55);
-  --orbi-border:      rgba(5,150,105,0.2);
-  --input:            transparent;
+  --orbi-base:             #faf8f4;
+  --orbi-surface:          #ffffff;
+  --orbi-surface-2:        #f3f1ed;
+  --orbi-primary:          #059669;
+  --orbi-secondary:        #f97162;
+  --orbi-text:             #1a1a1a;
+  --orbi-text-muted:       rgba(26,26,26,0.55);
+  --orbi-border:           rgba(5,150,105,0.2);
+  --orbi-gradient:         linear-gradient(160deg, #f5f2ec 0%, #faf8f4 50%, #f0ede6 100%);
+  --orbi-sidebar-gradient: #ffffff;
+  --orbi-glass:            color-mix(in srgb, #faf8f4 88%, transparent);
+  --input:                 transparent;
 }
 
 /* High-contrast — true black, electric blue + teal (WCAG AAA) */
 [data-orbi-theme="high-contrast"] {
-  --orbi-base:        #000000;
-  --orbi-surface:     #0a0a0a;
-  --orbi-surface-2:   #111111;
-  --orbi-primary:     #3b82f6;
-  --orbi-secondary:   #14b8a6;
-  --orbi-text:        #ffffff;
-  --orbi-text-muted:  rgba(255,255,255,0.7);
-  --orbi-border:      rgba(59,130,246,0.35);
+  --orbi-base:             #000000;
+  --orbi-surface:          #0a0a0a;
+  --orbi-surface-2:        #111111;
+  --orbi-primary:          #3b82f6;
+  --orbi-secondary:        #14b8a6;
+  --orbi-text:             #ffffff;
+  --orbi-text-muted:       rgba(255,255,255,0.7);
+  --orbi-border:           rgba(59,130,246,0.35);
+  --orbi-gradient:         #000000;
+  --orbi-sidebar-gradient: #0a0a0a;
 }
 
 @layer base {
