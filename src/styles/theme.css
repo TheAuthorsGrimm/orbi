@@ -120,8 +120,17 @@
 }
 
 /* ── Orbi theme system ─────────────────────────────────────────────────────── */
+/*
+ * HOW TO ADD A NEW THEME
+ * ──────────────────────
+ * 1. Add the theme id to OrbiTheme in ThemeContext.tsx and VALID_THEMES array.
+ * 2. Add a swatch entry to THEME_PRESETS in SettingsPage.tsx.
+ * 3. Add a [data-orbi-theme="your-id"] block below with 8 semantic variables.
+ *    The Tailwind token mapping in the [data-orbi-theme] base block above
+ *    handles the rest automatically — no other CSS changes needed.
+ */
 
-/* Shared reward + categorical palette — constant across all four themes */
+/* Shared reward + categorical palette — constant across all themes */
 :root,
 [data-orbi-theme] {
   --reward-accent: #f59e0b;
@@ -135,52 +144,93 @@
   --category-8: #84cc16;
 }
 
-/* Focus — deep navy, indigo + teal accents (default) */
+/*
+ * Central Tailwind token → Orbi semantic variable mapping.
+ * Runs on ANY element with data-orbi-theme (i.e. <html>).
+ * All Tailwind bg-background / text-foreground / bg-card etc. classes
+ * automatically pick up the active theme through this bridge.
+ * Never edit this for new themes — only edit the per-theme blocks below.
+ */
+[data-orbi-theme] {
+  --background:              var(--orbi-base);
+  --foreground:              var(--orbi-text);
+  --card:                    var(--orbi-surface);
+  --card-foreground:         var(--orbi-text);
+  --popover:                 var(--orbi-surface-2);
+  --popover-foreground:      var(--orbi-text);
+  --primary:                 var(--orbi-primary);
+  --primary-foreground:      var(--orbi-primary-fg, #ffffff);
+  --secondary:               var(--orbi-secondary);
+  --secondary-foreground:    var(--orbi-secondary-fg, #ffffff);
+  --muted:                   var(--orbi-surface-2);
+  --muted-foreground:        var(--orbi-text-muted);
+  --accent:                  var(--orbi-surface-2);
+  --accent-foreground:       var(--orbi-text);
+  --border:                  var(--orbi-border);
+  --input:                   var(--orbi-surface-2);
+  --input-background:        var(--orbi-surface-2);
+  --ring:                    var(--orbi-primary);
+  --sidebar:                 var(--orbi-surface);
+  --sidebar-foreground:      var(--orbi-text);
+  --sidebar-primary:         var(--orbi-primary);
+  --sidebar-primary-foreground: var(--orbi-primary-fg, #ffffff);
+  --sidebar-accent:          var(--orbi-surface-2);
+  --sidebar-accent-foreground: var(--orbi-text);
+  --sidebar-border:          var(--orbi-border);
+  --sidebar-ring:            var(--orbi-primary);
+}
+
+/* ── Theme definitions ─────────────────────────────────────────────────────── */
+/* Each theme only needs to set the 8 core --orbi-* semantic variables.        */
+/* Optional overrides: --orbi-primary-fg, --orbi-secondary-fg (default #fff)   */
+
+/* Focus — deep navy, indigo + teal (default) */
 [data-orbi-theme="focus"] {
-  --orbi-base:         #0b0a18;
-  --orbi-surface:      #0f0e28;
-  --orbi-surface-2:    #14122e;
-  --orbi-primary:      #5250f3;
-  --orbi-secondary:    #0d9488;
-  --orbi-text:         #f0efff;
-  --orbi-text-muted:   rgba(240,239,255,0.55);
-  --orbi-border:       rgba(82,80,243,0.25);
+  --orbi-base:        #0b0a18;
+  --orbi-surface:     #0f0e28;
+  --orbi-surface-2:   #14122e;
+  --orbi-primary:     #5250f3;
+  --orbi-secondary:   #0d9488;
+  --orbi-text:        #f0efff;
+  --orbi-text-muted:  rgba(240,239,255,0.55);
+  --orbi-border:      rgba(82,80,243,0.25);
 }
 
-/* Warm — cozy plum, violet + rose accents */
+/* Warm — cozy plum, violet + rose */
 [data-orbi-theme="warm"] {
-  --orbi-base:         #1a1224;
-  --orbi-surface:      #231830;
-  --orbi-surface-2:    #2c1e3c;
-  --orbi-primary:      #8b5cf6;
-  --orbi-secondary:    #ec4899;
-  --orbi-text:         #faf0ff;
-  --orbi-text-muted:   rgba(250,240,255,0.55);
-  --orbi-border:       rgba(139,92,246,0.25);
+  --orbi-base:        #1a1224;
+  --orbi-surface:     #231830;
+  --orbi-surface-2:   #2c1e3c;
+  --orbi-primary:     #8b5cf6;
+  --orbi-secondary:   #ec4899;
+  --orbi-text:        #faf0ff;
+  --orbi-text-muted:  rgba(250,240,255,0.55);
+  --orbi-border:      rgba(139,92,246,0.25);
 }
 
-/* Fresh — warm off-white, sage + coral accents (light mode) */
+/* Fresh — warm off-white, sage + coral (light) */
 [data-orbi-theme="fresh"] {
-  --orbi-base:         #faf8f4;
-  --orbi-surface:      #ffffff;
-  --orbi-surface-2:    #f3f1ed;
-  --orbi-primary:      #059669;
-  --orbi-secondary:    #f97162;
-  --orbi-text:         #1a1a1a;
-  --orbi-text-muted:   rgba(26,26,26,0.55);
-  --orbi-border:       rgba(5,150,105,0.2);
+  --orbi-base:        #faf8f4;
+  --orbi-surface:     #ffffff;
+  --orbi-surface-2:   #f3f1ed;
+  --orbi-primary:     #059669;
+  --orbi-secondary:   #f97162;
+  --orbi-text:        #1a1a1a;
+  --orbi-text-muted:  rgba(26,26,26,0.55);
+  --orbi-border:      rgba(5,150,105,0.2);
+  --input:            transparent;
 }
 
 /* High-contrast — true black, electric blue + teal (WCAG AAA) */
 [data-orbi-theme="high-contrast"] {
-  --orbi-base:         #000000;
-  --orbi-surface:      #0a0a0a;
-  --orbi-surface-2:    #111111;
-  --orbi-primary:      #3b82f6;
-  --orbi-secondary:    #14b8a6;
-  --orbi-text:         #ffffff;
-  --orbi-text-muted:   rgba(255,255,255,0.7);
-  --orbi-border:       rgba(59,130,246,0.35);
+  --orbi-base:        #000000;
+  --orbi-surface:     #0a0a0a;
+  --orbi-surface-2:   #111111;
+  --orbi-primary:     #3b82f6;
+  --orbi-secondary:   #14b8a6;
+  --orbi-text:        #ffffff;
+  --orbi-text-muted:  rgba(255,255,255,0.7);
+  --orbi-border:      rgba(59,130,246,0.35);
 }
 
 @layer base {
