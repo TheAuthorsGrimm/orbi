@@ -84,7 +84,7 @@ function ChipMultiSelect({
   options,
   selected,
   onChange,
-  accent = '#a78bfa',
+  accent = 'var(--orbi-primary)',
 }: {
   label: string;
   options: string[];
@@ -107,7 +107,7 @@ function ChipMultiSelect({
               onClick={() => toggle(opt)}
               className="px-lg py-sm rounded-corner-full text-label-sm transition-all"
               style={{
-                background: active ? accent + '25' : 'color-mix(in srgb, var(--orbi-text) 4%, transparent)',
+                background: active ? `color-mix(in srgb, ${accent} 15%, transparent)` : 'color-mix(in srgb, var(--orbi-text) 4%, transparent)',
                 border: `1.5px solid ${active ? accent : 'color-mix(in srgb, var(--orbi-text) 10%, transparent)'}`,
                 color: active ? accent : 'var(--orbi-text-muted)',
                 cursor: 'pointer',
@@ -128,7 +128,7 @@ function ChipSingleSelect({
   options,
   value,
   onChange,
-  accent = '#a78bfa',
+  accent = 'var(--orbi-primary)',
 }: {
   label: string;
   options: string[];
@@ -148,7 +148,7 @@ function ChipSingleSelect({
               onClick={() => onChange(opt)}
               className="px-lg py-sm rounded-corner-full text-label-sm transition-all"
               style={{
-                background: active ? accent + '25' : 'color-mix(in srgb, var(--orbi-text) 4%, transparent)',
+                background: active ? `color-mix(in srgb, ${accent} 15%, transparent)` : 'color-mix(in srgb, var(--orbi-text) 4%, transparent)',
                 border: `1.5px solid ${active ? accent : 'color-mix(in srgb, var(--orbi-text) 10%, transparent)'}`,
                 color: active ? accent : 'var(--orbi-text-muted)',
                 cursor: 'pointer',
@@ -197,7 +197,7 @@ function ThemePicker({ current, onPick }: { current: OrbiTheme; onPick: (t: Orbi
               className="flex flex-col gap-sm rounded-corner-md p-md text-left"
               style={{
                 background: preset.base,
-                border: active ? `2px solid ${preset.primary}` : '2px solid rgba(255,255,255,0.08)',
+                border: active ? `2px solid ${preset.primary}` : '2px solid color-mix(in srgb, var(--orbi-text) 8%, transparent)',
                 boxShadow: active ? `0 0 16px ${preset.primary}55` : 'none',
                 cursor: 'pointer',
                 position: 'relative',
@@ -205,10 +205,9 @@ function ThemePicker({ current, onPick }: { current: OrbiTheme; onPick: (t: Orbi
             >
               {/* Color strip preview */}
               <div className="flex gap-xs" style={{ height: 8 }}>
-                <div style={{ flex: 1, borderRadius: 4, background: preset.base, border: '1px solid rgba(255,255,255,0.15)' }} />
+                <div style={{ flex: 1, borderRadius: 4, background: preset.base, border: '1px solid rgba(0,0,0,0.15)' }} />
                 <div style={{ flex: 1, borderRadius: 4, background: preset.primary }} />
                 <div style={{ flex: 1, borderRadius: 4, background: preset.secondary }} />
-                <div style={{ flex: 1, borderRadius: 4, background: '#f59e0b' }} />
               </div>
 
               {/* Labels */}
@@ -421,7 +420,7 @@ function MyContextSection() {
           options={['he/him', 'she/her', 'they/them', 'he/they', 'she/they', 'any/all', 'prefer not to say']}
           value={profile.pronouns}
           onChange={v => updateProfile({ pronouns: v })}
-          accent="#a78bfa"
+          accent="var(--orbi-primary)"
         />
         <ChipMultiSelect
           label="Life roles (select all that apply)"
@@ -443,7 +442,7 @@ function MyContextSection() {
       <SectionCard
         title="Career & work"
         gradient="var(--orbi-surface)"
-        border="1px solid rgba(251,146,60,0.2)"
+        border="1px solid color-mix(in srgb, var(--orbi-primary) 20%, transparent)"
       >
         <div className="grid grid-cols-2 gap-lg">
           <InputField
@@ -464,14 +463,14 @@ function MyContextSection() {
           options={['Full-time employed', 'Part-time', 'Freelance / contract', 'Self-employed', 'Student', 'Between jobs', 'Not working currently']}
           value={profile.employmentType}
           onChange={v => updateProfile({ employmentType: v })}
-          accent="#fb923c"
+          accent="var(--orbi-primary)"
         />
         <ChipSingleSelect
           label="Where do you work?"
           options={['Fully remote', 'Hybrid', 'In office / on-site', 'On the go / field work', 'Varies']}
           value={profile.workStyle}
           onChange={v => updateProfile({ workStyle: v })}
-          accent="#fb923c"
+          accent="var(--orbi-primary)"
         />
         <EditableTextarea
           label="What are you working toward career-wise?"
@@ -490,7 +489,7 @@ function MyContextSection() {
       >
         <div
           className="rounded-corner-md p-lg flex flex-col gap-md"
-          style={{ background: 'rgba(251,146,60,0.08)', border: '1px solid rgba(251,146,60,0.2)' }}
+          style={{ background: 'color-mix(in srgb, var(--orbi-primary) 8%, transparent)', border: '1px solid color-mix(in srgb, var(--orbi-primary) 20%, transparent)' }}
         >
           <p className="text-label-sm text-text-secondary flex items-center gap-sm">
             <span>🔥</span> <strong className="text-text-primary">This week</strong> — #1 thing to accomplish
@@ -506,7 +505,7 @@ function MyContextSection() {
 
         <div
           className="rounded-corner-md p-lg flex flex-col gap-md"
-          style={{ background: 'rgba(20,184,166,0.06)', border: '1px solid rgba(20,184,166,0.2)' }}
+          style={{ background: 'color-mix(in srgb, var(--orbi-secondary) 6%, transparent)', border: '1px solid color-mix(in srgb, var(--orbi-secondary) 20%, transparent)' }}
         >
           <p className="text-label-sm text-text-secondary flex items-center gap-sm">
             <span>🎯</span> <strong className="text-text-primary">This month</strong> — what you want in motion
@@ -570,7 +569,7 @@ function MyContextSection() {
           ]}
           selected={profile.adhdChallenges}
           onChange={v => updateProfile({ adhdChallenges: v })}
-          accent="#f472b6"
+          accent="var(--orbi-primary)"
         />
 
         <ChipMultiSelect
@@ -582,7 +581,7 @@ function MyContextSection() {
           ]}
           selected={profile.adhdStrengths}
           onChange={v => updateProfile({ adhdStrengths: v })}
-          accent="#6ee7b7"
+          accent="var(--orbi-secondary)"
         />
 
         <ChipSingleSelect
@@ -590,7 +589,7 @@ function MyContextSection() {
           options={['Morning (6–12pm)', 'Afternoon (12–5pm)', 'Evening (5–9pm)', 'Night owl (9pm–2am)', 'Varies wildly']}
           value={profile.peakHours}
           onChange={v => updateProfile({ peakHours: v })}
-          accent="#fcd34d"
+          accent="var(--orbi-primary)"
         />
 
         <ChipMultiSelect
@@ -602,7 +601,7 @@ function MyContextSection() {
           ]}
           selected={profile.focusHelpers}
           onChange={v => updateProfile({ focusHelpers: v })}
-          accent="#38bdf8"
+          accent="var(--orbi-secondary)"
         />
 
         <EditableTextarea
