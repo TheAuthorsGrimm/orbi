@@ -27,7 +27,7 @@ export function StepShell({ step, totalSteps, orbiMessage, children }: StepShell
           <div className="flex items-center gap-md">
             <AstraLogo size={32} />
             <span
-              className="text-title text-white font-bold"
+              className="text-title text-text-primary font-bold"
               style={{ fontFamily: 'Instrument Sans, system-ui, sans-serif' }}
             >
               Orbi
@@ -35,7 +35,7 @@ export function StepShell({ step, totalSteps, orbiMessage, children }: StepShell
           </div>
           <div className="flex items-center gap-xs">
             <Sparkles size={10} className="text-brand-primary" />
-            <span className="text-video-title text-gray-400">by GrimmForged AI Solutions</span>
+            <span className="text-video-title text-text-secondary">by GrimmForged AI Solutions</span>
           </div>
         </div>
 
@@ -53,10 +53,10 @@ export function StepShell({ step, totalSteps, orbiMessage, children }: StepShell
                 style={{
                   background:
                     i < step
-                      ? 'linear-gradient(135deg, #5250f3, #0d9488)'
+                      ? 'linear-gradient(135deg, var(--orbi-primary), var(--orbi-secondary))'
                       : i === step
-                        ? '#5250f3'
-                        : 'rgba(255,255,255,0.3)',
+                        ? 'var(--orbi-primary)'
+                        : 'color-mix(in srgb, var(--orbi-text) 30%, transparent)',
                   transform: i === step ? 'scale(1.3)' : 'scale(1)',
                 }}
               />

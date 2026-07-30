@@ -29,13 +29,13 @@ export function WelcomeStep({ onNext }: WelcomeStepProps) {
           transition={{ repeat: Infinity, duration: 3, ease: 'easeInOut' }}
           className="rounded-full grid place-items-center shadow-2xl"
           style={{
-            background: 'linear-gradient(135deg, #5250f3, #0d9488)',
+            background: 'linear-gradient(135deg, var(--orbi-primary), var(--orbi-secondary))',
             width: 'clamp(6rem, 12vw, 12rem)',
             height: 'clamp(6rem, 12vw, 12rem)',
           }}
         >
           <Bot
-            className="text-white"
+            className="text-text-primary"
             style={{ width: 'clamp(3rem, 6vw, 6rem)', height: 'clamp(3rem, 6vw, 6rem)' }}
           />
         </motion.div>
@@ -44,7 +44,7 @@ export function WelcomeStep({ onNext }: WelcomeStepProps) {
         <div className="flex items-center" style={{ gap: 'clamp(0.5rem, 1.5vw, 1.25rem)' }}>
           <AstraLogo size={36} />
           <span
-            className="text-white font-bold"
+            className="text-text-primary font-bold"
             style={{
               fontFamily: 'Instrument Sans, system-ui, sans-serif',
               fontSize: 'clamp(2rem, 6vw, 5rem)',
@@ -56,7 +56,7 @@ export function WelcomeStep({ onNext }: WelcomeStepProps) {
         </div>
 
         <p
-          className="text-gray-300"
+          className="text-text-secondary"
           style={{ fontSize: 'clamp(1rem, 2vw, 1.5rem)' }}
         >
           Your ADHD productivity companion
@@ -70,9 +70,9 @@ export function WelcomeStep({ onNext }: WelcomeStepProps) {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 + i * 0.3, duration: 0.4, ease: 'easeOut' }}
-              className="text-white font-bold"
+              className="text-text-primary font-bold"
               style={{
-                background: 'linear-gradient(135deg, #5250f3, #0d9488)',
+                background: 'linear-gradient(135deg, var(--orbi-primary), var(--orbi-secondary))',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 fontSize: 'clamp(1.75rem, 5vw, 4rem)',
@@ -88,7 +88,7 @@ export function WelcomeStep({ onNext }: WelcomeStepProps) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.8, duration: 0.5 }}
-          className="text-gray-300"
+          className="text-text-secondary"
           style={{
             fontSize: 'clamp(0.95rem, 1.6vw, 1.25rem)',
             maxWidth: 'min(90vw, 36rem)',

@@ -41,7 +41,7 @@ const STAT_CARDS = [
     getValue: (v: number) => `${v} min`,
     gradient: 'linear-gradient(135deg, #1e1b4b 0%, #3730a3 60%, #5250f3 100%)',
     iconColor: '#c4b5fd',
-    glowColor: 'rgba(82,80,243,0.35)',
+    glowColor: 'color-mix(in srgb, var(--orbi-primary) 35%, transparent)',
   },
   {
     icon: Flame,
@@ -74,7 +74,7 @@ const QUICK_ACTIONS = [
     icon: Bot,
     path: '/agent',
     gradient: 'linear-gradient(135deg, #0891b2, #0d9488)',
-    glow: 'rgba(13,148,136,0.4)',
+    glow: 'color-mix(in srgb, var(--orbi-secondary) 40%, transparent)',
   },
   {
     label: 'Reminders',
@@ -132,12 +132,12 @@ export function DashboardPage() {
           animate={{ opacity: 1, y: 0 }}
           className="rounded-corner-lg px-xl py-lg flex items-center gap-lg cursor-pointer"
           style={{
-            background: 'linear-gradient(135deg, rgba(82,80,243,0.2), rgba(13,148,136,0.12))',
-            border: '1.5px solid rgba(82,80,243,0.4)',
+            background: 'linear-gradient(135deg, color-mix(in srgb, var(--orbi-primary) 20%, transparent), color-mix(in srgb, var(--orbi-secondary) 12%, transparent))',
+            border: '1.5px solid color-mix(in srgb, var(--orbi-primary) 40%, transparent)',
           }}
           onClick={() => navigate('/onboarding')}
         >
-          <div className="p-md rounded-corner-md flex-shrink-0" style={{ background: 'linear-gradient(135deg, #5250f3, #0d9488)' }}>
+          <div className="p-md rounded-corner-md flex-shrink-0" style={{ background: 'linear-gradient(135deg, var(--orbi-primary), var(--orbi-secondary))' }}>
             <Brain size={18} className="text-white" />
           </div>
           <div className="flex flex-col gap-xs flex-1">
@@ -169,10 +169,10 @@ export function DashboardPage() {
           <motion.button
             className="flex items-center gap-sm px-lg py-md rounded-corner-md text-white cursor-pointer border-0 outline-none"
             style={{
-              background: 'linear-gradient(135deg, #5250f3 0%, #0d9488 100%)',
-              boxShadow: '0 0 18px rgba(82,80,243,0.5), 0 0 6px rgba(13,148,136,0.4)',
+              background: 'linear-gradient(135deg, var(--orbi-primary), var(--orbi-secondary))',
+              boxShadow: '0 0 18px color-mix(in srgb, var(--orbi-primary) 50%, transparent), 0 0 6px color-mix(in srgb, var(--orbi-secondary) 40%, transparent)',
             }}
-            whileHover={{ scale: 1.04, boxShadow: '0 0 28px rgba(82,80,243,0.7), 0 0 10px rgba(13,148,136,0.5)' }}
+            whileHover={{ scale: 1.04, boxShadow: '0 0 28px color-mix(in srgb, var(--orbi-primary) 70%, transparent), 0 0 10px color-mix(in srgb, var(--orbi-secondary) 50%, transparent)' }}
             whileTap={{ scale: 0.97 }}
             onClick={() => navigate('/agent')}
           >
@@ -207,12 +207,12 @@ export function DashboardPage() {
           >
             <div
               className="flex-shrink-0 p-md rounded-corner-md"
-              style={{ background: 'rgba(255,255,255,0.12)' }}
+              style={{ background: 'color-mix(in srgb, var(--orbi-text) 12%, transparent)' }}
             >
               <stat.icon size={20} style={{ color: stat.iconColor }} />
             </div>
             <div className="flex flex-col gap-xs">
-              <span className="text-video-title" style={{ color: 'rgba(255,255,255,0.65)' }}>
+              <span className="text-video-title" style={{ color: 'color-mix(in srgb, var(--orbi-text) 65%, transparent)' }}>
                 {stat.label}
               </span>
               <span className="text-label text-white">
@@ -232,7 +232,7 @@ export function DashboardPage() {
           {/* Orbital visualization */}
           <div
             className="rounded-corner-lg p-xl flex flex-col gap-lg flex-1"
-            style={{ background: 'linear-gradient(145deg, #0f0e2a 0%, #13122f 60%, #0e1f2f 100%)', border: '1px solid rgba(82,80,243,0.25)' }}
+            style={{ background: 'var(--orbi-surface)', border: '1px solid color-mix(in srgb, var(--orbi-primary) 25%, transparent)' }}
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-md">
@@ -248,15 +248,15 @@ export function DashboardPage() {
                 className="absolute rounded-full"
                 style={{
                   width: 240, height: 240,
-                  border: '1px solid rgba(82,80,243,0.3)',
-                  boxShadow: 'inset 0 0 40px rgba(82,80,243,0.05)',
+                  border: '1px solid color-mix(in srgb, var(--orbi-primary) 30%, transparent)',
+                  boxShadow: 'inset 0 0 40px color-mix(in srgb, var(--orbi-primary) 5%, transparent)',
                 }}
               />
               <div
                 className="absolute rounded-full"
                 style={{
                   width: 320, height: 320,
-                  border: '1px dashed rgba(13,148,136,0.2)',
+                  border: '1px dashed color-mix(in srgb, var(--orbi-secondary) 20%, transparent)',
                 }}
               />
 
@@ -265,13 +265,13 @@ export function DashboardPage() {
                 className="absolute z-10 flex flex-col items-center justify-center rounded-full"
                 style={{
                   width: 72, height: 72,
-                  background: 'linear-gradient(135deg, #5250f3, #0d9488)',
+                  background: 'linear-gradient(135deg, var(--orbi-primary), var(--orbi-secondary))',
                 }}
                 animate={{
                   boxShadow: [
-                    '0 0 0 0px rgba(82,80,243,0.5)',
-                    '0 0 0 20px rgba(82,80,243,0)',
-                    '0 0 0 0px rgba(82,80,243,0)',
+                    '0 0 0 0px color-mix(in srgb, var(--orbi-primary) 50%, transparent)',
+                    '0 0 0 20px color-mix(in srgb, var(--orbi-primary) 0%, transparent)',
+                    '0 0 0 0px color-mix(in srgb, var(--orbi-primary) 0%, transparent)',
                   ],
                 }}
                 transition={{ duration: 2.4, repeat: Infinity, ease: 'easeOut' }}
@@ -304,8 +304,8 @@ export function DashboardPage() {
                           width: 120,
                           background: task.status === 'complete'
                             ? 'rgba(5,150,105,0.2)'
-                            : 'rgba(255,255,255,0.06)',
-                          border: `1px solid ${task.status === 'complete' ? 'rgba(5,150,105,0.5)' : 'rgba(82,80,243,0.4)'}`,
+                            : 'color-mix(in srgb, var(--orbi-text) 6%, transparent)',
+                          border: `1px solid ${task.status === 'complete' ? 'rgba(5,150,105,0.5)' : 'color-mix(in srgb, var(--orbi-primary) 40%, transparent)'}`,
                           backdropFilter: 'blur(4px)',
                         }}
                         onClick={() => navigate('/tasks')}
@@ -355,8 +355,8 @@ export function DashboardPage() {
             className="rounded-corner-lg p-xl flex flex-col gap-lg"
             style={{
               background: 'linear-gradient(145deg, #1e1b4b 0%, #1a2e3b 100%)',
-              border: '1px solid rgba(82,80,243,0.4)',
-              boxShadow: '0 4px 32px rgba(82,80,243,0.2)',
+              border: '1px solid color-mix(in srgb, var(--orbi-primary) 40%, transparent)',
+              boxShadow: '0 4px 32px color-mix(in srgb, var(--orbi-primary) 20%, transparent)',
             }}
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -365,7 +365,7 @@ export function DashboardPage() {
             <div className="flex items-center gap-md">
               <div
                 className="p-sm rounded-corner-md"
-                style={{ background: 'linear-gradient(135deg, #5250f3, #0d9488)' }}
+                style={{ background: 'linear-gradient(135deg, var(--orbi-primary), var(--orbi-secondary))' }}
               >
                 <Bot size={14} className="text-white" />
               </div>
@@ -379,7 +379,7 @@ export function DashboardPage() {
             </p>
             <button
               className="flex items-center justify-center gap-sm px-md py-sm rounded-corner-md text-white cursor-pointer border-0"
-              style={{ background: 'linear-gradient(135deg, #5250f3 0%, #0d9488 100%)' }}
+              style={{ background: 'linear-gradient(135deg, var(--orbi-primary), var(--orbi-secondary))' }}
               onClick={() => navigate('/agent')}
             >
               <span className="text-label-sm">Talk to Orbi</span>
@@ -392,7 +392,7 @@ export function DashboardPage() {
             className="rounded-corner-lg p-xl flex flex-col gap-lg flex-1"
             style={{
               background: 'linear-gradient(145deg, #0f0e2a 0%, #0e1a0e 100%)',
-              border: '1px solid rgba(255,255,255,0.08)',
+              border: '1px solid color-mix(in srgb, var(--orbi-text) 8%, transparent)',
             }}
           >
             <div className="flex items-center justify-between">
@@ -410,17 +410,17 @@ export function DashboardPage() {
                   style={{
                     background: task.status === 'complete'
                       ? 'rgba(5,150,105,0.08)'
-                      : 'rgba(255,255,255,0.04)',
-                    border: `1px solid ${task.status === 'complete' ? 'rgba(5,150,105,0.2)' : 'rgba(255,255,255,0.06)'}`,
+                      : 'color-mix(in srgb, var(--orbi-text) 4%, transparent)',
+                    border: `1px solid ${task.status === 'complete' ? 'rgba(5,150,105,0.2)' : 'color-mix(in srgb, var(--orbi-text) 6%, transparent)'}`,
                     opacity: task.status === 'complete' ? 0.65 : 1,
                   }}
-                  whileHover={{ background: 'rgba(82,80,243,0.12)', borderColor: 'rgba(82,80,243,0.3)' }}
+                  whileHover={{ background: 'color-mix(in srgb, var(--orbi-primary) 12%, transparent)', borderColor: 'color-mix(in srgb, var(--orbi-primary) 30%, transparent)' }}
                   onClick={() => navigate('/tasks')}
                 >
                   <div
                     className="flex-shrink-0 w-4 h-4 rounded-full border-2 flex items-center justify-center"
                     style={{
-                      borderColor: task.status === 'complete' ? '#059669' : 'rgba(255,255,255,0.25)',
+                      borderColor: task.status === 'complete' ? '#059669' : 'color-mix(in srgb, var(--orbi-text) 25%, transparent)',
                       background: task.status === 'complete' ? '#059669' : 'transparent',
                     }}
                   >

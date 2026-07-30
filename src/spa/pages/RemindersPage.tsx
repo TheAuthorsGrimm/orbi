@@ -71,7 +71,7 @@ function MedicationTracker() {
     <div
       className="rounded-corner-lg p-xl flex flex-col gap-xl"
       style={{
-        background: 'linear-gradient(145deg, #0a0f1a 0%, #0d1526 60%, #0a1a1a 100%)',
+        background: 'var(--orbi-surface)',
         border: '1px solid rgba(99,102,241,0.4)',
         boxShadow: '0 4px 40px rgba(99,102,241,0.15)',
       }}
@@ -132,8 +132,8 @@ function MedicationTracker() {
           const taken = data.taken[i];
           const missed = isPast && !taken;
 
-          let tileBg = 'rgba(255,255,255,0.03)';
-          let tileBorder = 'rgba(255,255,255,0.08)';
+          let tileBg = 'color-mix(in srgb, var(--orbi-text) 3%, transparent)';
+          let tileBorder = 'color-mix(in srgb, var(--orbi-text) 8%, transparent)';
           let tileGlow = '';
 
           if (taken) {
@@ -178,7 +178,7 @@ function MedicationTracker() {
               <span
                 className="text-label-sm"
                 style={{
-                  color: isToday ? '#a5b4fc' : taken ? '#6ee7b7' : missed ? '#fca5a5' : 'rgba(255,255,255,0.35)',
+                  color: isToday ? '#a5b4fc' : taken ? '#6ee7b7' : missed ? '#fca5a5' : 'color-mix(in srgb, var(--orbi-text) 35%, transparent)',
                   fontWeight: isToday ? 700 : 400,
                 }}
               >
@@ -203,8 +203,8 @@ function MedicationTracker() {
                     ? 'rgba(239,68,68,0.15)'
                     : isToday
                     ? 'rgba(99,102,241,0.2)'
-                    : 'rgba(255,255,255,0.05)',
-                  border: `2px solid ${taken ? '#059669' : missed ? 'rgba(239,68,68,0.4)' : isToday ? 'rgba(99,102,241,0.5)' : 'rgba(255,255,255,0.08)'}`,
+                    : 'color-mix(in srgb, var(--orbi-text) 5%, transparent)',
+                  border: `2px solid ${taken ? '#059669' : missed ? 'rgba(239,68,68,0.4)' : isToday ? 'rgba(99,102,241,0.5)' : 'color-mix(in srgb, var(--orbi-text) 8%, transparent)'}`,
                 }}
               >
                 {taken
@@ -213,14 +213,14 @@ function MedicationTracker() {
                   ? <span style={{ fontSize: '1rem' }}>✗</span>
                   : isToday
                   ? <Pill size={16} style={{ color: '#a5b4fc' }} />
-                  : <span style={{ color: 'rgba(255,255,255,0.2)', fontSize: '0.75rem' }}>—</span>
+                  : <span style={{ color: 'color-mix(in srgb, var(--orbi-text) 20%, transparent)', fontSize: '0.75rem' }}>—</span>
                 }
               </div>
 
               <span
                 className="text-label-sm"
                 style={{
-                  color: taken ? '#6ee7b7' : missed ? '#fca5a5' : isToday ? '#a5b4fc' : 'rgba(255,255,255,0.2)',
+                  color: taken ? '#6ee7b7' : missed ? '#fca5a5' : isToday ? '#a5b4fc' : 'color-mix(in srgb, var(--orbi-text) 20%, transparent)',
                 }}
               >
                 {taken ? 'Taken ✓' : missed ? 'Missed' : isToday ? 'Today' : '—'}
@@ -238,10 +238,10 @@ function MedicationTracker() {
             {takenCount} / 7 days
           </span>
         </div>
-        <div className="rounded-full h-2" style={{ background: 'rgba(255,255,255,0.08)' }}>
+        <div className="rounded-full h-2" style={{ background: 'color-mix(in srgb, var(--orbi-text) 8%, transparent)' }}>
           <motion.div
             className="h-2 rounded-full"
-            style={{ background: 'linear-gradient(90deg, #6366f1, #0d9488)' }}
+            style={{ background: 'linear-gradient(90deg, var(--category-1), var(--orbi-secondary))' }}
             initial={{ width: 0 }}
             animate={{ width: `${(takenCount / 7) * 100}%` }}
             transition={{ duration: 0.6, ease: 'easeOut' }}
@@ -271,13 +271,13 @@ const TRIGGER_BADGE: Record<ReminderTriggerType, 'default' | 'brand' | 'warning'
 const TRIGGER_GRADIENT: Record<ReminderTriggerType, string> = {
   time: 'linear-gradient(135deg, #1e1b4b, #13122f)',
   context: 'linear-gradient(135deg, #1a1000, #120900)',
-  ai: 'linear-gradient(135deg, #031a17, #021210)',
+  ai: 'var(--orbi-surface)',
 };
 
 const TRIGGER_BORDER: Record<ReminderTriggerType, string> = {
-  time: 'rgba(82,80,243,0.3)',
+  time: 'color-mix(in srgb, var(--orbi-primary) 30%, transparent)',
   context: 'rgba(217,119,6,0.35)',
-  ai: 'rgba(13,148,136,0.3)',
+  ai: 'color-mix(in srgb, var(--orbi-secondary) 30%, transparent)',
 };
 
 export function RemindersPage() {
@@ -319,9 +319,9 @@ export function RemindersPage() {
       {/* Reminder type cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-lg">
         {[
-          { type: 'time', label: 'Time-based', desc: 'Triggers at a specific time', icon: Clock, accent: '#a5b4fc', gradient: 'linear-gradient(145deg, #0f0e2a 0%, #0a0a18 100%)', border: 'rgba(82,80,243,0.25)' },
+          { type: 'time', label: 'Time-based', desc: 'Triggers at a specific time', icon: Clock, accent: '#a5b4fc', gradient: 'var(--orbi-surface)', border: 'color-mix(in srgb, var(--orbi-primary) 25%, transparent)' },
           { type: 'context', label: 'Context-aware', desc: 'Based on your activity', icon: Zap, accent: '#fcd34d', gradient: 'linear-gradient(145deg, #1a0e00 0%, #110900 100%)', border: 'rgba(217,119,6,0.25)' },
-          { type: 'ai', label: 'AI-triggered', desc: 'Orbi decides when you need a nudge', icon: Brain, accent: '#6ee7b7', gradient: 'linear-gradient(145deg, #031a17 0%, #021210 100%)', border: 'rgba(13,148,136,0.25)' },
+          { type: 'ai', label: 'AI-triggered', desc: 'Orbi decides when you need a nudge', icon: Brain, accent: '#6ee7b7', gradient: 'var(--orbi-surface)', border: 'color-mix(in srgb, var(--orbi-secondary) 25%, transparent)' },
         ].map(item => (
           <div
             key={item.type}
@@ -341,7 +341,7 @@ export function RemindersPage() {
       {showAdd && (
         <div
           className="rounded-corner-lg p-xl flex flex-col gap-lg"
-          style={{ background: 'linear-gradient(145deg, #0f0e2a 0%, #0a0a18 100%)', border: '1px solid rgba(82,80,243,0.35)' }}
+          style={{ background: 'var(--orbi-surface)', border: '1px solid color-mix(in srgb, var(--orbi-primary) 35%, transparent)' }}
         >
           <h2 className="text-label text-text-primary">New Reminder</h2>
           <div className="flex gap-xl">
@@ -393,7 +393,7 @@ export function RemindersPage() {
               >
                 <div
                   className="w-10 h-10 rounded-corner-md flex items-center justify-center flex-shrink-0"
-                  style={{ background: 'rgba(255,255,255,0.08)' }}
+                  style={{ background: 'color-mix(in srgb, var(--orbi-text) 8%, transparent)' }}
                 >
                   <Icon size={18} className="text-brand-primary" />
                 </div>
@@ -425,9 +425,9 @@ export function RemindersPage() {
       <div
         className="rounded-corner-lg p-xl flex items-start gap-md"
         style={{
-          background: 'linear-gradient(145deg, #031a17 0%, #021210 100%)',
+          background: 'var(--orbi-surface)',
           borderLeft: '3px solid #0d9488',
-          border: '1px solid rgba(13,148,136,0.3)',
+          border: '1px solid color-mix(in srgb, var(--orbi-secondary) 30%, transparent)',
         }}
       >
         <Brain size={18} className="text-brand-primary mt-xs flex-shrink-0" />

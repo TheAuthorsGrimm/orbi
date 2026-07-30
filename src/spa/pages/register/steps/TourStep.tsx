@@ -46,8 +46,8 @@ export function TourStep({ firstName, onChoose }: TourStepProps) {
           />
 
           <div className="flex flex-col gap-xs">
-            <h2 className="text-heading text-white text-center">You're in!</h2>
-            <p className="text-label-sm text-gray-300 text-center">
+            <h2 className="text-heading text-text-primary text-center">You're in!</h2>
+            <p className="text-label-sm text-text-secondary text-center">
               Choose how you'd like to explore Orbi.
             </p>
           </div>
@@ -68,7 +68,7 @@ export function TourStep({ firstName, onChoose }: TourStepProps) {
                   {opt.icon}
                   <div className="text-left">
                     <span className="block">{opt.label}</span>
-                    <span className="block text-video-title text-gray-400 font-normal">
+                    <span className="block text-video-title text-text-secondary font-normal">
                       {opt.desc}
                     </span>
                   </div>

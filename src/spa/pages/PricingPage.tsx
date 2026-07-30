@@ -10,8 +10,8 @@ const TIERS = [
     icon: Zap,
     badge: null,
     description: 'Get started with ADHD-friendly task planning',
-    gradient: 'linear-gradient(145deg, #0a0a18 0%, #0e0d20 100%)',
-    border: '1px solid rgba(255,255,255,0.1)',
+    gradient: 'var(--orbi-surface)',
+    border: '1px solid color-mix(in srgb, var(--orbi-text) 10%, transparent)',
     accent: '#a5b4fc',
     iconGradient: 'linear-gradient(135deg, #3730a3, #4338ca)',
     current: false,
@@ -26,8 +26,8 @@ const TIERS = [
     icon: Bot,
     badge: 'Most Popular',
     description: 'AI-powered ADHD support with Claude',
-    gradient: 'linear-gradient(145deg, #0f0e2a 0%, #1a1040 100%)',
-    border: '1px solid rgba(82,80,243,0.5)',
+    gradient: 'var(--orbi-surface)',
+    border: '1px solid color-mix(in srgb, var(--orbi-primary) 50%, transparent)',
     accent: '#c4b5fd',
     iconGradient: 'linear-gradient(135deg, #5250f3, #7c3aed)',
     current: false,
@@ -49,8 +49,8 @@ const TIERS = [
     icon: Sparkles,
     badge: 'All features',
     description: 'The complete ADHD companion experience',
-    gradient: 'linear-gradient(145deg, #031a17 0%, #0a2a2a 100%)',
-    border: '1px solid rgba(13,148,136,0.5)',
+    gradient: 'var(--orbi-surface)',
+    border: '1px solid color-mix(in srgb, var(--orbi-secondary) 50%, transparent)',
     accent: '#5eead4',
     iconGradient: 'linear-gradient(135deg, #0d9488, #0891b2)',
     current: true,
@@ -94,7 +94,7 @@ export function PricingPage() {
               style={{
                 background: tier.gradient,
                 border: tier.border,
-                boxShadow: tier.current ? '0 4px 40px rgba(13,148,136,0.2)' : tier.id === 'agent' ? '0 4px 40px rgba(82,80,243,0.2)' : 'none',
+                boxShadow: tier.current ? '0 4px 40px color-mix(in srgb, var(--orbi-secondary) 20%, transparent)' : tier.id === 'agent' ? '0 4px 40px color-mix(in srgb, var(--orbi-primary) 20%, transparent)' : 'none',
               }}
             >
               {/* Top */}
@@ -159,7 +159,7 @@ export function PricingPage() {
       {/* FAQ */}
       <div
         className="rounded-corner-lg p-xl flex flex-col gap-lg max-w-2xl mx-auto w-full"
-        style={{ background: 'linear-gradient(145deg, #0f0e2a 0%, #0a0a18 100%)', border: '1px solid rgba(82,80,243,0.2)' }}
+        style={{ background: 'var(--orbi-surface)', border: '1px solid color-mix(in srgb, var(--orbi-primary) 20%, transparent)' }}
       >
         <h2 className="text-label text-text-primary">Before you commit</h2>
         <div className="flex flex-col gap-lg">
@@ -169,7 +169,7 @@ export function PricingPage() {
             { q: 'Who is Orbi for?', a: 'Primarily people with ADHD, but anyone who struggles with executive dysfunction, task paralysis, or motivation will benefit.' },
             { q: 'Is my data private?', a: 'Your task data and AI conversations are private and not used to train models. Payments processed securely via Stripe.' },
           ].map(item => (
-            <div key={item.q} className="flex flex-col gap-xs" style={{ paddingBottom: '1rem', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+            <div key={item.q} className="flex flex-col gap-xs" style={{ paddingBottom: '1rem', borderBottom: '1px solid color-mix(in srgb, var(--orbi-text) 5%, transparent)' }}>
               <span className="text-label text-text-primary">{item.q}</span>
               <p className="text-label-sm text-text-secondary">{item.a}</p>
             </div>

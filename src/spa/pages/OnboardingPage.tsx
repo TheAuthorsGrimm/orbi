@@ -41,7 +41,7 @@ export function OnboardingPage() {
         className="w-full max-w-4xl"
       >
         <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-          <section className="rounded-corner-lg p-8 bg-surface-bg border border-white/10 shadow-2xl shadow-black/30">
+          <section className="rounded-corner-lg p-8 shadow-2xl shadow-black/30" style={{ background: 'var(--orbi-surface)', border: 'var(--orbi-border)' }}>
             <div className="flex items-center gap-3 mb-6">
               <AstraLogo size={36} />
               <div>
@@ -111,10 +111,10 @@ export function OnboardingPage() {
             </form>
           </section>
 
-          <aside className="rounded-corner-lg p-8 bg-[linear-gradient(160deg,rgba(82,80,243,0.18),rgba(13,148,136,0.10))] border border-white/10 shadow-2xl shadow-black/20">
+          <aside className="rounded-corner-lg p-8 shadow-2xl shadow-black/20" style={{ background: 'linear-gradient(160deg, color-mix(in srgb, var(--orbi-primary) 18%, transparent), color-mix(in srgb, var(--orbi-secondary) 10%, transparent))', border: 'var(--orbi-border)' }}>
             <div className="flex items-center gap-3 mb-4">
-              <div className="rounded-corner-md p-3 bg-white/10">
-                <Brain size={18} className="text-white" />
+              <div className="rounded-corner-md p-3" style={{ background: 'color-mix(in srgb, var(--orbi-text) 10%, transparent)' }}>
+                <Brain size={18} style={{ color: 'var(--orbi-text)' }} />
               </div>
               <div>
                 <p className="text-label-sm text-text-secondary">What this unlocks</p>
@@ -128,9 +128,9 @@ export function OnboardingPage() {
                 { icon: Timer, title: 'Better timing', body: 'Your peak hours help Orbi place nudges when you can actually act.' },
                 { icon: Sparkles, title: 'Tone control', body: 'Choose how Orbi should talk so the app feels supportive, not noisy.' },
               ].map((item) => (
-                <div key={item.title} className="rounded-corner-md p-4 bg-black/20 border border-white/10 flex gap-3">
-                  <div className="rounded-full p-2 bg-white/10 h-fit">
-                    <item.icon size={16} className="text-white" />
+                <div key={item.title} className="rounded-corner-md p-4 flex gap-3" style={{ background: 'color-mix(in srgb, var(--orbi-base) 20%, transparent)', border: 'var(--orbi-border)' }}>
+                  <div className="rounded-full p-2 h-fit" style={{ background: 'color-mix(in srgb, var(--orbi-text) 10%, transparent)' }}>
+                    <item.icon size={16} style={{ color: 'var(--orbi-text)' }} />
                   </div>
                   <div>
                     <p className="text-label-sm text-text-primary">{item.title}</p>

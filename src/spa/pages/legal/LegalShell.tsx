@@ -18,7 +18,7 @@ export function LegalShell({ title, lastUpdated, children }: LegalShellProps) {
   return (
     <main
       className="min-h-screen overflow-y-auto"
-      style={{ background: 'linear-gradient(160deg, #080814 0%, #0a0a1a 50%, #080e14 100%)' }}
+      style={{ background: 'var(--orbi-gradient)' }}
     >
       <div
         className="mx-auto flex flex-col"
@@ -38,7 +38,7 @@ export function LegalShell({ title, lastUpdated, children }: LegalShellProps) {
           <div className="flex items-center gap-sm">
             <AstraLogo size={28} />
             <span
-              className="text-white font-bold"
+              className="text-text-primary font-bold"
               style={{
                 fontFamily: 'Instrument Sans, system-ui, sans-serif',
                 fontSize: 'clamp(1.15rem, 2vw, 1.5rem)',
@@ -61,7 +61,7 @@ export function LegalShell({ title, lastUpdated, children }: LegalShellProps) {
           <AlertTriangle size={20} className="shrink-0 mt-0.5" style={{ color: '#fbbf24' }} />
           <div className="flex flex-col gap-xs">
             <p
-              className="text-white font-semibold"
+              className="text-text-primary font-semibold"
               style={{ fontSize: 'clamp(0.9rem, 1.5vw, 1rem)' }}
             >
               Draft — pending legal review
@@ -80,7 +80,7 @@ export function LegalShell({ title, lastUpdated, children }: LegalShellProps) {
         {/* Title */}
         <div className="flex flex-col gap-xs">
           <h1
-            className="text-white font-bold"
+            className="text-text-primary font-bold"
             style={{
               fontFamily: 'Instrument Sans, system-ui, sans-serif',
               fontSize: 'clamp(1.75rem, 4.5vw, 3rem)',
@@ -101,7 +101,7 @@ export function LegalShell({ title, lastUpdated, children }: LegalShellProps) {
         <article
           className="legal-prose flex flex-col"
           style={{
-            color: 'rgba(255,255,255,0.85)',
+            color: 'color-mix(in srgb, var(--orbi-text) 85%, transparent)',
             fontSize: 'clamp(0.95rem, 1.6vw, 1.1rem)',
             lineHeight: 1.7,
             gap: 'clamp(1.25rem, 2vw, 1.75rem)',
@@ -113,7 +113,7 @@ export function LegalShell({ title, lastUpdated, children }: LegalShellProps) {
         {/* Footer */}
         <div
           className="flex items-center justify-center gap-sm border-t pt-xl"
-          style={{ borderColor: 'rgba(255,255,255,0.08)' }}
+          style={{ borderColor: 'color-mix(in srgb, var(--orbi-text) 8%, transparent)' }}
         >
           <Sparkles size={12} className="text-brand-primary" />
           <span
@@ -138,7 +138,7 @@ export function Section({ id, title, children }: SectionProps) {
   return (
     <section id={id} className="flex flex-col gap-md">
       <h2
-        className="text-white font-semibold"
+        className="text-text-primary font-semibold"
         style={{
           fontFamily: 'Instrument Sans, system-ui, sans-serif',
           fontSize: 'clamp(1.25rem, 2.5vw, 1.75rem)',

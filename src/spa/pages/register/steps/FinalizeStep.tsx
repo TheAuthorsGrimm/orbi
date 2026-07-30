@@ -32,21 +32,21 @@ export function FinalizeStep({
       orbiMessage="One last look — if everything's right, let's launch your workspace!"
     >
       <div className="flex flex-col gap-xs">
-        <h2 className="text-heading text-white font-bold">Almost done!</h2>
-        <p className="text-label-sm text-gray-300">
+        <h2 className="text-heading text-text-primary font-bold">Almost done!</h2>
+        <p className="text-label-sm text-text-secondary">
           Review your details before creating your account.
         </p>
       </div>
 
-      <div className="flex flex-col gap-sm rounded-corner-md bg-white/5 p-md">
+      <div className="flex flex-col gap-sm rounded-corner-md p-md" style={{ background: 'color-mix(in srgb, var(--orbi-text) 5%, transparent)', border: 'var(--orbi-border)' }}>
         {[
           { label: 'Name', value: `${data.firstName} ${data.lastName}`.trim() },
           { label: 'Email', value: data.email },
           { label: 'Plan', value: `${tier.icon} ${tier.name}${tier.price > 0 ? ` — $${tier.price}/mo` : ''}` },
         ].map((row) => (
           <div key={row.label} className="flex justify-between items-center">
-            <span className="text-label-sm text-gray-400">{row.label}</span>
-            <span className="text-label-sm text-white">{row.value}</span>
+            <span className="text-label-sm text-text-secondary">{row.label}</span>
+            <span className="text-label-sm text-text-primary">{row.value}</span>
           </div>
         ))}
       </div>
@@ -61,7 +61,7 @@ export function FinalizeStep({
         </motion.p>
       )}
 
-      <p className="text-video-title text-gray-500 text-center leading-relaxed">
+      <p className="text-video-title text-text-secondary text-center leading-relaxed">
         By creating an account you agree to our Terms of Service and Privacy Policy.
       </p>
 
