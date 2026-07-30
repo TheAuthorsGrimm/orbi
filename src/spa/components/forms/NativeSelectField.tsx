@@ -54,8 +54,8 @@ export function NativeSelectField({
           onChange={(e) => onChange(e.target.value)}
           className="w-full appearance-none rounded-corner-md text-text-primary outline-none transition disabled:opacity-50 disabled:cursor-not-allowed"
           style={{
-            background: 'rgba(255,255,255,0.04)',
-            border: '1.5px solid rgba(255,255,255,0.12)',
+            background: 'color-mix(in srgb, var(--orbi-text) 4%, transparent)',
+            border: '1.5px solid color-mix(in srgb, var(--orbi-text) 12%, transparent)',
             padding: '0.65rem 2.25rem 0.65rem 0.85rem',
             fontFamily: 'Atkinson Hyperlegible, sans-serif',
             fontSize: 'clamp(0.9rem, 1.3vw, 1rem)',
@@ -63,10 +63,10 @@ export function NativeSelectField({
             cursor: disabled ? 'not-allowed' : 'pointer',
           }}
           onFocus={(e) => {
-            e.currentTarget.style.borderColor = 'rgba(82,80,243,0.6)';
+            e.currentTarget.style.borderColor = 'var(--orbi-primary)';
           }}
           onBlur={(e) => {
-            e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)';
+            e.currentTarget.style.borderColor = 'color-mix(in srgb, var(--orbi-text) 12%, transparent)';
           }}
         >
           {placeholder && (
@@ -75,7 +75,7 @@ export function NativeSelectField({
             </option>
           )}
           {options.map((opt) => (
-            <option key={opt.value} value={opt.value} style={{ background: '#0a0a1a', color: '#fff' }}>
+            <option key={opt.value} value={opt.value} style={{ background: 'var(--orbi-base)', color: 'var(--orbi-text)' }}>
               {opt.label}
             </option>
           ))}

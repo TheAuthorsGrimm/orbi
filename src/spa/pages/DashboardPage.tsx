@@ -236,7 +236,7 @@ export function DashboardPage() {
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-md">
-                <Target size={16} style={{ color: '#a78bfa' }} />
+                <Target size={16} style={{ color: 'var(--orbi-primary)' }} />
                 <h2 className="text-label text-text-primary">Focus Orbit</h2>
               </div>
               <Badge label="4 orbiting" variant="brand" />

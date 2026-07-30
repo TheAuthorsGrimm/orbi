@@ -119,8 +119,8 @@ export function AppLayout() {
             type="button"
             aria-label={mobileNavOpen ? 'Close menu' : 'Open menu'}
             onClick={() => setMobileNavOpen((v) => !v)}
-            className="flex items-center justify-center rounded-corner-md text-white"
-            style={{ width: 44, height: 44, background: 'rgba(255,255,255,0.06)' }}
+            className="flex items-center justify-center rounded-corner-md text-text-primary"
+            style={{ width: 44, height: 44, background: 'color-mix(in srgb, var(--orbi-text) 6%, transparent)' }}
           >
             {mobileNavOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
@@ -130,15 +130,15 @@ export function AppLayout() {
               type="button"
               aria-label="Go back"
               onClick={handleBack}
-              className="flex items-center justify-center rounded-corner-md text-white"
-              style={{ width: 44, height: 44, background: 'rgba(255,255,255,0.06)' }}
+              className="flex items-center justify-center rounded-corner-md text-text-primary"
+              style={{ width: 44, height: 44, background: 'color-mix(in srgb, var(--orbi-text) 6%, transparent)' }}
             >
               <ArrowLeft size={20} />
             </button>
           )}
 
           <span
-            className="text-white font-bold"
+            className="text-text-primary font-bold"
             style={{
               fontFamily: 'Instrument Sans, system-ui, sans-serif',
               fontSize: '1.15rem',
@@ -157,10 +157,10 @@ export function AppLayout() {
             type="button"
             aria-label="Go back"
             onClick={handleBack}
-            className="hidden md:flex absolute top-lg left-lg z-10 items-center gap-xs px-md py-sm rounded-corner-md text-text-secondary hover:text-white transition"
+            className="hidden md:flex absolute top-lg left-lg z-10 items-center gap-xs px-md py-sm rounded-corner-md text-text-secondary hover:text-text-primary transition"
             style={{
-              background: 'rgba(255,255,255,0.05)',
-              border: '1px solid rgba(255,255,255,0.08)',
+              background: 'color-mix(in srgb, var(--orbi-text) 5%, transparent)',
+              border: '1px solid color-mix(in srgb, var(--orbi-text) 8%, transparent)',
               backdropFilter: 'blur(8px)',
             }}
           >

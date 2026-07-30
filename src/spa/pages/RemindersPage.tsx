@@ -72,8 +72,8 @@ function MedicationTracker() {
       className="rounded-corner-lg p-xl flex flex-col gap-xl"
       style={{
         background: 'var(--orbi-surface)',
-        border: '1px solid rgba(99,102,241,0.4)',
-        boxShadow: '0 4px 40px rgba(99,102,241,0.15)',
+        border: '1px solid color-mix(in srgb, var(--orbi-primary) 40%, transparent)',
+        boxShadow: '0 4px 40px color-mix(in srgb, var(--orbi-primary) 15%, transparent)',
       }}
     >
       {/* Header */}
@@ -83,10 +83,10 @@ function MedicationTracker() {
             className="flex items-center justify-center rounded-corner-md"
             style={{
               width: 48, height: 48,
-              background: 'linear-gradient(135deg, #6366f1 0%, #0d9488 100%)',
-              boxShadow: '0 0 20px rgba(99,102,241,0.5)',
+              background: 'linear-gradient(135deg, var(--orbi-primary), var(--orbi-secondary))',
+              boxShadow: '0 0 20px color-mix(in srgb, var(--orbi-primary) 50%, transparent)',
             }}
-            animate={{ boxShadow: ['0 0 16px rgba(99,102,241,0.4)', '0 0 32px rgba(99,102,241,0.7)', '0 0 16px rgba(99,102,241,0.4)'] }}
+            animate={{ boxShadow: ['0 0 16px color-mix(in srgb, var(--orbi-primary) 40%, transparent)', '0 0 32px color-mix(in srgb, var(--orbi-primary) 70%, transparent)', '0 0 16px color-mix(in srgb, var(--orbi-primary) 40%, transparent)'] }}
             transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
           >
             <Pill size={22} className="text-white" />
@@ -103,10 +103,10 @@ function MedicationTracker() {
         <div className="flex items-center gap-md">
           <div
             className="flex items-center gap-sm px-lg py-sm rounded-corner-md"
-            style={{ background: 'rgba(99,102,241,0.15)', border: '1px solid rgba(99,102,241,0.3)' }}
+            style={{ background: 'color-mix(in srgb, var(--orbi-primary) 15%, transparent)', border: '1px solid color-mix(in srgb, var(--orbi-primary) 30%, transparent)' }}
           >
-            <CheckCircle2 size={14} style={{ color: '#a5b4fc' }} />
-            <span className="text-label-sm" style={{ color: '#a5b4fc' }}>
+            <CheckCircle2 size={14} style={{ color: 'var(--orbi-primary)' }} />
+            <span className="text-label-sm" style={{ color: 'var(--orbi-primary)' }}>
               {takenCount} of {daysElapsed} days taken
             </span>
           </div>
@@ -137,15 +137,15 @@ function MedicationTracker() {
           let tileGlow = '';
 
           if (taken) {
-            tileBg = 'linear-gradient(145deg, #052e16 0%, #064e3b 100%)';
+            tileBg = 'rgba(5,150,105,0.15)';
             tileBorder = 'rgba(5,150,105,0.5)';
             tileGlow = '0 0 16px rgba(5,150,105,0.3)';
           } else if (isToday) {
-            tileBg = 'linear-gradient(145deg, #1e1b4b 0%, #1a2e3b 100%)';
-            tileBorder = 'rgba(99,102,241,0.7)';
-            tileGlow = '0 0 20px rgba(99,102,241,0.4)';
+            tileBg = 'color-mix(in srgb, var(--orbi-primary) 15%, transparent)';
+            tileBorder = 'color-mix(in srgb, var(--orbi-primary) 70%, transparent)';
+            tileGlow = '0 0 20px color-mix(in srgb, var(--orbi-primary) 40%, transparent)';
           } else if (missed) {
-            tileBg = 'linear-gradient(145deg, #1c0505 0%, #150202 100%)';
+            tileBg = 'rgba(239,68,68,0.1)';
             tileBorder = 'rgba(239,68,68,0.4)';
           }
 
@@ -169,7 +169,7 @@ function MedicationTracker() {
               {isToday && !taken && (
                 <motion.div
                   className="absolute inset-0 rounded-corner-lg"
-                  style={{ border: '2px solid rgba(99,102,241,0.5)' }}
+                  style={{ border: '2px solid color-mix(in srgb, var(--orbi-primary) 50%, transparent)' }}
                   animate={{ opacity: [0.5, 1, 0.5] }}
                   transition={{ duration: 1.8, repeat: Infinity }}
                 />
@@ -178,7 +178,7 @@ function MedicationTracker() {
               <span
                 className="text-label-sm"
                 style={{
-                  color: isToday ? '#a5b4fc' : taken ? '#6ee7b7' : missed ? '#fca5a5' : 'color-mix(in srgb, var(--orbi-text) 35%, transparent)',
+                  color: isToday ? 'var(--orbi-primary)' : taken ? '#6ee7b7' : missed ? '#fca5a5' : 'color-mix(in srgb, var(--orbi-text) 35%, transparent)',
                   fontWeight: isToday ? 700 : 400,
                 }}
               >
@@ -202,9 +202,9 @@ function MedicationTracker() {
                     : missed
                     ? 'rgba(239,68,68,0.15)'
                     : isToday
-                    ? 'rgba(99,102,241,0.2)'
+                    ? 'color-mix(in srgb, var(--orbi-primary) 20%, transparent)'
                     : 'color-mix(in srgb, var(--orbi-text) 5%, transparent)',
-                  border: `2px solid ${taken ? '#059669' : missed ? 'rgba(239,68,68,0.4)' : isToday ? 'rgba(99,102,241,0.5)' : 'color-mix(in srgb, var(--orbi-text) 8%, transparent)'}`,
+                  border: `2px solid ${taken ? '#059669' : missed ? 'rgba(239,68,68,0.4)' : isToday ? 'color-mix(in srgb, var(--orbi-primary) 50%, transparent)' : 'color-mix(in srgb, var(--orbi-text) 8%, transparent)'}`,
                 }}
               >
                 {taken
@@ -212,7 +212,7 @@ function MedicationTracker() {
                   : missed
                   ? <span style={{ fontSize: '1rem' }}>✗</span>
                   : isToday
-                  ? <Pill size={16} style={{ color: '#a5b4fc' }} />
+                  ? <Pill size={16} style={{ color: 'var(--orbi-primary)' }} />
                   : <span style={{ color: 'color-mix(in srgb, var(--orbi-text) 20%, transparent)', fontSize: '0.75rem' }}>—</span>
                 }
               </div>
@@ -234,7 +234,7 @@ function MedicationTracker() {
       <div className="flex flex-col gap-sm">
         <div className="flex justify-between">
           <span className="text-label-sm text-text-secondary">Weekly progress</span>
-          <span className="text-label-sm" style={{ color: '#a5b4fc' }}>
+          <span className="text-label-sm" style={{ color: 'var(--orbi-primary)' }}>
             {takenCount} / 7 days
           </span>
         </div>
