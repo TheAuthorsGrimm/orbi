@@ -270,7 +270,7 @@ export function TasksPage() {
   return (
     <div className="p-md md:p-xl flex flex-col gap-xl min-h-full">
       {/* Header */}
-      <div className="flex items-start justify-between">
+      <div className="flex flex-col sm:flex-row items-start justify-between gap-md">
         <div className="flex flex-col gap-xs">
           <h1 className="text-title text-text-primary">Task Planner</h1>
           <p className="text-label-sm text-text-secondary">
@@ -328,7 +328,7 @@ export function TasksPage() {
       </motion.div>
 
       {/* Two-column task entry */}
-      <div className="flex gap-xl flex-1">
+      <div className="flex flex-col md:flex-row gap-xl flex-1">
         <TaskColumn
           title="Today's Needs"
           subtitle="Must get done — non-negotiable"

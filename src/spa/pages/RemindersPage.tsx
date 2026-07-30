@@ -115,7 +115,7 @@ function MedicationTracker() {
               className="flex items-center gap-sm px-lg py-sm rounded-corner-md"
               style={{ background: 'rgba(239,68,68,0.12)', border: '1px solid rgba(239,68,68,0.3)' }}
             >
-              <span className="text-label-sm" style={{ color: '#fca5a5' }}>
+              <span className="text-label-sm" style={{ color: 'rgb(220,38,38)' }}>
                 {missedCount} missed
               </span>
             </div>

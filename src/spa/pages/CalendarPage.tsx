@@ -133,7 +133,7 @@ export function CalendarPage() {
                       : isToday
                       ? 'color-mix(in srgb, var(--orbi-primary) 20%, transparent)'
                       : 'transparent',
-                    color: isSelected ? '#fff' : isToday ? '#a5b4fc' : 'color-mix(in srgb, var(--orbi-text) 75%, transparent)',
+                    color: isSelected ? '#fff' : isToday ? 'var(--orbi-primary)' : 'color-mix(in srgb, var(--orbi-text) 75%, transparent)',
                     border: isSelected ? 'none' : isToday ? '1px solid color-mix(in srgb, var(--orbi-primary) 40%, transparent)' : '1px solid transparent',
                   }}
                 >
