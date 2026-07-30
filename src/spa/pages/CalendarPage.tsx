@@ -41,8 +41,8 @@ function getFirstDayOfMonth(year: number, month: number) {
 }
 
 const CARD_PURPLE = {
-  background: 'linear-gradient(145deg, #0f0e2a 0%, #0a0a18 100%)',
-  border: '1px solid rgba(82,80,243,0.25)',
+  background: 'var(--orbi-surface)',
+  border: '1px solid color-mix(in srgb, var(--orbi-primary) 25%, transparent)',
 };
 
 export function CalendarPage() {
@@ -129,12 +129,12 @@ export function CalendarPage() {
                   style={{
                     fontSize: '0.9rem',
                     background: isSelected
-                      ? 'linear-gradient(135deg, #5250f3, #0d9488)'
+                      ? 'linear-gradient(135deg, var(--orbi-primary), var(--orbi-secondary))'
                       : isToday
-                      ? 'rgba(82,80,243,0.2)'
+                      ? 'color-mix(in srgb, var(--orbi-primary) 20%, transparent)'
                       : 'transparent',
-                    color: isSelected ? '#fff' : isToday ? '#a5b4fc' : 'rgba(255,255,255,0.75)',
-                    border: isSelected ? 'none' : isToday ? '1px solid rgba(82,80,243,0.4)' : '1px solid transparent',
+                    color: isSelected ? '#fff' : isToday ? '#a5b4fc' : 'color-mix(in srgb, var(--orbi-text) 75%, transparent)',
+                    border: isSelected ? 'none' : isToday ? '1px solid color-mix(in srgb, var(--orbi-primary) 40%, transparent)' : '1px solid transparent',
                   }}
                 >
                   {day}
@@ -147,7 +147,7 @@ export function CalendarPage() {
           </div>
 
           {/* Legend */}
-          <div className="flex flex-col gap-sm pt-md" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+          <div className="flex flex-col gap-sm pt-md" style={{ borderTop: '1px solid color-mix(in srgb, var(--orbi-text) 6%, transparent)' }}>
             <p className="text-label-sm text-text-tertiary">Event types</p>
             {LEGEND.map(item => (
               <div key={item.type} className="flex items-center gap-md">
@@ -161,7 +161,7 @@ export function CalendarPage() {
         {/* ── Day View ── */}
         <div
           className="flex-1 rounded-corner-lg p-xl flex flex-col gap-lg overflow-hidden"
-          style={{ background: 'linear-gradient(145deg, #0a0e1a 0%, #080814 100%)', border: '1px solid rgba(82,80,243,0.2)' }}
+          style={{ background: 'var(--orbi-surface)', border: '1px solid color-mix(in srgb, var(--orbi-primary) 20%, transparent)' }}
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-md">
@@ -185,7 +185,7 @@ export function CalendarPage() {
                     <div className="text-label-sm text-text-tertiary w-14 pt-sm flex-shrink-0 text-right">
                       {hour === 12 ? '12pm' : hour > 12 ? `${hour - 12}pm` : `${hour}am`}
                     </div>
-                    <div className="flex-1 relative" style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+                    <div className="flex-1 relative" style={{ borderTop: '1px solid color-mix(in srgb, var(--orbi-text) 5%, transparent)' }}>
                       {eventsAtHour.map(event => (
                         <div
                           key={event.id}

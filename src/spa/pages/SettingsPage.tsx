@@ -24,8 +24,8 @@ type SettingsSection = 'profile' | 'context' | 'preferences' | 'notifications' |
 function SectionCard({
   title,
   children,
-  gradient = 'linear-gradient(145deg, #0f0e2a 0%, #0a0a18 100%)',
-  border = '1px solid rgba(82,80,243,0.25)',
+  gradient = 'var(--orbi-surface)',
+  border = '1px solid var(--orbi-border)',
 }: {
   title: string;
   children: React.ReactNode;
@@ -66,14 +66,14 @@ function EditableTextarea({
         placeholder={placeholder}
         className="w-full rounded-corner-md p-lg text-text-primary placeholder-text-tertiary resize-none outline-none"
         style={{
-          background: 'rgba(255,255,255,0.04)',
-          border: '1.5px solid rgba(255,255,255,0.1)',
+          background: 'color-mix(in srgb, var(--orbi-text) 4%, transparent)',
+          border: '1.5px solid color-mix(in srgb, var(--orbi-text) 10%, transparent)',
           fontFamily: 'Atkinson Hyperlegible, sans-serif',
           fontSize: '1rem',
           lineHeight: 1.6,
         }}
-        onFocus={e => { e.currentTarget.style.borderColor = 'rgba(82,80,243,0.5)'; }}
-        onBlur={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; }}
+        onFocus={e => { e.currentTarget.style.borderColor = 'color-mix(in srgb, var(--orbi-primary) 50%, transparent)'; }}
+        onBlur={e => { e.currentTarget.style.borderColor = 'color-mix(in srgb, var(--orbi-text) 10%, transparent)'; }}
       />
     </div>
   );
@@ -107,9 +107,9 @@ function ChipMultiSelect({
               onClick={() => toggle(opt)}
               className="px-lg py-sm rounded-corner-full text-label-sm transition-all"
               style={{
-                background: active ? accent + '25' : 'rgba(255,255,255,0.04)',
-                border: `1.5px solid ${active ? accent : 'rgba(255,255,255,0.1)'}`,
-                color: active ? accent : 'rgba(255,255,255,0.5)',
+                background: active ? accent + '25' : 'color-mix(in srgb, var(--orbi-text) 4%, transparent)',
+                border: `1.5px solid ${active ? accent : 'color-mix(in srgb, var(--orbi-text) 10%, transparent)'}`,
+                color: active ? accent : 'var(--orbi-text-muted)',
                 cursor: 'pointer',
               }}
             >
@@ -148,9 +148,9 @@ function ChipSingleSelect({
               onClick={() => onChange(opt)}
               className="px-lg py-sm rounded-corner-full text-label-sm transition-all"
               style={{
-                background: active ? accent + '25' : 'rgba(255,255,255,0.04)',
-                border: `1.5px solid ${active ? accent : 'rgba(255,255,255,0.1)'}`,
-                color: active ? accent : 'rgba(255,255,255,0.5)',
+                background: active ? accent + '25' : 'color-mix(in srgb, var(--orbi-text) 4%, transparent)',
+                border: `1.5px solid ${active ? accent : 'color-mix(in srgb, var(--orbi-text) 10%, transparent)'}`,
+                color: active ? accent : 'var(--orbi-text-muted)',
                 cursor: 'pointer',
               }}
             >
@@ -288,8 +288,8 @@ function CategoryManager({ profile, update }: { profile: OrbiProfile; update: (p
               whileTap={{ scale: 0.97 }}
               className="flex flex-col items-center gap-sm py-lg px-md rounded-corner-md text-center"
               style={{
-                background: on ? cat.color + '20' : 'rgba(255,255,255,0.03)',
-                border: `2px solid ${on ? cat.color : 'rgba(255,255,255,0.07)'}`,
+                background: on ? cat.color + '20' : 'color-mix(in srgb, var(--orbi-text) 4%, transparent)',
+                border: `2px solid ${on ? cat.color : 'color-mix(in srgb, var(--orbi-text) 8%, transparent)'}`,
                 cursor: 'pointer',
               }}
             >
@@ -319,7 +319,7 @@ function CategoryManager({ profile, update }: { profile: OrbiProfile; update: (p
                 <span>{cat.emoji}</span>
                 <span className="text-label-sm text-text-primary">{cat.label}</span>
                 <button onClick={() => removeCustom(cat.id)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
-                  <X size={12} style={{ color: 'rgba(255,255,255,0.4)' }} />
+                  <X size={12} style={{ color: 'var(--orbi-text-muted)' }} />
                 </button>
               </div>
             ))}
@@ -331,7 +331,7 @@ function CategoryManager({ profile, update }: { profile: OrbiProfile; update: (p
       {adding ? (
         <div
           className="rounded-corner-md p-lg flex flex-col gap-md"
-          style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(167,139,250,0.3)' }}
+          style={{ background: 'color-mix(in srgb, var(--orbi-text) 4%, transparent)', border: '1px solid color-mix(in srgb, var(--orbi-primary) 30%, transparent)' }}
         >
           <input
             autoFocus
@@ -346,7 +346,7 @@ function CategoryManager({ profile, update }: { profile: OrbiProfile; update: (p
             {CATEGORY_EMOJIS.map(em => (
               <button key={em} onClick={() => setNewEmoji(em)}
                 className="w-8 h-8 rounded-corner-sm flex items-center justify-center"
-                style={{ background: newEmoji === em ? 'rgba(167,139,250,0.2)' : 'transparent', border: `1px solid ${newEmoji === em ? '#a78bfa' : 'transparent'}`, cursor: 'pointer' }}>
+                style={{ background: newEmoji === em ? 'color-mix(in srgb, var(--orbi-primary) 20%, transparent)' : 'transparent', border: `1px solid ${newEmoji === em ? 'var(--orbi-primary)' : 'transparent'}`, cursor: 'pointer' }}>
                 {em}
               </button>
             ))}
@@ -359,7 +359,7 @@ function CategoryManager({ profile, update }: { profile: OrbiProfile; update: (p
             ))}
           </div>
           <div className="flex gap-sm">
-            <button onClick={addCustom} className="px-lg py-sm rounded-corner-md text-white text-label-sm" style={{ background: '#5250f3', border: 'none', cursor: 'pointer' }}>Add</button>
+            <button onClick={addCustom} className="px-lg py-sm rounded-corner-md text-white text-label-sm" style={{ background: 'var(--orbi-primary)', border: 'none', cursor: 'pointer' }}>Add</button>
             <button onClick={() => setAdding(false)} className="px-lg py-sm rounded-corner-md text-label-sm text-text-tertiary" style={{ background: 'transparent', border: 'none', cursor: 'pointer' }}>Cancel</button>
           </div>
         </div>
@@ -367,7 +367,7 @@ function CategoryManager({ profile, update }: { profile: OrbiProfile; update: (p
         <button
           onClick={() => setAdding(true)}
           className="flex items-center gap-md px-lg py-md rounded-corner-md text-label-sm"
-          style={{ background: 'rgba(255,255,255,0.03)', border: '2px dashed rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.35)', cursor: 'pointer' }}
+          style={{ background: 'color-mix(in srgb, var(--orbi-text) 4%, transparent)', border: '2px dashed color-mix(in srgb, var(--orbi-text) 10%, transparent)', color: 'color-mix(in srgb, var(--orbi-text) 35%, transparent)', cursor: 'pointer' }}
         >
           <Plus size={14} /> Add custom category
         </button>
@@ -442,7 +442,7 @@ function MyContextSection() {
       {/* Career & Work */}
       <SectionCard
         title="Career & work"
-        gradient="linear-gradient(145deg, #1a0e00 0%, #0d0600 100%)"
+        gradient="var(--orbi-surface)"
         border="1px solid rgba(251,146,60,0.2)"
       >
         <div className="grid grid-cols-2 gap-lg">
@@ -485,8 +485,8 @@ function MyContextSection() {
       {/* Goals */}
       <SectionCard
         title="Your goals"
-        gradient="linear-gradient(145deg, #0a0a1e 0%, #060e18 100%)"
-        border="1px solid rgba(82,80,243,0.25)"
+        gradient="var(--orbi-surface)"
+        border="1px solid color-mix(in srgb, var(--orbi-primary) 25%, transparent)"
       >
         <div
           className="rounded-corner-md p-lg flex flex-col gap-md"
@@ -522,7 +522,7 @@ function MyContextSection() {
 
         <div
           className="rounded-corner-md p-lg flex flex-col gap-md"
-          style={{ background: 'rgba(82,80,243,0.08)', border: '1px solid rgba(82,80,243,0.2)' }}
+          style={{ background: 'color-mix(in srgb, var(--orbi-primary) 8%, transparent)', border: '1px solid color-mix(in srgb, var(--orbi-primary) 20%, transparent)' }}
         >
           <p className="text-label-sm text-text-secondary flex items-center gap-sm">
             <span>🌟</span> <strong className="text-text-primary">Big dream</strong> — where you want to be in a year
@@ -540,7 +540,7 @@ function MyContextSection() {
       {/* Task Categories */}
       <SectionCard
         title="Task categories"
-        gradient="linear-gradient(145deg, #0a1a0a 0%, #060e06 100%)"
+        gradient="var(--orbi-surface)"
         border="1px solid rgba(5,150,105,0.2)"
       >
         <CategoryManager profile={profile} update={updateProfile} />
@@ -549,14 +549,14 @@ function MyContextSection() {
       {/* ADHD Profile */}
       <SectionCard
         title="Your brain profile"
-        gradient="linear-gradient(145deg, #1a0a1e 0%, #0e060e 100%)"
-        border="1px solid rgba(167,139,250,0.25)"
+        gradient="var(--orbi-surface)"
+        border="1px solid color-mix(in srgb, var(--orbi-primary) 25%, transparent)"
       >
         <div
           className="rounded-corner-md px-lg py-md"
-          style={{ background: 'rgba(167,139,250,0.08)', border: '1px solid rgba(167,139,250,0.15)' }}
+          style={{ background: 'color-mix(in srgb, var(--orbi-primary) 8%, transparent)', border: '1px solid color-mix(in srgb, var(--orbi-primary) 15%, transparent)' }}
         >
-          <p className="text-label-sm" style={{ color: '#a78bfa' }}>
+          <p className="text-label-sm" style={{ color: 'var(--orbi-primary)' }}>
             💜 This helps Orbi give you better-suited support — not judgment. Be as honest as you like.
           </p>
         </div>
@@ -680,7 +680,7 @@ export function SettingsPage() {
 
       <main
         className="flex-1 p-md md:p-2xl overflow-y-auto"
-        style={{ background: 'linear-gradient(160deg, #080814 0%, #0a0a1a 50%, #080e14 100%)' }}
+        style={{ background: 'var(--orbi-gradient)' }}
       >
         {/* ── My Context ── */}
         {activeSection === 'context' && <MyContextSection />}
@@ -693,7 +693,7 @@ export function SettingsPage() {
               <p className="text-label-sm text-text-secondary mt-xs">Manage your account information</p>
             </div>
 
-            <div className="rounded-corner-lg p-xl flex flex-col gap-lg" style={{ background: 'linear-gradient(145deg, #0f0e2a 0%, #0a0a18 100%)', border: '1px solid rgba(82,80,243,0.25)' }}>
+            <div className="rounded-corner-lg p-xl flex flex-col gap-lg" style={{ background: 'var(--orbi-surface)', border: 'var(--orbi-border)' }}>
               <h2 className="text-label text-text-primary">Profile photo</h2>
               <div className="flex items-center gap-xl">
                 <Avatar type="initial" initials="AC" size="large" shape="circle" />
@@ -704,7 +704,7 @@ export function SettingsPage() {
               </div>
             </div>
 
-            <div className="rounded-corner-lg p-xl flex flex-col gap-lg" style={{ background: 'linear-gradient(145deg, #0f0e2a 0%, #0a0a18 100%)', border: '1px solid rgba(82,80,243,0.25)' }}>
+            <div className="rounded-corner-lg p-xl flex flex-col gap-lg" style={{ background: 'var(--orbi-surface)', border: 'var(--orbi-border)' }}>
               <h2 className="text-label text-text-primary">Basic information</h2>
               <div className="flex flex-col gap-lg">
                 <InputField label="Display name" value={displayName} onChange={setDisplayName} />
@@ -731,13 +731,13 @@ export function SettingsPage() {
             <motion.div
               className="rounded-corner-lg p-xl flex items-center gap-lg cursor-pointer"
               style={{
-                background: 'linear-gradient(145deg, rgba(82,80,243,0.1), rgba(13,148,136,0.08))',
-                border: '1px solid rgba(82,80,243,0.3)',
+                background: 'color-mix(in srgb, var(--orbi-primary) 10%, transparent)',
+                border: '1px solid color-mix(in srgb, var(--orbi-primary) 30%, transparent)',
               }}
-              whileHover={{ borderColor: 'rgba(82,80,243,0.5)' }}
+              whileHover={{ borderColor: 'color-mix(in srgb, var(--orbi-primary) 50%, transparent)' }}
               onClick={() => setActiveSection('context')}
             >
-              <div className="p-md rounded-corner-md" style={{ background: 'linear-gradient(135deg, #5250f3, #0d9488)' }}>
+              <div className="p-md rounded-corner-md" style={{ background: 'linear-gradient(135deg, var(--orbi-primary), var(--orbi-secondary))' }}>
                 <Brain size={18} className="text-white" />
               </div>
               <div className="flex flex-col gap-xs flex-1">
@@ -758,11 +758,11 @@ export function SettingsPage() {
               <h1 className="text-title text-text-primary">Preferences</h1>
               <p className="text-label-sm text-text-secondary mt-xs">Customise Orbi to work with your brain</p>
             </div>
-            <div className="rounded-corner-lg p-xl flex flex-col gap-lg" style={{ background: 'linear-gradient(145deg, #0f0e2a 0%, #0a0a18 100%)', border: '1px solid rgba(82,80,243,0.25)' }}>
+            <div className="rounded-corner-lg p-xl flex flex-col gap-lg" style={{ background: 'var(--orbi-surface)', border: 'var(--orbi-border)' }}>
               <h2 className="text-label text-text-primary">Appearance</h2>
               <ThemePicker current={orbiTheme} onPick={setOrbiTheme} />
             </div>
-            <div className="rounded-corner-lg p-xl flex flex-col gap-lg" style={{ background: 'linear-gradient(145deg, #0f0e2a 0%, #0a0a18 100%)', border: '1px solid rgba(82,80,243,0.25)' }}>
+            <div className="rounded-corner-lg p-xl flex flex-col gap-lg" style={{ background: 'var(--orbi-surface)', border: 'var(--orbi-border)' }}>
               <h2 className="text-label text-text-primary">Focus sessions</h2>
               <div className="flex gap-xl">
                 <SelectField
@@ -803,12 +803,12 @@ export function SettingsPage() {
               <h1 className="text-title text-text-primary">Notifications</h1>
               <p className="text-label-sm text-text-secondary mt-xs">Control when and how Orbi reaches out</p>
             </div>
-            <div className="rounded-corner-lg p-xl flex flex-col gap-lg" style={{ background: 'linear-gradient(145deg, #0f0e2a 0%, #0a0a18 100%)', border: '1px solid rgba(82,80,243,0.25)' }}>
+            <div className="rounded-corner-lg p-xl flex flex-col gap-lg" style={{ background: 'var(--orbi-surface)', border: 'var(--orbi-border)' }}>
               <h2 className="text-label text-text-primary">Channels</h2>
               <SwitchField label="Push notifications" description="Receive browser notifications for reminders and check-ins" defaultSelected={notifications} onChange={setNotifications} />
               <SwitchField label="Email digest" description="Weekly summary of your tasks and focus stats" defaultSelected={true} />
             </div>
-            <div className="rounded-corner-lg p-xl flex flex-col gap-lg" style={{ background: 'linear-gradient(145deg, #031a17 0%, #021210 100%)', border: '1px solid rgba(13,148,136,0.25)' }}>
+            <div className="rounded-corner-lg p-xl flex flex-col gap-lg" style={{ background: 'var(--orbi-surface)', border: '1px solid color-mix(in srgb, var(--orbi-secondary) 25%, transparent)' }}>
               <h2 className="text-label text-text-primary">Orbi check-ins</h2>
               <SwitchField label="Proactive check-ins" description="Let Orbi reach out when it thinks you might need help" defaultSelected={true} />
               <SwitchField label="Hyperfocus alerts" description="Alert me if I've been working for 90+ minutes without a break" defaultSelected={true} />
@@ -824,11 +824,11 @@ export function SettingsPage() {
               <h1 className="text-title text-text-primary">Orbi Persona</h1>
               <p className="text-label-sm text-text-secondary mt-xs">Tailor your AI companion's personality</p>
             </div>
-            <div className="rounded-corner-lg p-xl flex flex-col gap-lg" style={{ background: 'linear-gradient(145deg, #031a17 0%, #021210 100%)', border: '1px solid rgba(13,148,136,0.25)' }}>
+            <div className="rounded-corner-lg p-xl flex flex-col gap-lg" style={{ background: 'var(--orbi-surface)', border: '1px solid color-mix(in srgb, var(--orbi-secondary) 25%, transparent)' }}>
               <h2 className="text-label text-text-primary">Companion name</h2>
               <InputField label="What should your Orbi be called?" value="Orbi" description="Give your AI companion a name that feels right" onChange={() => {}} />
             </div>
-            <div className="rounded-corner-lg p-xl flex flex-col gap-lg" style={{ background: 'linear-gradient(145deg, #0f0e2a 0%, #0a0a18 100%)', border: '1px solid rgba(82,80,243,0.25)' }}>
+            <div className="rounded-corner-lg p-xl flex flex-col gap-lg" style={{ background: 'var(--orbi-surface)', border: 'var(--orbi-border)' }}>
               <h2 className="text-label text-text-primary">Tone & style</h2>
               <SelectField label="Orbi's tone" value="gentle" options={[
                 { value: 'gentle', label: 'Gentle — warm, supportive, patient' },
@@ -856,12 +856,12 @@ export function SettingsPage() {
               <h1 className="text-title text-text-primary">Billing</h1>
               <p className="text-label-sm text-text-secondary mt-xs">Manage your subscription and payment</p>
             </div>
-            <div className="rounded-corner-lg p-xl flex flex-col gap-lg" style={{ background: 'linear-gradient(145deg, #031a17 0%, #021210 100%)', border: '1px solid rgba(13,148,136,0.35)', boxShadow: '0 4px 24px rgba(13,148,136,0.12)' }}>
+            <div className="rounded-corner-lg p-xl flex flex-col gap-lg" style={{ background: 'var(--orbi-surface)', border: '1px solid color-mix(in srgb, var(--orbi-secondary) 35%, transparent)', boxShadow: '0 4px 24px color-mix(in srgb, var(--orbi-secondary) 12%, transparent)' }}>
               <div className="flex items-center justify-between">
                 <h2 className="text-label text-text-primary">Current plan</h2>
                 <Badge label="Active" variant="success" />
               </div>
-              <div className="rounded-corner-md p-lg flex flex-col gap-md" style={{ background: 'rgba(13,148,136,0.08)', border: '1px solid rgba(13,148,136,0.2)' }}>
+              <div className="rounded-corner-md p-lg flex flex-col gap-md" style={{ background: 'color-mix(in srgb, var(--orbi-secondary) 8%, transparent)', border: '1px solid color-mix(in srgb, var(--orbi-secondary) 20%, transparent)' }}>
                 <div className="flex items-center gap-md">
                   <Sparkles size={20} className="text-brand-primary" />
                   <div className="flex flex-col gap-xs">
@@ -876,10 +876,10 @@ export function SettingsPage() {
                 <Button variant="subtle" size="small">Cancel subscription</Button>
               </div>
             </div>
-            <div className="rounded-corner-lg p-xl flex flex-col gap-lg" style={{ background: 'linear-gradient(145deg, #0f0e2a 0%, #0a0a18 100%)', border: '1px solid rgba(82,80,243,0.25)' }}>
+            <div className="rounded-corner-lg p-xl flex flex-col gap-lg" style={{ background: 'var(--orbi-surface)', border: 'var(--orbi-border)' }}>
               <h2 className="text-label text-text-primary">Payment method</h2>
               <div className="flex items-center gap-md">
-                <div className="rounded-corner-md p-md" style={{ background: 'rgba(82,80,243,0.15)', border: '1px solid rgba(82,80,243,0.3)' }}>
+                <div className="rounded-corner-md p-md" style={{ background: 'color-mix(in srgb, var(--orbi-primary) 15%, transparent)', border: '1px solid color-mix(in srgb, var(--orbi-primary) 30%, transparent)' }}>
                   <CreditCard size={18} className="text-brand-primary" />
                 </div>
                 <div className="flex flex-col gap-xs">

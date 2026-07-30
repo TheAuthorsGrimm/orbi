@@ -30,8 +30,8 @@ export function TierStep({
       orbiMessage="Pick the version that works for you — you can always change later. No pressure!"
     >
       <div className="flex flex-col gap-xs">
-        <h2 className="text-heading text-white font-bold">Choose your plan</h2>
-        <p className="text-label-sm text-gray-300">
+        <h2 className="text-heading text-text-primary font-bold">Choose your plan</h2>
+        <p className="text-label-sm text-text-secondary">
           Start free or unlock AI features. Tap a plan to see what's included.
         </p>
       </div>
@@ -53,20 +53,20 @@ export function TierStep({
               style={{
                 border: selected
                   ? `2px solid ${tier.color}`
-                  : '1px solid rgba(255,255,255,0.1)',
+                  : '1px solid color-mix(in srgb, var(--orbi-text) 10%, transparent)',
                 background: selected
-                  ? 'rgba(255,255,255,0.06)'
-                  : 'rgba(255,255,255,0.02)',
+                  ? 'color-mix(in srgb, var(--orbi-text) 6%, transparent)'
+                  : 'color-mix(in srgb, var(--orbi-text) 2%, transparent)',
               }}
             >
               <div className="flex items-center gap-sm">
                 <span className="text-xl">{tier.icon}</span>
                 <div className="flex-1">
-                  <p className="text-label text-white">{tier.name}</p>
-                  <p className="text-label-sm text-gray-400">{tier.tagline}</p>
+                  <p className="text-label text-text-primary">{tier.name}</p>
+                  <p className="text-label-sm text-text-secondary">{tier.tagline}</p>
                 </div>
                 <div className="flex items-center gap-xs">
-                  <span className="text-label text-white">
+                  <span className="text-label text-text-primary">
                     {tier.price === 0 ? 'Free' : `$${tier.price}/mo`}
                   </span>
                   {selected && (
@@ -102,7 +102,7 @@ export function TierStep({
                   className="mt-2 flex flex-col gap-1 pl-7"
                 >
                   {tier.features.map((f) => (
-                    <li key={f} className="text-label-sm text-gray-300 flex items-center gap-1">
+                    <li key={f} className="text-label-sm text-text-secondary flex items-center gap-1">
                       <Check size={10} style={{ color: tier.color }} />
                       {f}
                     </li>

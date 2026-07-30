@@ -19,7 +19,7 @@ export function OrbiCharacter({ message }: OrbiMessageProps) {
         animate={{ y: [0, -4, 0] }}
         transition={{ repeat: Infinity, duration: 2.5, ease: 'easeInOut' }}
         className="shrink-0 h-12 w-12 rounded-full grid place-items-center"
-        style={{ background: 'linear-gradient(135deg, #5250f3, #0d9488)' }}
+        style={{ background: 'linear-gradient(135deg, var(--orbi-primary), var(--orbi-secondary))' }}
       >
         <Bot size={22} className="text-white" />
       </motion.div>
@@ -30,9 +30,10 @@ export function OrbiCharacter({ message }: OrbiMessageProps) {
         initial={{ opacity: 0, x: -6 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.3 }}
-        className="rounded-corner-md border border-white/20 bg-white/10 p-md flex-1"
+        className="rounded-corner-md p-md flex-1"
+        style={{ border: 'var(--orbi-border)', background: 'color-mix(in srgb, var(--orbi-text) 10%, transparent)' }}
       >
-        <p className="text-label-sm text-gray-300 leading-relaxed">{message}</p>
+        <p className="text-label-sm text-text-secondary leading-relaxed">{message}</p>
       </motion.div>
     </motion.div>
   );

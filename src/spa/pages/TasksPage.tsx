@@ -50,8 +50,8 @@ function TaskCard({
       className="rounded-corner-md p-lg flex items-center gap-lg"
       style={{
         background: task.done
-          ? 'linear-gradient(145deg, #031a0e 0%, #020e08 100%)'
-          : 'linear-gradient(145deg, #0f0e2a 0%, #0a0a18 100%)',
+          ? 'var(--orbi-surface)'
+          : 'var(--orbi-surface)',
         border: `1px solid ${task.done ? 'rgba(5,150,105,0.3)' : accent}`,
       }}
     >
@@ -59,7 +59,7 @@ function TaskCard({
         onClick={() => onToggle(task.id)}
         className="flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all"
         style={{
-          borderColor: task.done ? '#059669' : 'rgba(255,255,255,0.2)',
+          borderColor: task.done ? '#059669' : 'color-mix(in srgb, var(--orbi-text) 20%, transparent)',
           background: task.done ? '#059669' : 'transparent',
         }}
         aria-label="Toggle complete"
@@ -142,7 +142,7 @@ function TaskColumn({
         <div className="flex items-center gap-sm">
           <span className="text-label-sm" style={{ color: accent }}>{done}/{total} done</span>
           {total > 0 && (
-            <div className="w-16 h-1.5 rounded-full" style={{ background: 'rgba(255,255,255,0.1)' }}>
+            <div className="w-16 h-1.5 rounded-full" style={{ background: 'color-mix(in srgb, var(--orbi-text) 10%, transparent)' }}>
               <div
                 className="h-1.5 rounded-full transition-all"
                 style={{ width: `${total ? (done / total) * 100 : 0}%`, background: accent }}
@@ -155,7 +155,7 @@ function TaskColumn({
       {/* Input */}
       <div
         className="rounded-corner-md p-md flex flex-col gap-md"
-        style={{ background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.07)' }}
+        style={{ background: 'rgba(0,0,0,0.3)', border: '1px solid color-mix(in srgb, var(--orbi-text) 7%, transparent)' }}
       >
         <div className="flex gap-md items-center">
           <input
@@ -184,8 +184,8 @@ function TaskColumn({
               className="px-sm py-xs rounded-corner-sm text-label-sm capitalize transition-all"
               style={{
                 background: priority === p ? accent + '33' : 'transparent',
-                border: `1px solid ${priority === p ? accent : 'rgba(255,255,255,0.1)'}`,
-                color: priority === p ? accent : 'rgba(255,255,255,0.5)',
+                border: `1px solid ${priority === p ? accent : 'color-mix(in srgb, var(--orbi-text) 10%, transparent)'}`,
+                color: priority === p ? accent : 'color-mix(in srgb, var(--orbi-text) 50%, transparent)',
               }}
             >
               {p}
@@ -281,24 +281,24 @@ export function TasksPage() {
         <div
           className="flex items-center gap-lg px-xl py-lg rounded-corner-lg"
           style={{
-            background: 'linear-gradient(135deg, #1e1b4b 0%, #1a2e3b 100%)',
-            border: '1px solid rgba(82,80,243,0.3)',
+            background: 'var(--orbi-surface)',
+            border: '1px solid color-mix(in srgb, var(--orbi-primary) 30%, transparent)',
           }}
         >
           <div className="flex flex-col items-center gap-xs">
-            <span className="text-title text-white" style={{ lineHeight: 1 }}>{totalDone}</span>
+            <span className="text-title text-text-primary" style={{ lineHeight: 1 }}>{totalDone}</span>
             <span className="text-label-sm text-text-tertiary">done</span>
           </div>
           <ArrowRight size={16} className="text-text-tertiary" />
           <div className="flex flex-col items-center gap-xs">
-            <span className="text-title text-white" style={{ lineHeight: 1 }}>{totalTasks}</span>
+            <span className="text-title text-text-primary" style={{ lineHeight: 1 }}>{totalTasks}</span>
             <span className="text-label-sm text-text-tertiary">total</span>
           </div>
           {totalTasks > 0 && (
             <>
-              <div className="w-px h-8" style={{ background: 'rgba(255,255,255,0.1)' }} />
+              <div className="w-px h-8" style={{ background: 'color-mix(in srgb, var(--orbi-text) 10%, transparent)' }} />
               <div className="flex flex-col items-center gap-xs">
-                <span className="text-title" style={{ lineHeight: 1, color: '#a78bfa' }}>
+                <span className="text-title" style={{ lineHeight: 1, color: 'var(--orbi-primary)' }}>
                   {Math.round((totalDone / totalTasks) * 100)}%
                 </span>
                 <span className="text-label-sm text-text-tertiary">complete</span>
@@ -314,8 +314,8 @@ export function TasksPage() {
         animate={{ opacity: 1, y: 0 }}
         className="rounded-corner-md px-xl py-lg flex items-center gap-md"
         style={{
-          background: 'linear-gradient(135deg, rgba(82,80,243,0.12) 0%, rgba(13,148,136,0.08) 100%)',
-          border: '1px solid rgba(82,80,243,0.2)',
+          background: 'linear-gradient(135deg, color-mix(in srgb, var(--orbi-primary) 12%, transparent) 0%, color-mix(in srgb, var(--orbi-secondary) 8%, transparent) 100%)',
+          border: '1px solid color-mix(in srgb, var(--orbi-primary) 20%, transparent)',
         }}
       >
         <span style={{ fontSize: '1.25rem' }}>🔮</span>
@@ -350,7 +350,7 @@ export function TasksPage() {
           onAdd={addTask('wants')}
           onToggle={toggleTask('wants')}
           onDelete={deleteTask('wants')}
-          gradient="linear-gradient(145deg, #031a17 0%, #021210 100%)"
+          gradient="var(--orbi-surface)"
           border="1px solid rgba(20,184,166,0.3)"
           accent="#14b8a6"
           placeholder="What would be great to do today? (press Enter to add + earn XP)"

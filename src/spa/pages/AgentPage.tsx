@@ -53,8 +53,8 @@ export function AgentPage() {
       <div
         className="p-xl flex items-center gap-md"
         style={{
-          background: 'linear-gradient(145deg, #0f0e2a 0%, #0a0a18 100%)',
-          borderBottom: '1px solid rgba(82,80,243,0.25)',
+          background: 'var(--orbi-surface)',
+          borderBottom: '1px solid color-mix(in srgb, var(--orbi-primary) 25%, transparent)',
         }}
       >
         <Avatar type="initial" initials="O" size="medium" shape="circle" />
@@ -80,8 +80,8 @@ export function AgentPage() {
               onClick={() => setInput(s.prompt)}
               className="rounded-corner-md px-lg py-sm text-label-sm text-text-secondary transition-all"
               style={{
-                background: 'linear-gradient(145deg, #0f0e2a 0%, #0a0a18 100%)',
-                border: '1px solid rgba(82,80,243,0.3)',
+                background: 'var(--orbi-surface)',
+                border: '1px solid color-mix(in srgb, var(--orbi-primary) 30%, transparent)',
               }}
             >
               {s.label}

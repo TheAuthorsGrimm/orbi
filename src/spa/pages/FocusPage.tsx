@@ -32,12 +32,12 @@ function formatTime(seconds: number) {
 }
 
 const CARD_PURPLE = {
-  background: 'linear-gradient(145deg, #0f0e2a 0%, #0a0a18 100%)',
-  border: '1px solid rgba(82,80,243,0.25)',
+  background: 'var(--orbi-surface)',
+  border: '1px solid color-mix(in srgb, var(--orbi-primary) 25%, transparent)',
 };
 const CARD_TEAL = {
-  background: 'linear-gradient(145deg, #031a17 0%, #021210 100%)',
-  border: '1px solid rgba(13,148,136,0.25)',
+  background: 'var(--orbi-surface)',
+  border: '1px solid color-mix(in srgb, var(--orbi-secondary) 25%, transparent)',
 };
 const CARD_AMBER = {
   background: 'linear-gradient(145deg, #1a0e00 0%, #110900 100%)',
@@ -130,7 +130,7 @@ export function FocusPage() {
     ? '#6ee7b7'
     : phase === 'break'
     ? '#fcd34d'
-    : 'rgba(255,255,255,0.3)';
+    : 'color-mix(in srgb, var(--orbi-text) 30%, transparent)';
 
   return (
     <div className="p-md md:p-xl flex flex-col gap-xl">
@@ -149,12 +149,12 @@ export function FocusPage() {
           {/* Timer Card */}
           <div
             className="rounded-corner-lg p-xl flex flex-col items-center gap-xl"
-            style={{ background: 'linear-gradient(145deg, #0f0e2a 0%, #13122f 60%, #0e1a2f 100%)', border: '1px solid rgba(82,80,243,0.3)', boxShadow: '0 4px 40px rgba(82,80,243,0.12)' }}
+            style={{ background: 'var(--orbi-surface)', border: '1px solid color-mix(in srgb, var(--orbi-primary) 30%, transparent)', boxShadow: '0 4px 40px color-mix(in srgb, var(--orbi-primary) 12%, transparent)' }}
           >
             {/* Circular progress */}
             <div className="relative flex items-center justify-center" style={{ width: 240, height: 240 }}>
               <svg className="absolute" width={240} height={240} viewBox="0 0 240 240">
-                <circle cx={120} cy={120} r={108} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth={10} />
+                <circle cx={120} cy={120} r={108} fill="none" stroke="color-mix(in srgb, var(--orbi-text) 6%, transparent)" strokeWidth={10} />
                 <motion.circle
                   cx={120} cy={120} r={108}
                   fill="none"
@@ -240,14 +240,14 @@ export function FocusPage() {
             <div className="flex gap-md flex-wrap">
               {[...Array(completedSessions)].map((_, i) => (
                 <div key={i} className="flex flex-col items-center gap-xs">
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #5250f3, #0d9488)' }}>
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: 'linear-gradient(135deg, var(--orbi-primary), var(--orbi-secondary))' }}>
                     <CheckCircle2 size={16} className="text-white" />
                   </div>
                   <span className="text-label-sm text-text-tertiary">25m</span>
                 </div>
               ))}
               <div className="flex flex-col items-center gap-xs opacity-40">
-                <div className="w-10 h-10 rounded-full border-2 border-dashed" style={{ borderColor: 'rgba(82,80,243,0.4)' }} />
+                <div className="w-10 h-10 rounded-full border-2 border-dashed" style={{ borderColor: 'color-mix(in srgb, var(--orbi-primary) 40%, transparent)' }} />
                 <span className="text-label-sm text-text-tertiary">next</span>
               </div>
             </div>

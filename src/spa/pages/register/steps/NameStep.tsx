@@ -35,8 +35,8 @@ export function NameStep({
       }
     >
       <div className="flex flex-col gap-xs">
-        <h2 className="text-heading text-white font-bold">What&apos;s your name?</h2>
-        <p className="text-label-sm text-gray-300">
+        <h2 className="text-heading text-text-primary font-bold">What&apos;s your name?</h2>
+        <p className="text-label-sm text-text-secondary">
           Just so Orbi knows what to call you.
         </p>
       </div>
