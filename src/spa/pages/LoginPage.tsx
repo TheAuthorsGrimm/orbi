@@ -14,6 +14,24 @@ export function LoginPage() {
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
+  const ownerEmail = process.env.NEXT_PUBLIC_OWNER_EMAIL;
+  const ownerPassword = process.env.NEXT_PUBLIC_OWNER_PASSWORD;
+  const ownerBypassEnabled = !!(ownerEmail && ownerPassword);
+
+  async function handleOwnerBypass() {
+    if (!ownerEmail || !ownerPassword) return;
+    setError('');
+    setSubmitting(true);
+    try {
+      await login(ownerEmail, ownerPassword);
+      navigate(isOnboarded ? '/dashboard' : '/onboarding', { replace: true });
+    } catch {
+      setError('Owner bypass failed — check VITE_OWNER_EMAIL / VITE_OWNER_PASSWORD.');
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
   useEffect(() => {
     if (!authLoading && user) {
       navigate(isOnboarded ? '/dashboard' : '/onboarding', { replace: true });
@@ -99,6 +117,26 @@ export function LoginPage() {
             <Button variant="primary" type="submit" className="w-full" disabled={submitting}>
               {submitting ? 'Signing in…' : 'Sign in'}
             </Button>
+
+            {ownerBypassEnabled && (
+              <button
+                type="button"
+                onClick={handleOwnerBypass}
+                disabled={submitting}
+                className="w-full rounded-corner-md py-sm text-label-sm transition-all"
+                style={{
+                  background: 'color-mix(in srgb, var(--orbi-primary) 8%, transparent)',
+                  border: '1px dashed color-mix(in srgb, var(--orbi-primary) 35%, transparent)',
+                  color: 'color-mix(in srgb, var(--orbi-primary) 75%, transparent)',
+                  cursor: submitting ? 'not-allowed' : 'pointer',
+                  opacity: submitting ? 0.5 : 1,
+                  fontSize: '0.78rem',
+                  letterSpacing: '0.03em',
+                }}
+              >
+                ⚡ Owner access
+              </button>
+            )}
           </form>
 
           <p className="text-label-sm text-text-secondary text-center">

@@ -238,6 +238,18 @@
   --input:                 transparent;
 }
 
+/* Custom — user-defined colors; CSS vars are injected inline by ThemeContext */
+[data-orbi-theme="custom"] {
+  --orbi-base:             #0b0a18;
+  --orbi-surface:          #0f0e28;
+  --orbi-surface-2:        #14122e;
+  --orbi-primary:          #5250f3;
+  --orbi-secondary:        #0d9488;
+  --orbi-text:             #f0efff;
+  --orbi-text-muted:       rgba(240,239,255,0.55);
+  --orbi-border:           rgba(82,80,243,0.25);
+}
+
 /* High-contrast — true black, electric blue + teal (WCAG AAA) */
 [data-orbi-theme="high-contrast"] {
   --orbi-base:             #000000;

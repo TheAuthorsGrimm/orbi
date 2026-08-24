@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import {
   SecondaryNav, SecondaryNavItem, InputField, SwitchField,
   Button, ButtonGroup, Avatar, Badge,
 } from '@figma/astraui';
-import { useOrbiTheme, type OrbiTheme } from '@/spa/context/ThemeContext';
+import { useOrbiTheme, type OrbiTheme, type CustomTheme } from '@/spa/context/ThemeContext';
 import {
   User, CreditCard, Bell, Sliders, Sparkles, Brain, Plus, X, Check,
 } from 'lucide-react';
@@ -175,64 +175,634 @@ const THEME_PRESETS: Array<{
   secondary: string;
   text: string;
 }> = [
-  { id: 'focus',         name: 'Focus',         description: 'Deep navy · Indigo + Teal',   base: '#0b0a18', primary: '#5250f3', secondary: '#0d9488', text: '#f0efff' },
-  { id: 'warm',          name: 'Warm',           description: 'Cozy plum · Violet + Rose',   base: '#1a1224', primary: '#8b5cf6', secondary: '#ec4899', text: '#faf0ff' },
-  { id: 'fresh',         name: 'Fresh',          description: 'Off-white · Sage + Coral',    base: '#faf8f4', primary: '#059669', secondary: '#f97162', text: '#1a1a1a' },
-  { id: 'high-contrast', name: 'High Contrast',  description: 'True black · Blue + Teal',   base: '#000000', primary: '#3b82f6', secondary: '#14b8a6', text: '#ffffff' },
+  { id: 'focus',         name: 'Focus',         description: 'Deep navy · Indigo + Teal',  base: '#0b0a18', primary: '#5250f3', secondary: '#0d9488', text: '#f0efff' },
+  { id: 'warm',          name: 'Warm',           description: 'Cozy plum · Violet + Rose',  base: '#1a1224', primary: '#8b5cf6', secondary: '#ec4899', text: '#faf0ff' },
+  { id: 'fresh',         name: 'Fresh',          description: 'Off-white · Sage + Coral',   base: '#faf8f4', primary: '#059669', secondary: '#f97162', text: '#1a1a1a' },
+  { id: 'high-contrast', name: 'High Contrast',  description: 'True black · Blue + Teal',  base: '#000000', primary: '#3b82f6', secondary: '#14b8a6', text: '#ffffff' },
 ];
 
-function ThemePicker({ current, onPick }: { current: OrbiTheme; onPick: (t: OrbiTheme) => void }) {
+// Named palette combos for the Palette tab
+const PALETTE_PRESETS: Array<{
+  name: string; emoji: string;
+  primary: string; secondary: string; mode: 'dark' | 'light';
+}> = [
+  { name: 'Ocean',    emoji: '🌊', primary: '#0ea5e9', secondary: '#06b6d4', mode: 'dark'  },
+  { name: 'Sunset',   emoji: '🌅', primary: '#f97316', secondary: '#ef4444', mode: 'dark'  },
+  { name: 'Forest',   emoji: '🌲', primary: '#22c55e', secondary: '#14b8a6', mode: 'dark'  },
+  { name: 'Candy',    emoji: '🍭', primary: '#ec4899', secondary: '#a855f7', mode: 'dark'  },
+  { name: 'Midnight', emoji: '🌙', primary: '#6366f1', secondary: '#8b5cf6', mode: 'dark'  },
+  { name: 'Ember',    emoji: '🔥', primary: '#f59e0b', secondary: '#ef4444', mode: 'dark'  },
+  { name: 'Rose',     emoji: '🌹', primary: '#f43f5e', secondary: '#fb923c', mode: 'dark'  },
+  { name: 'Arctic',   emoji: '❄️',  primary: '#38bdf8', secondary: '#a5f3fc', mode: 'dark'  },
+  { name: 'Sage',     emoji: '🌿', primary: '#4ade80', secondary: '#2dd4bf', mode: 'light' },
+  { name: 'Citrus',   emoji: '🍋', primary: '#ca8a04', secondary: '#ea580c', mode: 'light' },
+  { name: 'Dusk',     emoji: '🌆', primary: '#7c3aed', secondary: '#db2777', mode: 'dark'  },
+  { name: 'Steel',    emoji: '⚙️',  primary: '#64748b', secondary: '#3b82f6', mode: 'dark'  },
+];
+
+// Grid colors: 12 hues × 5 lightness levels + grays
+function buildGrid(): string[] {
+  const hues = [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330];
+  const lValues = [25, 40, 55, 68, 80];
+  const colors: string[] = [];
+  for (const l of lValues) {
+    for (const h of hues) {
+      colors.push(`hsl(${h},85%,${l}%)`);
+    }
+  }
+  // Grays row
+  [8, 20, 35, 50, 65, 76, 88, 94, 97, 100, 0, 14].forEach(l =>
+    colors.push(`hsl(240,5%,${l}%)`)
+  );
+  return colors;
+}
+const GRID_COLORS = buildGrid();
+
+// ── Color utilities ───────────────────────────────────────────────────────────
+
+function hexToHsl(hex: string): { h: number; s: number; l: number } {
+  let r = 0, g = 0, b = 0;
+  const clean = hex.replace('#', '');
+  if (clean.length === 3) {
+    r = parseInt(clean[0]+clean[0], 16);
+    g = parseInt(clean[1]+clean[1], 16);
+    b = parseInt(clean[2]+clean[2], 16);
+  } else if (clean.length >= 6) {
+    r = parseInt(clean.slice(0,2), 16);
+    g = parseInt(clean.slice(2,4), 16);
+    b = parseInt(clean.slice(4,6), 16);
+  }
+  r /= 255; g /= 255; b /= 255;
+  const max = Math.max(r,g,b), min = Math.min(r,g,b);
+  let h = 0, s = 0;
+  const l = (max + min) / 2;
+  if (max !== min) {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    switch (max) {
+      case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
+      case g: h = ((b - r) / d + 2) / 6; break;
+      case b: h = ((r - g) / d + 4) / 6; break;
+    }
+  }
+  return { h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100) };
+}
+
+function hslToHex(h: number, s: number, l: number): string {
+  s /= 100; l /= 100;
+  const a = s * Math.min(l, 1 - l);
+  const f = (n: number) => {
+    const k = (n + h / 30) % 12;
+    const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+    return Math.round(255 * color).toString(16).padStart(2, '0');
+  };
+  return `#${f(0)}${f(8)}${f(4)}`;
+}
+
+function resolveToHex(color: string): string {
+  // If it's already a hex, return it. If hsl(), convert it.
+  if (color.startsWith('#')) return color;
+  if (color.startsWith('hsl(')) {
+    const m = color.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/);
+    if (m) return hslToHex(+m[1], +m[2], +m[3]);
+  }
+  return '#5250f3';
+}
+
+function generateTheme(primary: string, secondary: string, mode: 'dark' | 'light'): CustomTheme {
+  const ph = hexToHsl(primary);
+  if (mode === 'dark') {
+    return {
+      primary,
+      secondary,
+      base:       hslToHex(ph.h, Math.max(ph.s * 0.25, 10), 6),
+      surface:    hslToHex(ph.h, Math.max(ph.s * 0.22, 8),  9),
+      surface2:   hslToHex(ph.h, Math.max(ph.s * 0.18, 6),  13),
+      text:       '#f0efff',
+      textMuted:  'rgba(240,239,255,0.55)',
+      border:     `color-mix(in srgb, ${primary} 25%, transparent)`,
+      mode:       'dark',
+    };
+  } else {
+    return {
+      primary,
+      secondary,
+      base:       hslToHex(ph.h, Math.max(ph.s * 0.18, 8),  97),
+      surface:    '#ffffff',
+      surface2:   hslToHex(ph.h, Math.max(ph.s * 0.14, 6),  94),
+      text:       '#1a1a1a',
+      textMuted:  'rgba(26,26,26,0.55)',
+      border:     `color-mix(in srgb, ${primary} 20%, transparent)`,
+      mode:       'light',
+    };
+  }
+}
+
+// ── Sub-pickers ───────────────────────────────────────────────────────────────
+
+function ColorWheel({ value, onChange }: { value: string; onChange: (hex: string) => void }) {
+  const wheelRef = useRef<HTMLDivElement>(null);
+  const [hsl, setHsl] = useState<{ h: number; s: number; l: number }>(() => hexToHsl(value));
+  const [dragging, setDragging] = useState(false);
+  const [hexInput, setHexInput] = useState(value);
+
+  useEffect(() => {
+    setHsl(hexToHsl(value));
+    setHexInput(value);
+  }, [value]);
+
+  const WHEEL_SIZE = 220;
+  const r = WHEEL_SIZE / 2;
+
+  const pickFromEvent = useCallback((clientX: number, clientY: number) => {
+    if (!wheelRef.current) return;
+    const rect = wheelRef.current.getBoundingClientRect();
+    const dx = clientX - (rect.left + r);
+    const dy = clientY - (rect.top + r);
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    const sat = Math.min((dist / r) * 100, 100);
+    const angle = ((Math.atan2(dy, dx) * 180 / Math.PI) + 360) % 360;
+    const newHsl = { h: Math.round(angle), s: Math.round(sat), l: hsl.l };
+    setHsl(newHsl);
+    const hex = hslToHex(newHsl.h, newHsl.s, newHsl.l);
+    setHexInput(hex);
+    onChange(hex);
+  }, [r, hsl.l, onChange]);
+
+  useEffect(() => {
+    if (!dragging) return;
+    const onMove = (e: MouseEvent) => pickFromEvent(e.clientX, e.clientY);
+    const onUp = () => setDragging(false);
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseup', onUp);
+    return () => { window.removeEventListener('mousemove', onMove); window.removeEventListener('mouseup', onUp); };
+  }, [dragging, pickFromEvent]);
+
+  const dotX = r + Math.cos((hsl.h * Math.PI) / 180) * (hsl.s / 100) * (r - 6);
+  const dotY = r + Math.sin((hsl.h * Math.PI) / 180) * (hsl.s / 100) * (r - 6);
+  const preview = hslToHex(hsl.h, hsl.s, hsl.l);
+
+  return (
+    <div className="flex flex-col gap-lg items-center">
+      {/* Wheel */}
+      <div
+        ref={wheelRef}
+        onMouseDown={e => { setDragging(true); pickFromEvent(e.clientX, e.clientY); }}
+        style={{
+          width: WHEEL_SIZE,
+          height: WHEEL_SIZE,
+          borderRadius: '50%',
+          background: `
+            radial-gradient(circle, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0) 65%),
+            conic-gradient(
+              hsl(0,100%,50%), hsl(45,100%,50%), hsl(90,100%,50%),
+              hsl(135,100%,50%), hsl(180,100%,50%), hsl(225,100%,50%),
+              hsl(270,100%,50%), hsl(315,100%,50%), hsl(360,100%,50%)
+            )
+          `,
+          position: 'relative',
+          cursor: 'crosshair',
+          userSelect: 'none',
+          flexShrink: 0,
+          border: '2px solid color-mix(in srgb, var(--orbi-text) 10%, transparent)',
+        }}
+      >
+        {/* Lightness darkening overlay */}
+        <div style={{
+          position: 'absolute', inset: 0, borderRadius: '50%',
+          background: `rgba(0,0,0,${Math.max(0, (50 - hsl.l) / 80)})`,
+          pointerEvents: 'none',
+        }} />
+        {/* Selection dot */}
+        <div style={{
+          position: 'absolute',
+          left: dotX - 8,
+          top: dotY - 8,
+          width: 16,
+          height: 16,
+          borderRadius: '50%',
+          background: preview,
+          border: '2.5px solid white',
+          boxShadow: '0 1px 6px rgba(0,0,0,0.5)',
+          pointerEvents: 'none',
+        }} />
+      </div>
+
+      {/* Lightness slider */}
+      <div className="w-full flex flex-col gap-xs" style={{ maxWidth: WHEEL_SIZE }}>
+        <div className="flex items-center justify-between">
+          <span className="text-label-sm text-text-secondary">Lightness</span>
+          <span className="text-label-sm text-text-tertiary">{hsl.l}%</span>
+        </div>
+        <div style={{
+          height: 14, borderRadius: 7, position: 'relative',
+          background: `linear-gradient(to right, #000 0%, hsl(${hsl.h},${hsl.s}%,50%) 50%, #fff 100%)`,
+          border: '1px solid color-mix(in srgb, var(--orbi-text) 12%, transparent)',
+        }}>
+          <input type="range" min={10} max={90} value={hsl.l}
+            onChange={e => {
+              const newHsl = { ...hsl, l: +e.target.value };
+              setHsl(newHsl);
+              const hex = hslToHex(newHsl.h, newHsl.s, newHsl.l);
+              setHexInput(hex);
+              onChange(hex);
+            }}
+            style={{ position: 'absolute', inset: 0, opacity: 0, width: '100%', cursor: 'pointer' }}
+          />
+        </div>
+      </div>
+
+      {/* Preview + hex input */}
+      <div className="flex gap-md items-center" style={{ maxWidth: WHEEL_SIZE, width: '100%' }}>
+        <div style={{
+          width: 40, height: 40, borderRadius: 8, flexShrink: 0,
+          background: preview,
+          border: '2px solid color-mix(in srgb, var(--orbi-text) 15%, transparent)',
+          boxShadow: `0 0 12px ${preview}88`,
+        }} />
+        <input
+          type="text"
+          value={hexInput}
+          onChange={e => {
+            setHexInput(e.target.value);
+            if (/^#[0-9a-f]{6}$/i.test(e.target.value)) {
+              const newHsl = hexToHsl(e.target.value);
+              setHsl(newHsl);
+              onChange(e.target.value);
+            }
+          }}
+          className="flex-1 bg-transparent text-text-primary outline-none rounded-corner-sm px-md py-xs"
+          style={{
+            fontSize: '0.85rem',
+            border: '1px solid color-mix(in srgb, var(--orbi-text) 15%, transparent)',
+            fontFamily: 'monospace',
+          }}
+          placeholder="#000000"
+          spellCheck={false}
+        />
+        {/* Native color fallback */}
+        <input
+          type="color"
+          value={preview}
+          onChange={e => {
+            const newHsl = hexToHsl(e.target.value);
+            setHsl(newHsl);
+            setHexInput(e.target.value);
+            onChange(e.target.value);
+          }}
+          style={{ width: 32, height: 32, borderRadius: 6, border: 'none', cursor: 'pointer', padding: 2 }}
+          title="Open system color picker"
+        />
+      </div>
+    </div>
+  );
+}
+
+function ColorGrid({ value, onChange }: { value: string; onChange: (hex: string) => void }) {
   return (
     <div className="flex flex-col gap-md">
-      <label className="text-label-sm text-text-secondary">Theme</label>
-      <div className="grid grid-cols-2 gap-md">
-        {THEME_PRESETS.map(preset => {
-          const active = current === preset.id;
+      <div className="grid" style={{ gridTemplateColumns: 'repeat(12, 1fr)', gap: 4 }}>
+        {GRID_COLORS.map((color, i) => {
+          const hex = resolveToHex(color);
+          const active = value.toLowerCase() === hex.toLowerCase();
           return (
-            <motion.button
-              key={preset.id}
-              onClick={() => onPick(preset.id)}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.97 }}
-              className="flex flex-col gap-sm rounded-corner-md p-md text-left"
+            <button
+              key={i}
+              onClick={() => onChange(hex)}
+              title={hex}
               style={{
-                background: preset.base,
-                border: active ? `2px solid ${preset.primary}` : '2px solid color-mix(in srgb, var(--orbi-text) 8%, transparent)',
-                boxShadow: active ? `0 0 16px ${preset.primary}55` : 'none',
+                width: '100%',
+                aspectRatio: '1',
+                borderRadius: 4,
+                background: color,
+                border: active ? '2px solid var(--orbi-text)' : '1.5px solid transparent',
+                outline: active ? '2px solid var(--orbi-primary)' : 'none',
+                outlineOffset: 1,
                 cursor: 'pointer',
-                position: 'relative',
+                transition: 'transform 0.1s',
               }}
-            >
-              {/* Color strip preview */}
-              <div className="flex gap-xs" style={{ height: 8 }}>
-                <div style={{ flex: 1, borderRadius: 4, background: preset.base, border: '1px solid rgba(0,0,0,0.15)' }} />
-                <div style={{ flex: 1, borderRadius: 4, background: preset.primary }} />
-                <div style={{ flex: 1, borderRadius: 4, background: preset.secondary }} />
-              </div>
-
-              {/* Labels */}
-              <div className="flex flex-col gap-xs">
-                <span className="text-label-sm" style={{ color: preset.text, fontWeight: 600, fontSize: '0.8rem' }}>
-                  {preset.name}
-                </span>
-                <span style={{ color: preset.text, opacity: 0.55, fontSize: '0.7rem' }}>
-                  {preset.description}
-                </span>
-              </div>
-
-              {/* Active checkmark */}
-              {active && (
-                <div
-                  className="absolute top-sm right-sm flex items-center justify-center rounded-full"
-                  style={{ width: 18, height: 18, background: preset.primary }}
-                >
-                  <Check size={10} className="text-white" />
-                </div>
-              )}
-            </motion.button>
+              onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.2)')}
+              onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
+            />
           );
         })}
       </div>
+      <div className="flex gap-md items-center">
+        <div style={{
+          width: 32, height: 32, borderRadius: 6, flexShrink: 0,
+          background: value,
+          border: '2px solid color-mix(in srgb, var(--orbi-text) 15%, transparent)',
+        }} />
+        <span className="text-label-sm text-text-secondary" style={{ fontFamily: 'monospace' }}>{value}</span>
+      </div>
+    </div>
+  );
+}
+
+function PaletteGrid({ onPick }: { onPick: (primary: string, secondary: string, mode: 'dark' | 'light') => void }) {
+  return (
+    <div className="grid grid-cols-2 gap-md">
+      {PALETTE_PRESETS.map(p => (
+        <motion.button
+          key={p.name}
+          onClick={() => onPick(p.primary, p.secondary, p.mode)}
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.97 }}
+          className="flex items-center gap-md rounded-corner-md p-md text-left"
+          style={{
+            background: p.mode === 'dark'
+              ? `linear-gradient(135deg, ${p.primary}22, ${p.secondary}18)`
+              : `linear-gradient(135deg, ${p.primary}18, ${p.secondary}14)`,
+            border: `1.5px solid color-mix(in srgb, ${p.primary} 30%, transparent)`,
+            cursor: 'pointer',
+          }}
+        >
+          <span style={{ fontSize: '1.2rem' }}>{p.emoji}</span>
+          <div className="flex flex-col gap-xs flex-1 min-w-0">
+            <span className="text-label-sm text-text-primary" style={{ fontWeight: 600 }}>{p.name}</span>
+            <div className="flex gap-xs">
+              <div style={{ width: 12, height: 12, borderRadius: '50%', background: p.primary, flexShrink: 0 }} />
+              <div style={{ width: 12, height: 12, borderRadius: '50%', background: p.secondary, flexShrink: 0 }} />
+              <span style={{ fontSize: '0.65rem', color: 'color-mix(in srgb, var(--orbi-text) 50%, transparent)' }}>
+                {p.mode}
+              </span>
+            </div>
+          </div>
+        </motion.button>
+      ))}
+    </div>
+  );
+}
+
+// ── Main ThemePicker ──────────────────────────────────────────────────────────
+
+type PickerTab = 'presets' | 'wheel' | 'grid' | 'palette';
+
+function ThemePicker({
+  current,
+  onPick,
+  customTheme,
+  onCustom,
+}: {
+  current: OrbiTheme;
+  onPick: (t: OrbiTheme) => void;
+  customTheme: CustomTheme | null;
+  onCustom: (ct: CustomTheme) => void;
+}) {
+  const [tab, setTab] = useState<PickerTab>('presets');
+  const [primaryColor, setPrimaryColor] = useState(customTheme?.primary ?? '#5250f3');
+  const [secondaryColor, setSecondaryColor] = useState(customTheme?.secondary ?? '#0d9488');
+  const [colorMode, setColorMode] = useState<'dark' | 'light'>(customTheme?.mode ?? 'dark');
+  const [activeWheel, setActiveWheel] = useState<'primary' | 'secondary'>('primary');
+
+  function applyCustom(primary: string, secondary: string, mode: 'dark' | 'light') {
+    const theme = generateTheme(primary, secondary, mode);
+    onCustom(theme);
+  }
+
+  const TABS: { id: PickerTab; label: string }[] = [
+    { id: 'presets', label: 'Presets' },
+    { id: 'wheel',   label: 'Wheel'   },
+    { id: 'grid',    label: 'Grid'    },
+    { id: 'palette', label: 'Palette' },
+  ];
+
+  return (
+    <div className="flex flex-col gap-md">
+      {/* Tab row */}
+      <div className="flex gap-xs p-xs rounded-corner-md" style={{ background: 'color-mix(in srgb, var(--orbi-text) 6%, transparent)' }}>
+        {TABS.map(t => (
+          <button
+            key={t.id}
+            onClick={() => setTab(t.id)}
+            className="flex-1 rounded-corner-sm py-xs text-label-sm transition-all"
+            style={{
+              background: tab === t.id ? 'var(--orbi-primary)' : 'transparent',
+              color: tab === t.id ? '#fff' : 'color-mix(in srgb, var(--orbi-text) 65%, transparent)',
+              fontWeight: tab === t.id ? 600 : 400,
+              fontSize: '0.78rem',
+            }}
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
+
+      {/* ── Presets tab ── */}
+      {tab === 'presets' && (
+        <div className="flex flex-col gap-md">
+          <div className="grid grid-cols-2 gap-md">
+            {THEME_PRESETS.map(preset => {
+              const active = current === preset.id;
+              return (
+                <motion.button
+                  key={preset.id}
+                  onClick={() => onPick(preset.id)}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="flex flex-col gap-sm rounded-corner-md p-md text-left"
+                  style={{
+                    background: preset.base,
+                    border: active ? `2px solid ${preset.primary}` : '2px solid color-mix(in srgb, var(--orbi-text) 8%, transparent)',
+                    boxShadow: active ? `0 0 16px ${preset.primary}55` : 'none',
+                    cursor: 'pointer',
+                    position: 'relative',
+                  }}
+                >
+                  <div className="flex gap-xs" style={{ height: 8 }}>
+                    <div style={{ flex: 1, borderRadius: 4, background: preset.base, border: '1px solid rgba(0,0,0,0.15)' }} />
+                    <div style={{ flex: 1, borderRadius: 4, background: preset.primary }} />
+                    <div style={{ flex: 1, borderRadius: 4, background: preset.secondary }} />
+                  </div>
+                  <div className="flex flex-col gap-xs">
+                    <span className="text-label-sm" style={{ color: preset.text, fontWeight: 600, fontSize: '0.8rem' }}>{preset.name}</span>
+                    <span style={{ color: preset.text, opacity: 0.55, fontSize: '0.7rem' }}>{preset.description}</span>
+                  </div>
+                  {active && (
+                    <div className="absolute top-sm right-sm flex items-center justify-center rounded-full" style={{ width: 18, height: 18, background: preset.primary }}>
+                      <Check size={10} className="text-white" />
+                    </div>
+                  )}
+                </motion.button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* ── Wheel tab ── */}
+      {tab === 'wheel' && (
+        <div className="flex flex-col gap-lg">
+          {/* Primary / Secondary selector */}
+          <div className="flex gap-sm">
+            {(['primary', 'secondary'] as const).map(slot => (
+              <button
+                key={slot}
+                onClick={() => setActiveWheel(slot)}
+                className="flex-1 flex items-center gap-md rounded-corner-md p-md transition-all"
+                style={{
+                  border: activeWheel === slot
+                    ? `2px solid ${slot === 'primary' ? primaryColor : secondaryColor}`
+                    : '2px solid color-mix(in srgb, var(--orbi-text) 10%, transparent)',
+                  background: activeWheel === slot ? 'color-mix(in srgb, var(--orbi-primary) 8%, transparent)' : 'transparent',
+                }}
+              >
+                <div style={{ width: 20, height: 20, borderRadius: '50%', background: slot === 'primary' ? primaryColor : secondaryColor, border: '2px solid color-mix(in srgb, var(--orbi-text) 15%, transparent)' }} />
+                <span className="text-label-sm text-text-secondary capitalize">{slot}</span>
+              </button>
+            ))}
+          </div>
+
+          {/* Wheel */}
+          <div className="flex justify-center">
+            {activeWheel === 'primary' ? (
+              <ColorWheel
+                value={primaryColor}
+                onChange={hex => {
+                  setPrimaryColor(hex);
+                  applyCustom(hex, secondaryColor, colorMode);
+                }}
+              />
+            ) : (
+              <ColorWheel
+                value={secondaryColor}
+                onChange={hex => {
+                  setSecondaryColor(hex);
+                  applyCustom(primaryColor, hex, colorMode);
+                }}
+              />
+            )}
+          </div>
+
+          {/* Dark / Light mode toggle */}
+          <div className="flex items-center justify-between pt-sm" style={{ borderTop: '1px solid color-mix(in srgb, var(--orbi-text) 8%, transparent)' }}>
+            <span className="text-label-sm text-text-secondary">Background mode</span>
+            <div className="flex gap-xs p-xs rounded-corner-md" style={{ background: 'color-mix(in srgb, var(--orbi-text) 6%, transparent)' }}>
+              {(['dark', 'light'] as const).map(m => (
+                <button
+                  key={m}
+                  onClick={() => { setColorMode(m); applyCustom(primaryColor, secondaryColor, m); }}
+                  className="px-lg py-xs rounded-corner-sm text-label-sm transition-all capitalize"
+                  style={{
+                    background: colorMode === m ? 'var(--orbi-primary)' : 'transparent',
+                    color: colorMode === m ? '#fff' : 'color-mix(in srgb, var(--orbi-text) 65%, transparent)',
+                    fontWeight: colorMode === m ? 600 : 400,
+                    fontSize: '0.78rem',
+                  }}
+                >
+                  {m === 'dark' ? '🌙 Dark' : '☀️ Light'}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Apply button */}
+          <button
+            onClick={() => applyCustom(primaryColor, secondaryColor, colorMode)}
+            className="w-full rounded-corner-md py-md text-label-sm font-semibold transition-all"
+            style={{ background: `linear-gradient(135deg, ${primaryColor}, ${secondaryColor})`, color: '#fff' }}
+          >
+            Apply Custom Theme
+          </button>
+        </div>
+      )}
+
+      {/* ── Grid tab ── */}
+      {tab === 'grid' && (
+        <div className="flex flex-col gap-lg">
+          <div className="flex gap-sm">
+            {(['primary', 'secondary'] as const).map(slot => (
+              <button
+                key={slot}
+                onClick={() => setActiveWheel(slot)}
+                className="flex-1 flex items-center gap-md rounded-corner-md p-md transition-all"
+                style={{
+                  border: activeWheel === slot
+                    ? `2px solid ${slot === 'primary' ? primaryColor : secondaryColor}`
+                    : '2px solid color-mix(in srgb, var(--orbi-text) 10%, transparent)',
+                  background: activeWheel === slot ? 'color-mix(in srgb, var(--orbi-primary) 8%, transparent)' : 'transparent',
+                }}
+              >
+                <div style={{ width: 20, height: 20, borderRadius: '50%', background: slot === 'primary' ? primaryColor : secondaryColor, border: '2px solid color-mix(in srgb, var(--orbi-text) 15%, transparent)' }} />
+                <span className="text-label-sm text-text-secondary capitalize">{slot}</span>
+              </button>
+            ))}
+          </div>
+
+          <ColorGrid
+            value={activeWheel === 'primary' ? primaryColor : secondaryColor}
+            onChange={hex => {
+              if (activeWheel === 'primary') {
+                setPrimaryColor(hex);
+                applyCustom(hex, secondaryColor, colorMode);
+              } else {
+                setSecondaryColor(hex);
+                applyCustom(primaryColor, hex, colorMode);
+              }
+            }}
+          />
+
+          <div className="flex items-center justify-between">
+            <span className="text-label-sm text-text-secondary">Background mode</span>
+            <div className="flex gap-xs p-xs rounded-corner-md" style={{ background: 'color-mix(in srgb, var(--orbi-text) 6%, transparent)' }}>
+              {(['dark', 'light'] as const).map(m => (
+                <button
+                  key={m}
+                  onClick={() => { setColorMode(m); applyCustom(primaryColor, secondaryColor, m); }}
+                  className="px-lg py-xs rounded-corner-sm text-label-sm transition-all capitalize"
+                  style={{
+                    background: colorMode === m ? 'var(--orbi-primary)' : 'transparent',
+                    color: colorMode === m ? '#fff' : 'color-mix(in srgb, var(--orbi-text) 65%, transparent)',
+                    fontWeight: colorMode === m ? 600 : 400,
+                    fontSize: '0.78rem',
+                  }}
+                >
+                  {m === 'dark' ? '🌙 Dark' : '☀️ Light'}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <button
+            onClick={() => applyCustom(primaryColor, secondaryColor, colorMode)}
+            className="w-full rounded-corner-md py-md text-label-sm font-semibold transition-all"
+            style={{ background: `linear-gradient(135deg, ${primaryColor}, ${secondaryColor})`, color: '#fff' }}
+          >
+            Apply Custom Theme
+          </button>
+        </div>
+      )}
+
+      {/* ── Palette tab ── */}
+      {tab === 'palette' && (
+        <div className="flex flex-col gap-md">
+          <p className="text-label-sm text-text-secondary">Pick a curated pair — applies instantly.</p>
+          <PaletteGrid
+            onPick={(p, s, m) => {
+              setPrimaryColor(p);
+              setSecondaryColor(s);
+              setColorMode(m);
+              applyCustom(p, s, m);
+            }}
+          />
+        </div>
+      )}
+
+      {/* Active custom indicator */}
+      {current === 'custom' && (
+        <div className="flex items-center gap-md rounded-corner-sm px-md py-sm" style={{ background: 'color-mix(in srgb, var(--orbi-primary) 10%, transparent)', border: '1px solid color-mix(in srgb, var(--orbi-primary) 25%, transparent)' }}>
+          <div style={{ width: 10, height: 10, borderRadius: '50%', background: 'var(--orbi-primary)', flexShrink: 0 }} />
+          <span className="text-label-sm" style={{ color: 'var(--orbi-primary)', fontSize: '0.75rem' }}>Custom theme active</span>
+          <button
+            onClick={() => onPick('focus')}
+            className="ml-auto text-label-sm text-text-tertiary hover:text-text-secondary transition-colors"
+            style={{ fontSize: '0.72rem' }}
+          >
+            Reset to Focus
+          </button>
+        </div>
+      )}
+
       <p className="text-label-sm text-text-tertiary" style={{ fontSize: '0.72rem' }}>
         Amber ✦ is the shared reward accent — streak & task-complete animations stay consistent across themes.
       </p>
@@ -634,7 +1204,7 @@ export function SettingsPage() {
   const [focusDuration, setFocusDuration] = useState('25');
   const [breakDuration, setBreakDuration] = useState('5');
   const [notifications, setNotifications] = useState(true);
-  const { theme: orbiTheme, setTheme: setOrbiTheme } = useOrbiTheme();
+  const { theme: orbiTheme, setTheme: setOrbiTheme, customTheme, setCustomTheme } = useOrbiTheme();
 
   return (
     <div className="flex h-full">
@@ -759,7 +1329,12 @@ export function SettingsPage() {
             </div>
             <div className="rounded-corner-lg p-xl flex flex-col gap-lg" style={{ background: 'var(--orbi-surface)', border: 'var(--orbi-border)' }}>
               <h2 className="text-label text-text-primary">Appearance</h2>
-              <ThemePicker current={orbiTheme} onPick={setOrbiTheme} />
+              <ThemePicker
+                current={orbiTheme}
+                onPick={setOrbiTheme}
+                customTheme={customTheme}
+                onCustom={setCustomTheme}
+              />
             </div>
             <div className="rounded-corner-lg p-xl flex flex-col gap-lg" style={{ background: 'var(--orbi-surface)', border: 'var(--orbi-border)' }}>
               <h2 className="text-label text-text-primary">Focus sessions</h2>
