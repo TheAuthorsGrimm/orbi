@@ -155,7 +155,7 @@ function TaskColumn({
       {/* Input */}
       <div
         className="rounded-corner-md p-md flex flex-col gap-md"
-        style={{ background: 'rgba(0,0,0,0.3)', border: '1px solid color-mix(in srgb, var(--orbi-text) 7%, transparent)' }}
+        style={{ background: 'color-mix(in srgb, var(--orbi-text) 8%, transparent)', border: '1px solid color-mix(in srgb, var(--orbi-text) 7%, transparent)' }}
       >
         <div className="flex gap-md items-center">
           <input
@@ -270,7 +270,7 @@ export function TasksPage() {
   return (
     <div className="p-md md:p-xl flex flex-col gap-xl min-h-full">
       {/* Header */}
-      <div className="flex items-start justify-between">
+      <div className="flex flex-col sm:flex-row items-start justify-between gap-md">
         <div className="flex flex-col gap-xs">
           <h1 className="text-title text-text-primary">Task Planner</h1>
           <p className="text-label-sm text-text-secondary">
@@ -321,14 +321,14 @@ export function TasksPage() {
         <span style={{ fontSize: '1.25rem' }}>🔮</span>
         <p className="text-label-sm text-text-secondary flex-1">
           <strong className="text-text-primary">Orbi tip:</strong> Add your non-negotiables to{' '}
-          <strong style={{ color: '#fb923c' }}>Today's Needs</strong> first — medication, meals, critical deadlines.
-          Then fill <strong style={{ color: '#14b8a6' }}>Today's Wants</strong> with things you'd love to do.
-          <strong style={{ color: '#a78bfa' }}> Every task you add earns you XP!</strong>
+          <strong style={{ color: 'var(--orbi-primary)' }}>Today's Needs</strong> first — medication, meals, critical deadlines.
+          Then fill <strong style={{ color: 'var(--orbi-secondary)' }}>Today's Wants</strong> with things you'd love to do.
+          <strong style={{ color: 'var(--orbi-primary)' }}> Every task you add earns you XP!</strong>
         </p>
       </motion.div>
 
       {/* Two-column task entry */}
-      <div className="flex gap-xl flex-1">
+      <div className="flex flex-col md:flex-row gap-xl flex-1">
         <TaskColumn
           title="Today's Needs"
           subtitle="Must get done — non-negotiable"
@@ -337,9 +337,9 @@ export function TasksPage() {
           onAdd={addTask('needs')}
           onToggle={toggleTask('needs')}
           onDelete={deleteTask('needs')}
-          gradient="linear-gradient(145deg, #1a0e00 0%, #110900 100%)"
-          border="1px solid rgba(251,146,60,0.3)"
-          accent="#fb923c"
+          gradient="var(--orbi-surface)"
+          border="1px solid color-mix(in srgb, var(--orbi-primary) 30%, transparent)"
+          accent="var(--orbi-primary)"
           placeholder="What MUST happen today? (press Enter to add + earn XP)"
         />
         <TaskColumn
@@ -351,8 +351,8 @@ export function TasksPage() {
           onToggle={toggleTask('wants')}
           onDelete={deleteTask('wants')}
           gradient="var(--orbi-surface)"
-          border="1px solid rgba(20,184,166,0.3)"
-          accent="#14b8a6"
+          border="1px solid color-mix(in srgb, var(--orbi-secondary) 30%, transparent)"
+          accent="var(--orbi-secondary)"
           placeholder="What would be great to do today? (press Enter to add + earn XP)"
         />
       </div>

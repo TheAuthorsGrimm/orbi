@@ -58,7 +58,7 @@ export function LegalShell({ title, lastUpdated, children }: LegalShellProps) {
             padding: 'clamp(0.75rem, 1.5vw, 1rem)',
           }}
         >
-          <AlertTriangle size={20} className="shrink-0 mt-0.5" style={{ color: '#fbbf24' }} />
+          <AlertTriangle size={20} className="shrink-0 mt-0.5" style={{ color: 'rgb(217,119,6)' }} />
           <div className="flex flex-col gap-xs">
             <p
               className="text-text-primary font-semibold"

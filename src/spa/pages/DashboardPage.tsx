@@ -156,7 +156,7 @@ export function DashboardPage() {
       <div className="flex items-center justify-between">
         <div className="flex flex-col gap-xs">
           <h1 className="text-title text-text-primary">{greeting}</h1>
-          <p className="text-label-sm" style={{ color: '#a78bfa' }}>
+          <p className="text-label-sm" style={{ color: 'var(--orbi-primary)' }}>
             {todayAffirmation}
           </p>
           <p className="text-label-sm text-text-tertiary">
@@ -236,7 +236,7 @@ export function DashboardPage() {
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-md">
-                <Target size={16} style={{ color: '#a78bfa' }} />
+                <Target size={16} style={{ color: 'var(--orbi-primary)' }} />
                 <h2 className="text-label text-text-primary">Focus Orbit</h2>
               </div>
               <Badge label="4 orbiting" variant="brand" />
@@ -354,7 +354,7 @@ export function DashboardPage() {
           <motion.div
             className="rounded-corner-lg p-xl flex flex-col gap-lg"
             style={{
-              background: 'linear-gradient(145deg, #1e1b4b 0%, #1a2e3b 100%)',
+              background: 'var(--orbi-surface)',
               border: '1px solid color-mix(in srgb, var(--orbi-primary) 40%, transparent)',
               boxShadow: '0 4px 32px color-mix(in srgb, var(--orbi-primary) 20%, transparent)',
             }}
@@ -391,7 +391,7 @@ export function DashboardPage() {
           <div
             className="rounded-corner-lg p-xl flex flex-col gap-lg flex-1"
             style={{
-              background: 'linear-gradient(145deg, #0f0e2a 0%, #0e1a0e 100%)',
+              background: 'var(--orbi-surface)',
               border: '1px solid color-mix(in srgb, var(--orbi-text) 8%, transparent)',
             }}
           >

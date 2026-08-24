@@ -357,7 +357,7 @@ function RewardToast({ toast, onDismiss }: { toast: ActiveToast; onDismiss: () =
           zIndex: 9999,
           background: toast.bg,
           border: `2px solid ${toast.border}`,
-          boxShadow: `0 8px 60px ${toast.border}, 0 0 0 1px rgba(255,255,255,0.06)`,
+          boxShadow: `0 8px 60px ${toast.border}, 0 0 0 1px color-mix(in srgb, var(--orbi-text) 6%, transparent)`,
           minWidth: 340,
           maxWidth: 480,
           textAlign: 'center',
@@ -367,7 +367,7 @@ function RewardToast({ toast, onDismiss }: { toast: ActiveToast; onDismiss: () =
         {toast.levelUp && (
           <div
             className="px-lg py-xs rounded-corner-full text-label-sm"
-            style={{ background: 'rgba(255,255,255,0.12)', color: toast.color, border: `1px solid ${toast.border}` }}
+            style={{ background: 'color-mix(in srgb, var(--orbi-text) 10%, transparent)', color: toast.color, border: `1px solid ${toast.border}` }}
           >
             {toast.levelUp.from} → {toast.levelUp.to}
           </div>
@@ -386,7 +386,7 @@ function RewardToast({ toast, onDismiss }: { toast: ActiveToast; onDismiss: () =
           <p className="text-text-primary" style={{ fontSize: '1.15rem', fontWeight: 700, color: toast.color }}>
             {toast.message}
           </p>
-          <p className="text-label-sm" style={{ color: 'rgba(255,255,255,0.6)' }}>
+          <p className="text-label-sm" style={{ color: 'color-mix(in srgb, var(--orbi-text) 65%, transparent)' }}>
             +{toast.xp} XP earned
           </p>
         </div>
