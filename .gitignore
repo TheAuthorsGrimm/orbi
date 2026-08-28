@@ -7,3 +7,6 @@ node_modules
 *.tsbuildinfo
 next-env.d.ts
 .DS_Store
+
+# Local Claude Code MCP servers (not part of this project)
+.claude/mcp-servers/
