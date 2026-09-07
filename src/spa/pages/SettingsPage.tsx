@@ -1263,7 +1263,7 @@ export function SettingsPage() {
               <p className="text-label-sm text-text-secondary mt-xs">Manage your account information</p>
             </div>
 
-            <div className="rounded-corner-lg p-xl flex flex-col gap-lg" style={{ background: 'var(--orbi-surface)', border: 'var(--orbi-border)' }}>
+            <div className="rounded-corner-lg p-xl flex flex-col gap-lg" style={{ background: 'var(--orbi-surface)', border: '1px solid var(--orbi-border)' }}>
               <h2 className="text-label text-text-primary">Profile photo</h2>
               <div className="flex items-center gap-xl">
                 <Avatar type="initial" initials="AC" size="large" shape="circle" />
@@ -1274,7 +1274,7 @@ export function SettingsPage() {
               </div>
             </div>
 
-            <div className="rounded-corner-lg p-xl flex flex-col gap-lg" style={{ background: 'var(--orbi-surface)', border: 'var(--orbi-border)' }}>
+            <div className="rounded-corner-lg p-xl flex flex-col gap-lg" style={{ background: 'var(--orbi-surface)', border: '1px solid var(--orbi-border)' }}>
               <h2 className="text-label text-text-primary">Basic information</h2>
               <div className="flex flex-col gap-lg">
                 <InputField label="Display name" value={displayName} onChange={setDisplayName} />
@@ -1328,7 +1328,7 @@ export function SettingsPage() {
               <h1 className="text-title text-text-primary">Preferences</h1>
               <p className="text-label-sm text-text-secondary mt-xs">Customise Orbi to work with your brain</p>
             </div>
-            <div className="rounded-corner-lg p-xl flex flex-col gap-lg" style={{ background: 'var(--orbi-surface)', border: 'var(--orbi-border)' }}>
+            <div className="rounded-corner-lg p-xl flex flex-col gap-lg" style={{ background: 'var(--orbi-surface)', border: '1px solid var(--orbi-border)' }}>
               <h2 className="text-label text-text-primary">Appearance</h2>
               <ThemePicker
                 current={orbiTheme}
@@ -1337,7 +1337,7 @@ export function SettingsPage() {
                 onCustom={setCustomTheme}
               />
             </div>
-            <div className="rounded-corner-lg p-xl flex flex-col gap-lg" style={{ background: 'var(--orbi-surface)', border: 'var(--orbi-border)' }}>
+            <div className="rounded-corner-lg p-xl flex flex-col gap-lg" style={{ background: 'var(--orbi-surface)', border: '1px solid var(--orbi-border)' }}>
               <h2 className="text-label text-text-primary">Focus sessions</h2>
               <div className="flex gap-xl">
                 <SelectField
@@ -1378,7 +1378,7 @@ export function SettingsPage() {
               <h1 className="text-title text-text-primary">Notifications</h1>
               <p className="text-label-sm text-text-secondary mt-xs">Control when and how Orbi reaches out</p>
             </div>
-            <div className="rounded-corner-lg p-xl flex flex-col gap-lg" style={{ background: 'var(--orbi-surface)', border: 'var(--orbi-border)' }}>
+            <div className="rounded-corner-lg p-xl flex flex-col gap-lg" style={{ background: 'var(--orbi-surface)', border: '1px solid var(--orbi-border)' }}>
               <h2 className="text-label text-text-primary">Channels</h2>
               <SwitchField label="Push notifications" description="Receive browser notifications for reminders and check-ins" defaultSelected={notifications} onChange={setNotifications} />
               <SwitchField label="Email digest" description="Weekly summary of your tasks and focus stats" defaultSelected={true} />
@@ -1403,7 +1403,7 @@ export function SettingsPage() {
               <h2 className="text-label text-text-primary">Companion name</h2>
               <InputField label="What should your Orbi be called?" value="Orbi" description="Give your AI companion a name that feels right" onChange={() => {}} />
             </div>
-            <div className="rounded-corner-lg p-xl flex flex-col gap-lg" style={{ background: 'var(--orbi-surface)', border: 'var(--orbi-border)' }}>
+            <div className="rounded-corner-lg p-xl flex flex-col gap-lg" style={{ background: 'var(--orbi-surface)', border: '1px solid var(--orbi-border)' }}>
               <h2 className="text-label text-text-primary">Tone & style</h2>
               <SelectField label="Orbi's tone" value="gentle" options={[
                 { value: 'gentle', label: 'Gentle — warm, supportive, patient' },
@@ -1451,7 +1451,7 @@ export function SettingsPage() {
                 <Button variant="subtle" size="small">Cancel subscription</Button>
               </div>
             </div>
-            <div className="rounded-corner-lg p-xl flex flex-col gap-lg" style={{ background: 'var(--orbi-surface)', border: 'var(--orbi-border)' }}>
+            <div className="rounded-corner-lg p-xl flex flex-col gap-lg" style={{ background: 'var(--orbi-surface)', border: '1px solid var(--orbi-border)' }}>
               <h2 className="text-label text-text-primary">Payment method</h2>
               <div className="flex items-center gap-md">
                 <div className="rounded-corner-md p-md" style={{ background: 'color-mix(in srgb, var(--orbi-primary) 15%, transparent)', border: '1px solid color-mix(in srgb, var(--orbi-primary) 30%, transparent)' }}>

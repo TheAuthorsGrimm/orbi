@@ -40,8 +40,9 @@ const CARD_TEAL = {
   border: '1px solid color-mix(in srgb, var(--orbi-secondary) 25%, transparent)',
 };
 const CARD_AMBER = {
-  background: 'linear-gradient(145deg, #1a0e00 0%, #110900 100%)',
-  border: '1px solid rgba(217,119,6,0.25)',
+  background: 'var(--orbi-surface)',
+  border: '1px solid var(--orbi-border)',
+  borderLeft: '3px solid var(--orbi-secondary)',
 };
 
 export function FocusPage() {
@@ -168,8 +169,8 @@ export function FocusPage() {
                 />
                 <defs>
                   <linearGradient id="timerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#5250f3" />
-                    <stop offset="100%" stopColor="#0d9488" />
+                    <stop offset="0%" stopColor="var(--orbi-primary)" />
+                    <stop offset="100%" stopColor="var(--orbi-secondary)" />
                   </linearGradient>
                 </defs>
               </svg>

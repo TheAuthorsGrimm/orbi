@@ -38,7 +38,7 @@ export function FinalizeStep({
         </p>
       </div>
 
-      <div className="flex flex-col gap-sm rounded-corner-md p-md" style={{ background: 'color-mix(in srgb, var(--orbi-text) 5%, transparent)', border: 'var(--orbi-border)' }}>
+      <div className="flex flex-col gap-sm rounded-corner-md p-md" style={{ background: 'color-mix(in srgb, var(--orbi-text) 5%, transparent)', border: '1px solid var(--orbi-border)' }}>
         {[
           { label: 'Name', value: `${data.firstName} ${data.lastName}`.trim() },
           { label: 'Email', value: data.email },

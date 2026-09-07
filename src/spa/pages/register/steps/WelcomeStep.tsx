@@ -1,83 +1,46 @@
 import { motion } from 'motion/react';
-import { Bot, Sparkles } from 'lucide-react';
-import { AstraLogo } from '@figma/astraui';
-import { Button } from '@figma/astraui';
+import { Bot } from 'lucide-react';
+import '../register.css';
 
 interface WelcomeStepProps {
   onNext: () => void;
 }
 
-/** Page 1: Orbi introduces itself with a fun word animation */
 export function WelcomeStep({ onNext }: WelcomeStepProps) {
   const words = ['Plan.', 'Focus.', 'Thrive.'];
 
   return (
-    <div className="min-h-screen bg-orbi-dark flex items-center justify-center px-[clamp(1rem,4vw,4rem)] py-[clamp(1rem,4vw,4rem)]">
+    <div className="rg-root">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-        className="w-full flex flex-col items-center text-center"
-        style={{
-          maxWidth: 'min(90vw, 56rem)',
-          gap: 'clamp(1.25rem, 3vw, 2.5rem)',
-        }}
+        transition={{ duration: 0.45 }}
+        className="rg-welcome"
       >
-        {/* Orbi bot character */}
-        <motion.div
-          animate={{ y: [0, -8, 0] }}
-          transition={{ repeat: Infinity, duration: 3, ease: 'easeInOut' }}
-          className="rounded-full grid place-items-center shadow-2xl"
-          style={{
-            background: 'linear-gradient(135deg, var(--orbi-primary), var(--orbi-secondary))',
-            width: 'clamp(6rem, 12vw, 12rem)',
-            height: 'clamp(6rem, 12vw, 12rem)',
-          }}
-        >
+        {/* Bot avatar — square, gradient */}
+        <div className="rg-bot">
           <Bot
-            className="text-text-primary"
-            style={{ width: 'clamp(3rem, 6vw, 6rem)', height: 'clamp(3rem, 6vw, 6rem)' }}
+            className="text-white"
+            style={{ width: 'clamp(2.5rem, 5vw, 4.5rem)', height: 'clamp(2.5rem, 5vw, 4.5rem)' }}
           />
-        </motion.div>
-
-        {/* Logo */}
-        <div className="flex items-center" style={{ gap: 'clamp(0.5rem, 1.5vw, 1.25rem)' }}>
-          <AstraLogo size={36} />
-          <span
-            className="text-text-primary font-bold"
-            style={{
-              fontFamily: 'Instrument Sans, system-ui, sans-serif',
-              fontSize: 'clamp(2rem, 6vw, 5rem)',
-              lineHeight: 1,
-            }}
-          >
-            Orbi
-          </span>
         </div>
 
-        <p
-          className="text-text-secondary"
-          style={{ fontSize: 'clamp(1rem, 2vw, 1.5rem)' }}
-        >
-          Your ADHD productivity companion
-        </p>
+        {/* DM Serif Display wordmark */}
+        <div className="rg-wordmark">
+          <em>O</em>rbi
+        </div>
 
-        {/* Animated tagline words */}
-        <div className="flex justify-center" style={{ gap: 'clamp(0.5rem, 2vw, 2rem)' }}>
+        <p className="rg-welcome-sub">Your ADHD productivity companion</p>
+
+        {/* Tagline words */}
+        <div className="rg-words">
           {words.map((word, i) => (
             <motion.span
               key={word}
-              initial={{ opacity: 0, y: 16 }}
+              className="rg-word"
+              initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6 + i * 0.3, duration: 0.4, ease: 'easeOut' }}
-              className="text-text-primary font-bold"
-              style={{
-                background: 'linear-gradient(135deg, var(--orbi-primary), var(--orbi-secondary))',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                fontSize: 'clamp(1.75rem, 5vw, 4rem)',
-                lineHeight: 1.1,
-              }}
+              transition={{ delay: 0.5 + i * 0.25, duration: 0.35, ease: 'easeOut' }}
             >
               {word}
             </motion.span>
@@ -85,37 +48,29 @@ export function WelcomeStep({ onNext }: WelcomeStepProps) {
         </div>
 
         <motion.p
+          className="rg-intro"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1.8, duration: 0.5 }}
-          className="text-text-secondary"
-          style={{
-            fontSize: 'clamp(0.95rem, 1.6vw, 1.25rem)',
-            maxWidth: 'min(90vw, 36rem)',
-            lineHeight: 1.5,
-          }}
+          transition={{ delay: 1.4, duration: 0.4 }}
         >
           I'm Orbi — I'll guide you through setting up your account. One step at a time, no rush.
         </motion.p>
 
-        {/* CTA */}
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
+          initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 2.2, duration: 0.4 }}
-          style={{ transform: 'scale(clamp(1, calc(1 + (100vw - 768px) / 4000), 1.5))', transformOrigin: 'center' }}
+          transition={{ delay: 1.8, duration: 0.35 }}
         >
-          <Button variant="primary" onClick={onNext} iconStart={<Sparkles size={16} />}>
-            Let's get started
-          </Button>
+          <button className="rg-start-btn" type="button" onClick={onNext}>
+            Let's get started →
+          </button>
         </motion.div>
 
         <motion.p
+          className="rg-byline"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 2.5 }}
-          className="text-text-tertiary"
-          style={{ fontSize: 'clamp(0.75rem, 1.1vw, 1rem)' }}
+          transition={{ delay: 2.1 }}
         >
           by GrimmForged AI Solutions
         </motion.p>

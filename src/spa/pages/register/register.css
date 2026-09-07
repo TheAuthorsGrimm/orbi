@@ -1,0 +1,220 @@
+/* Register flow — Calm theme */
+
+/* ── Shared ground ── */
+.rg-root {
+  min-height: 100vh;
+  background: var(--orbi-base);
+  color: var(--orbi-text);
+  font-family: var(--orbi-font-family, 'Atkinson Hyperlegible', sans-serif);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1rem, 4vw, 4rem);
+}
+
+/* ── Welcome screen ── */
+.rg-welcome {
+  width: 100%;
+  max-width: min(90vw, 52rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+}
+
+.rg-bot {
+  width: clamp(5rem, 10vw, 9rem);
+  height: clamp(5rem, 10vw, 9rem);
+  background: linear-gradient(135deg, var(--orbi-primary) 0%, var(--orbi-secondary) 100%);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.rg-wordmark {
+  font-family: var(--orbi-display-family, 'DM Serif Display', Georgia, serif);
+  font-size: clamp(2.4rem, 7vw, 5rem);
+  font-weight: 400;
+  color: var(--orbi-text);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.rg-wordmark em {
+  color: var(--orbi-primary);
+  font-style: italic;
+}
+
+.rg-welcome-sub {
+  font-size: clamp(0.95rem, 1.6vw, 1.15rem);
+  color: var(--orbi-text-muted);
+}
+
+.rg-words {
+  display: flex;
+  justify-content: center;
+  gap: clamp(0.5rem, 2vw, 2rem);
+  flex-wrap: wrap;
+}
+
+.rg-word {
+  font-family: var(--orbi-display-family, 'DM Serif Display', Georgia, serif);
+  font-size: clamp(1.75rem, 5vw, 3.5rem);
+  font-weight: 400;
+  color: var(--orbi-primary);
+  line-height: 1.1;
+}
+
+.rg-word:nth-child(3) { color: var(--orbi-secondary); }
+
+.rg-intro {
+  font-size: clamp(0.95rem, 1.6vw, 1.1rem);
+  color: var(--orbi-text-muted);
+  max-width: min(90vw, 36rem);
+  line-height: 1.65;
+}
+
+.rg-start-btn {
+  background: var(--orbi-primary);
+  color: var(--orbi-primary-fg, #fff);
+  border: none;
+  font-family: inherit;
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 14px 36px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 0;
+}
+.rg-start-btn:hover { filter: brightness(1.08); }
+
+.rg-byline {
+  font-size: clamp(0.75rem, 1.1vw, 0.88rem);
+  color: var(--orbi-text-muted);
+}
+
+/* ── Step shell ── */
+.rg-shell-wrap {
+  width: 100%;
+  max-width: min(92vw, 58rem);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1rem, 2.5vw, 1.75rem);
+}
+
+.rg-shell-logo {
+  display: flex;
+  justify-content: center;
+}
+
+.rg-shell-wordmark {
+  font-family: var(--orbi-display-family, 'DM Serif Display', Georgia, serif);
+  font-size: 1.05rem;
+  color: var(--orbi-text);
+  letter-spacing: 0.02em;
+}
+
+.rg-shell-wordmark em {
+  color: var(--orbi-primary);
+  font-style: italic;
+  margin-left: 2px;
+}
+
+.rg-card {
+  background: var(--orbi-surface);
+  border: 1px solid var(--orbi-border);
+  box-shadow: 0 2px 24px color-mix(in srgb, var(--orbi-text) 6%, transparent);
+  padding: clamp(22px, 4vw, 40px);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(16px, 2.5vw, 24px);
+}
+
+/* ── Progress bar (step indicator) ── */
+.rg-progress {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.rg-progress-seg {
+  flex: 1;
+  height: 3px;
+  background: var(--orbi-border);
+  transition: background 0.25s ease;
+}
+
+.rg-progress-seg.done {
+  background: var(--orbi-secondary);
+}
+
+.rg-progress-seg.active {
+  background: var(--orbi-primary);
+}
+
+/* ── Orbi character ── */
+.rg-char {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.rg-char-avatar {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, var(--orbi-primary) 0%, var(--orbi-secondary) 100%);
+  display: grid;
+  place-items: center;
+}
+
+.rg-char-bubble {
+  flex: 1;
+  background: var(--orbi-surface-2);
+  border: 1px solid var(--orbi-border);
+  border-left: 2px solid var(--orbi-primary);
+  padding: 10px 14px;
+  font-size: 0.84rem;
+  color: var(--orbi-text-muted);
+  line-height: 1.55;
+}
+
+/* ── Step nav buttons ── */
+.rg-btn-row {
+  display: flex;
+  gap: 10px;
+}
+
+.rg-btn {
+  flex: 1;
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  padding: 12px 18px;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border-radius: 0;
+}
+
+.rg-btn-primary {
+  background: var(--orbi-primary);
+  color: var(--orbi-primary-fg, #fff);
+}
+.rg-btn-primary:hover:not(:disabled) { filter: brightness(1.08); }
+.rg-btn-primary:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.rg-btn-neutral {
+  background: var(--orbi-surface-2);
+  color: var(--orbi-text);
+  border: 1px solid var(--orbi-border);
+}
+.rg-btn-neutral:hover { border-color: var(--orbi-primary); }

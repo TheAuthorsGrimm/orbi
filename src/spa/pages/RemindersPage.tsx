@@ -269,9 +269,9 @@ const TRIGGER_BADGE: Record<ReminderTriggerType, 'default' | 'brand' | 'warning'
 };
 
 const TRIGGER_GRADIENT: Record<ReminderTriggerType, string> = {
-  time: 'linear-gradient(135deg, #1e1b4b, #13122f)',
-  context: 'linear-gradient(135deg, #1a1000, #120900)',
-  ai: 'var(--orbi-surface)',
+  time:    'var(--orbi-surface)',
+  context: 'var(--orbi-surface)',
+  ai:      'var(--orbi-surface)',
 };
 
 const TRIGGER_BORDER: Record<ReminderTriggerType, string> = {
@@ -319,9 +319,9 @@ export function RemindersPage() {
       {/* Reminder type cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-lg">
         {[
-          { type: 'time', label: 'Time-based', desc: 'Triggers at a specific time', icon: Clock, accent: '#a5b4fc', gradient: 'var(--orbi-surface)', border: 'color-mix(in srgb, var(--orbi-primary) 25%, transparent)' },
-          { type: 'context', label: 'Context-aware', desc: 'Based on your activity', icon: Zap, accent: '#fcd34d', gradient: 'linear-gradient(145deg, #1a0e00 0%, #110900 100%)', border: 'rgba(217,119,6,0.25)' },
-          { type: 'ai', label: 'AI-triggered', desc: 'Orbi decides when you need a nudge', icon: Brain, accent: '#6ee7b7', gradient: 'var(--orbi-surface)', border: 'color-mix(in srgb, var(--orbi-secondary) 25%, transparent)' },
+          { type: 'time', label: 'Time-based', desc: 'Triggers at a specific time', icon: Clock, accent: 'var(--orbi-primary)', gradient: 'var(--orbi-surface)', border: 'color-mix(in srgb, var(--orbi-primary) 25%, transparent)' },
+          { type: 'context', label: 'Context-aware', desc: 'Based on your activity', icon: Zap, accent: 'var(--orbi-secondary)', gradient: 'var(--orbi-surface)', border: 'color-mix(in srgb, var(--orbi-secondary) 25%, transparent)' },
+          { type: 'ai', label: 'AI-triggered', desc: 'Orbi decides when you need a nudge', icon: Brain, accent: 'var(--orbi-secondary)', gradient: 'var(--orbi-surface)', border: 'color-mix(in srgb, var(--orbi-secondary) 25%, transparent)' },
         ].map(item => (
           <div
             key={item.type}

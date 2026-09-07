@@ -1,39 +1,33 @@
 import { motion } from 'motion/react';
 import { Bot } from 'lucide-react';
+import './register.css';
 
 interface OrbiMessageProps {
   message: string;
 }
 
-/** The little Orbi bot character that guides users through signup */
 export function OrbiCharacter({ message }: OrbiMessageProps) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 10 }}
+      initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.35, ease: 'easeOut' }}
-      className="flex gap-sm items-start"
+      transition={{ duration: 0.3, ease: 'easeOut' }}
+      className="rg-char"
     >
-      {/* Orbi avatar */}
-      <motion.div
-        animate={{ y: [0, -4, 0] }}
-        transition={{ repeat: Infinity, duration: 2.5, ease: 'easeInOut' }}
-        className="shrink-0 h-12 w-12 rounded-full grid place-items-center"
-        style={{ background: 'linear-gradient(135deg, var(--orbi-primary), var(--orbi-secondary))' }}
-      >
-        <Bot size={22} className="text-white" />
-      </motion.div>
+      {/* Square avatar */}
+      <div className="rg-char-avatar">
+        <Bot size={20} className="text-white" />
+      </div>
 
       {/* Speech bubble */}
       <motion.div
         key={message}
-        initial={{ opacity: 0, x: -6 }}
+        initial={{ opacity: 0, x: -4 }}
         animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.3 }}
-        className="rounded-corner-md p-md flex-1"
-        style={{ border: 'var(--orbi-border)', background: 'color-mix(in srgb, var(--orbi-text) 10%, transparent)' }}
+        transition={{ duration: 0.25 }}
+        className="rg-char-bubble"
       >
-        <p className="text-label-sm text-text-secondary leading-relaxed">{message}</p>
+        {message}
       </motion.div>
     </motion.div>
   );

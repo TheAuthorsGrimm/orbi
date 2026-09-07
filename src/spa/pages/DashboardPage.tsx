@@ -31,65 +31,33 @@ const STAT_CARDS = [
     icon: CheckCircle2,
     label: 'Done today',
     getValue: (v: number) => `${v} task`,
-    gradient: 'linear-gradient(135deg, #064e3b 0%, #065f46 60%, #059669 100%)',
-    iconColor: '#6ee7b7',
-    glowColor: 'rgba(5,150,105,0.35)',
+    accent: 'var(--orbi-secondary)',
   },
   {
     icon: Clock,
     label: 'Focus time',
     getValue: (v: number) => `${v} min`,
-    gradient: 'linear-gradient(135deg, #1e1b4b 0%, #3730a3 60%, #5250f3 100%)',
-    iconColor: '#c4b5fd',
-    glowColor: 'color-mix(in srgb, var(--orbi-primary) 35%, transparent)',
+    accent: 'var(--orbi-primary)',
   },
   {
     icon: Flame,
     label: 'Day streak',
     getValue: (v: number) => `${v} days`,
-    gradient: 'linear-gradient(135deg, #431407 0%, #92400e 60%, #d97706 100%)',
-    iconColor: '#fcd34d',
-    glowColor: 'rgba(217,119,6,0.35)',
+    accent: 'var(--orbi-primary)',
   },
   {
     icon: Zap,
     label: 'Energy',
     getValue: (_v: number) => 'Medium',
-    gradient: 'linear-gradient(135deg, #134e4a 0%, #0f766e 60%, #14b8a6 100%)',
-    iconColor: '#5eead4',
-    glowColor: 'rgba(20,184,166,0.35)',
+    accent: 'var(--orbi-secondary)',
   },
 ];
 
 const QUICK_ACTIONS = [
-  {
-    label: 'Focus 25min',
-    icon: Timer,
-    path: '/focus',
-    gradient: 'linear-gradient(135deg, #4f46e5, #7c3aed)',
-    glow: 'rgba(124,58,237,0.4)',
-  },
-  {
-    label: 'Ask Orbi',
-    icon: Bot,
-    path: '/agent',
-    gradient: 'linear-gradient(135deg, #0891b2, #0d9488)',
-    glow: 'color-mix(in srgb, var(--orbi-secondary) 40%, transparent)',
-  },
-  {
-    label: 'Reminders',
-    icon: Bell,
-    path: '/reminders',
-    gradient: 'linear-gradient(135deg, #d97706, #ea580c)',
-    glow: 'rgba(234,88,12,0.4)',
-  },
-  {
-    label: 'Calendar',
-    icon: CalendarDays,
-    path: '/calendar',
-    gradient: 'linear-gradient(135deg, #059669, #0891b2)',
-    glow: 'rgba(8,145,178,0.4)',
-  },
+  { label: 'Focus 25min', icon: Timer,       path: '/focus',     accent: 'var(--orbi-primary)' },
+  { label: 'Ask Orbi',    icon: Bot,          path: '/agent',     accent: 'var(--orbi-secondary)' },
+  { label: 'Reminders',   icon: Bell,         path: '/reminders', accent: 'var(--orbi-primary)' },
+  { label: 'Calendar',    icon: CalendarDays, path: '/calendar',  accent: 'var(--orbi-secondary)' },
 ];
 
 export function DashboardPage() {
@@ -191,31 +159,32 @@ export function DashboardPage() {
         </div>
       </div>
 
-      {/* ── Gradient Stat Cards ── */}
+      {/* ── Stat Cards ── */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-lg">
         {STAT_CARDS.map((stat, i) => (
           <motion.div
             key={stat.label}
-            className="rounded-corner-lg p-lg flex items-center gap-md"
+            className="p-lg flex items-center gap-md"
             style={{
-              background: stat.gradient,
-              boxShadow: `0 4px 24px ${stat.glowColor}`,
+              background: 'var(--orbi-surface)',
+              border: '1px solid var(--orbi-border)',
+              borderLeft: `3px solid ${stat.accent}`,
             }}
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.06 }}
           >
             <div
-              className="flex-shrink-0 p-md rounded-corner-md"
-              style={{ background: 'color-mix(in srgb, var(--orbi-text) 12%, transparent)' }}
+              className="flex-shrink-0 p-md"
+              style={{ background: `color-mix(in srgb, ${stat.accent} 12%, transparent)` }}
             >
-              <stat.icon size={20} style={{ color: stat.iconColor }} />
+              <stat.icon size={20} style={{ color: stat.accent }} />
             </div>
             <div className="flex flex-col gap-xs">
-              <span className="text-video-title" style={{ color: 'color-mix(in srgb, var(--orbi-text) 65%, transparent)' }}>
+              <span className="text-video-title text-text-secondary">
                 {stat.label}
               </span>
-              <span className="text-label text-white">
+              <span className="text-label text-text-primary">
                 {stat.getValue(statValues[i])}
               </span>
             </div>
@@ -320,25 +289,25 @@ export function DashboardPage() {
             </div>
           </div>
 
-          {/* Quick Actions — fills the space below the orbital */}
+          {/* Quick Actions */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-md">
             {QUICK_ACTIONS.map((action, i) => (
               <motion.button
                 key={action.label}
-                className="rounded-corner-lg p-lg flex flex-col items-center gap-md cursor-pointer border-0 text-white"
+                className="p-lg flex flex-col items-center gap-md cursor-pointer border-0"
                 style={{
-                  background: action.gradient,
-                  boxShadow: `0 4px 20px ${action.glow}`,
+                  background: `color-mix(in srgb, ${action.accent} 8%, var(--orbi-surface))`,
+                  border: `1px solid color-mix(in srgb, ${action.accent} 28%, var(--orbi-border))`,
                 }}
-                initial={{ opacity: 0, scale: 0.9 }}
+                initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.2 + i * 0.06 }}
-                whileHover={{ scale: 1.06, boxShadow: `0 8px 32px ${action.glow}` }}
-                whileTap={{ scale: 0.97 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={() => navigate(action.path)}
               >
-                <action.icon size={22} />
-                <span className="text-video-title text-white">{action.label}</span>
+                <action.icon size={22} style={{ color: action.accent }} />
+                <span className="text-video-title" style={{ color: 'var(--orbi-text)' }}>{action.label}</span>
               </motion.button>
             ))}
           </div>

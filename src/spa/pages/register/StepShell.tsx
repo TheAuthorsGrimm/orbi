@@ -1,8 +1,7 @@
 import type { ReactNode } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { AstraLogo } from '@figma/astraui';
-import { Sparkles } from 'lucide-react';
 import { OrbiCharacter } from './OrbiCharacter';
+import './register.css';
 
 interface StepShellProps {
   step: number;
@@ -11,67 +10,43 @@ interface StepShellProps {
   children: ReactNode;
 }
 
-/** Consistent shell wrapping every signup step: logo, Orbi, progress, content */
 export function StepShell({ step, totalSteps, orbiMessage, children }: StepShellProps) {
   return (
-    <div className="min-h-screen bg-orbi-dark flex items-center justify-center px-[clamp(1rem,4vw,4rem)] py-[clamp(1rem,4vw,4rem)]">
-      <div
-        className="w-full flex flex-col"
-        style={{
-          maxWidth: 'min(92vw, 64rem)',
-          gap: 'clamp(1rem, 2.5vw, 2rem)',
-        }}
-      >
-        {/* Logo */}
-        <div className="flex flex-col items-center gap-xs">
-          <div className="flex items-center gap-md">
-            <AstraLogo size={32} />
-            <span
-              className="text-title text-text-primary font-bold"
-              style={{ fontFamily: 'Instrument Sans, system-ui, sans-serif' }}
-            >
-              Orbi
-            </span>
-          </div>
-          <div className="flex items-center gap-xs">
-            <Sparkles size={10} className="text-brand-primary" />
-            <span className="text-video-title text-text-secondary">by GrimmForged AI Solutions</span>
-          </div>
+    <div className="rg-root">
+      <div className="rg-shell-wrap">
+
+        {/* Wordmark */}
+        <div className="rg-shell-logo">
+          <span className="rg-shell-wordmark">
+            <em>O</em>rbi
+          </span>
         </div>
 
         {/* Card */}
-        <div className="w-full bg-orbi-surface rounded-corner-lg p-xl flex flex-col gap-lg border border-orbi-border">
-          {/* Orbi character */}
-          <OrbiCharacter message={orbiMessage} />
+        <div className="rg-card">
 
-          {/* Progress dots */}
-          <div className="flex items-center gap-xs justify-center">
+          {/* Progress segments */}
+          <div className="rg-progress" role="progressbar" aria-valuenow={step} aria-valuemax={totalSteps - 1}>
             {Array.from({ length: totalSteps }, (_, i) => (
               <div
                 key={i}
-                className="h-2 w-2 rounded-full transition-all duration-300"
-                style={{
-                  background:
-                    i < step
-                      ? 'linear-gradient(135deg, var(--orbi-primary), var(--orbi-secondary))'
-                      : i === step
-                        ? 'var(--orbi-primary)'
-                        : 'color-mix(in srgb, var(--orbi-text) 30%, transparent)',
-                  transform: i === step ? 'scale(1.3)' : 'scale(1)',
-                }}
+                className={`rg-progress-seg${i < step ? ' done' : i === step ? ' active' : ''}`}
               />
             ))}
           </div>
 
-          {/* Step content with enter/exit animation */}
+          {/* Orbi guide */}
+          <OrbiCharacter message={orbiMessage} />
+
+          {/* Step content */}
           <AnimatePresence mode="wait">
             <motion.div
               key={step}
-              initial={{ opacity: 0, x: 20 }}
+              initial={{ opacity: 0, x: 18 }}
               animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.25, ease: 'easeInOut' }}
-              className="flex flex-col gap-lg"
+              exit={{ opacity: 0, x: -18 }}
+              transition={{ duration: 0.22, ease: 'easeInOut' }}
+              style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(14px, 2vw, 20px)' }}
             >
               {children}
             </motion.div>

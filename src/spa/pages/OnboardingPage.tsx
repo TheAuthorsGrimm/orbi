@@ -33,7 +33,7 @@ export function OnboardingPage() {
   }
 
   return (
-    <div className="min-h-screen px-4 py-8 flex items-center justify-center bg-brand-tertiary">
+    <div className="min-h-screen px-4 py-8 flex items-center justify-center" style={{ background: 'var(--orbi-base)' }}>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -41,7 +41,7 @@ export function OnboardingPage() {
         className="w-full max-w-4xl"
       >
         <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-          <section className="rounded-corner-lg p-8 shadow-2xl shadow-black/30" style={{ background: 'var(--orbi-surface)', border: 'var(--orbi-border)' }}>
+          <section className="rounded-corner-lg p-8 shadow-2xl shadow-black/30" style={{ background: 'var(--orbi-surface)', border: '1px solid var(--orbi-border)' }}>
             <div className="flex items-center gap-3 mb-6">
               <AstraLogo size={36} />
               <div>
@@ -111,7 +111,7 @@ export function OnboardingPage() {
             </form>
           </section>
 
-          <aside className="rounded-corner-lg p-8 shadow-2xl shadow-black/20" style={{ background: 'linear-gradient(160deg, color-mix(in srgb, var(--orbi-primary) 18%, transparent), color-mix(in srgb, var(--orbi-secondary) 10%, transparent))', border: 'var(--orbi-border)' }}>
+          <aside className="rounded-corner-lg p-8 shadow-2xl shadow-black/20" style={{ background: 'linear-gradient(160deg, color-mix(in srgb, var(--orbi-primary) 18%, transparent), color-mix(in srgb, var(--orbi-secondary) 10%, transparent))', border: '1px solid var(--orbi-border)' }}>
             <div className="flex items-center gap-3 mb-4">
               <div className="rounded-corner-md p-3" style={{ background: 'color-mix(in srgb, var(--orbi-text) 10%, transparent)' }}>
                 <Brain size={18} style={{ color: 'var(--orbi-text)' }} />
@@ -128,7 +128,7 @@ export function OnboardingPage() {
                 { icon: Timer, title: 'Better timing', body: 'Your peak hours help Orbi place nudges when you can actually act.' },
                 { icon: Sparkles, title: 'Tone control', body: 'Choose how Orbi should talk so the app feels supportive, not noisy.' },
               ].map((item) => (
-                <div key={item.title} className="rounded-corner-md p-4 flex gap-3" style={{ background: 'color-mix(in srgb, var(--orbi-base) 20%, transparent)', border: 'var(--orbi-border)' }}>
+                <div key={item.title} className="rounded-corner-md p-4 flex gap-3" style={{ background: 'color-mix(in srgb, var(--orbi-base) 20%, transparent)', border: '1px solid var(--orbi-border)' }}>
                   <div className="rounded-full p-2 h-fit" style={{ background: 'color-mix(in srgb, var(--orbi-text) 10%, transparent)' }}>
                     <item.icon size={16} style={{ color: 'var(--orbi-text)' }} />
                   </div>

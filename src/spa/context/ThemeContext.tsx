@@ -84,7 +84,7 @@ export function OrbiThemeProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth();
 
   const [theme, setThemeState] = useState<OrbiTheme>(
-    () => readStored() ?? 'focus',
+    () => readStored() ?? 'calm',
   );
   const [customTheme, setCustomThemeState] = useState<CustomTheme | null>(
     () => readCustomTheme(),
