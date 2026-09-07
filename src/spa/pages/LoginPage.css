@@ -1,0 +1,420 @@
+/* LoginPage — Calm theme layout styles */
+
+.lp-root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--orbi-base);
+  color: var(--orbi-text);
+  font-family: var(--orbi-font-family, 'Atkinson Hyperlegible', sans-serif);
+}
+
+/* ── Nav ── */
+.lp-nav {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--orbi-base);
+  border-bottom: 1px solid var(--orbi-border);
+  padding: 13px 0;
+}
+
+.lp-nav-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 clamp(20px, 5vw, 52px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.lp-wordmark {
+  font-family: var(--orbi-display-family);
+  font-size: 1.05rem;
+  color: var(--orbi-text);
+  text-decoration: none;
+}
+
+.lp-wordmark em {
+  color: var(--orbi-primary);
+  font-style: italic;
+  margin-left: 2px;
+}
+
+/* ── Main two-column grid ── */
+.lp-main {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 100%;
+  padding: clamp(40px, 6vw, 80px) clamp(20px, 5vw, 52px);
+  gap: clamp(40px, 6vw, 100px);
+  align-items: center;
+}
+
+/* ── Left: editorial ── */
+.lp-editorial {
+  position: relative;
+}
+
+.lp-ghost {
+  position: absolute;
+  top: -24px;
+  left: -12px;
+  font-family: var(--orbi-display-family);
+  font-size: clamp(7rem, 18vw, 13rem);
+  color: color-mix(in srgb, var(--orbi-primary) 7%, transparent);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  user-select: none;
+  pointer-events: none;
+  font-style: italic;
+}
+
+.lp-eyebrow {
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--orbi-primary);
+  margin-bottom: 18px;
+  position: relative;
+}
+
+.lp-title {
+  font-family: var(--orbi-display-family);
+  font-size: clamp(2.6rem, 5vw, 4rem);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--orbi-text);
+  margin-bottom: 20px;
+  text-wrap: balance;
+  position: relative;
+}
+
+.lp-sub {
+  font-size: 0.92rem;
+  color: var(--orbi-text-muted);
+  max-width: 38ch;
+  line-height: 1.65;
+  position: relative;
+}
+
+/* ── Right: form card ── */
+.lp-card {
+  background: var(--orbi-surface);
+  border: 1px solid var(--orbi-border);
+  box-shadow: 0 2px 24px color-mix(in srgb, var(--orbi-text) 6%, transparent);
+  padding: clamp(28px, 5vw, 44px);
+}
+
+.lp-form-heading {
+  font-family: var(--orbi-display-family);
+  font-size: 1.7rem;
+  font-weight: 400;
+  color: var(--orbi-text);
+  margin-bottom: 6px;
+  line-height: 1.1;
+}
+
+.lp-form-sub {
+  font-size: 0.84rem;
+  color: var(--orbi-text-muted);
+  margin-bottom: 30px;
+}
+
+.lp-form-sub a {
+  color: var(--orbi-primary);
+  text-decoration: none;
+}
+.lp-form-sub a:hover { text-decoration: underline; }
+
+/* ── SSO ── */
+.lp-sso-row {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin-bottom: 22px;
+}
+
+.lp-sso-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: var(--orbi-base);
+  border: 1px solid var(--orbi-border);
+  color: var(--orbi-text);
+  font-family: inherit;
+  font-size: 0.88rem;
+  padding: 11px 16px;
+  cursor: pointer;
+  width: 100%;
+}
+.lp-sso-btn:hover { border-color: var(--orbi-primary); }
+.lp-sso-btn:focus-visible {
+  outline: 3px solid var(--orbi-primary);
+  outline-offset: 2px;
+}
+
+/* ── Divider ── */
+.lp-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 18px 0;
+  color: var(--orbi-text-muted);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.lp-divider::before,
+.lp-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--orbi-border);
+}
+
+/* ── Error banner ── */
+.lp-error-banner {
+  background: color-mix(in srgb, #b94040 10%, transparent);
+  border-left: 2px solid #b94040;
+  color: #b94040;
+  font-size: 0.84rem;
+  padding: 10px 14px;
+  margin-bottom: 18px;
+}
+
+/* ── Fields ── */
+.lp-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.lp-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.lp-label {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--orbi-text-muted);
+  letter-spacing: 0.02em;
+}
+
+.lp-field-row {
+  position: relative;
+}
+
+.lp-input {
+  width: 100%;
+  background: var(--orbi-surface-2);
+  border: 1px solid var(--orbi-border);
+  color: var(--orbi-text);
+  font-family: inherit;
+  font-size: 0.92rem;
+  padding: 12px 14px;
+  line-height: 1.4;
+  border-radius: 0;
+}
+
+.lp-input::placeholder { color: var(--orbi-text-muted); opacity: 0.6; }
+
+.lp-input:focus {
+  outline: 3px solid var(--orbi-primary);
+  outline-offset: 0;
+  border-color: var(--orbi-primary);
+}
+
+.lp-input[type="password"] { padding-right: 58px; }
+
+.lp-input.error { border-color: #b94040; }
+.lp-input.error:focus { outline-color: #b94040; }
+
+.lp-pw-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--orbi-text-muted);
+  cursor: pointer;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 4px;
+  font-family: inherit;
+}
+.lp-pw-toggle:hover { color: var(--orbi-text); }
+
+.lp-field-error {
+  font-size: 0.76rem;
+  color: #b94040;
+}
+
+/* ── Meta row ── */
+.lp-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.lp-check-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.84rem;
+  color: var(--orbi-text-muted);
+  cursor: pointer;
+  user-select: none;
+}
+
+.lp-check-label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--orbi-primary);
+  cursor: pointer;
+}
+
+.lp-forgot {
+  font-size: 0.82rem;
+  color: var(--orbi-primary);
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 0;
+}
+.lp-forgot:hover { text-decoration: underline; }
+
+/* ── Submit ── */
+.lp-submit {
+  width: 100%;
+  background: var(--orbi-primary);
+  color: var(--orbi-primary-fg, #fff);
+  border: none;
+  font-family: inherit;
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 14px 22px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 0;
+}
+.lp-submit:hover:not(:disabled) { filter: brightness(1.06); }
+.lp-submit:disabled { opacity: 0.7; cursor: not-allowed; }
+
+.lp-submit-arrow { font-size: 1rem; }
+
+/* ── Spinner ── */
+.lp-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255,255,255,.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: lp-spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes lp-spin { to { transform: rotate(360deg); } }
+
+/* ── Owner bypass ── */
+.lp-bypass {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  background: color-mix(in srgb, var(--orbi-primary) 8%, transparent);
+  border: 1px dashed color-mix(in srgb, var(--orbi-primary) 35%, transparent);
+  color: color-mix(in srgb, var(--orbi-primary) 75%, transparent);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.78rem;
+  letter-spacing: 0.03em;
+}
+.lp-bypass:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ── Security note ── */
+.lp-security {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 16px;
+  font-size: 0.7rem;
+  color: var(--orbi-text-muted);
+}
+
+.lp-security-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--orbi-secondary);
+  flex-shrink: 0;
+}
+
+/* ── Footer ── */
+.lp-footer {
+  border-top: 1px solid var(--orbi-border);
+  padding: 18px 0;
+}
+
+.lp-footer-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 clamp(20px, 5vw, 52px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.lp-footer-links {
+  display: flex;
+  gap: 20px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.lp-footer-links a {
+  font-size: 0.72rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--orbi-text-muted);
+  text-decoration: none;
+}
+.lp-footer-links a:hover { color: var(--orbi-text); }
+
+.lp-footer-sig {
+  font-family: var(--orbi-display-family);
+  font-style: italic;
+  font-size: 0.88rem;
+  color: var(--orbi-primary);
+}
+
+/* ── Responsive ── */
+@media (max-width: 700px) {
+  .lp-main {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+
+  .lp-ghost { font-size: 7rem; top: -14px; }
+}

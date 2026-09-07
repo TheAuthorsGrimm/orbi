@@ -175,10 +175,11 @@ const THEME_PRESETS: Array<{
   secondary: string;
   text: string;
 }> = [
-  { id: 'focus',         name: 'Focus',         description: 'Deep navy · Indigo + Teal',  base: '#0b0a18', primary: '#5250f3', secondary: '#0d9488', text: '#f0efff' },
-  { id: 'warm',          name: 'Warm',           description: 'Cozy plum · Violet + Rose',  base: '#1a1224', primary: '#8b5cf6', secondary: '#ec4899', text: '#faf0ff' },
-  { id: 'fresh',         name: 'Fresh',          description: 'Off-white · Sage + Coral',   base: '#faf8f4', primary: '#059669', secondary: '#f97162', text: '#1a1a1a' },
-  { id: 'high-contrast', name: 'High Contrast',  description: 'True black · Blue + Teal',  base: '#000000', primary: '#3b82f6', secondary: '#14b8a6', text: '#ffffff' },
+  { id: 'focus',         name: 'Focus',         description: 'Deep navy · Indigo + Teal',       base: '#0b0a18', primary: '#5250f3', secondary: '#0d9488', text: '#f0efff' },
+  { id: 'warm',          name: 'Warm',           description: 'Cozy plum · Violet + Rose',       base: '#1a1224', primary: '#8b5cf6', secondary: '#ec4899', text: '#faf0ff' },
+  { id: 'fresh',         name: 'Fresh',          description: 'Off-white · Sage + Coral',        base: '#faf8f4', primary: '#059669', secondary: '#f97162', text: '#1a1a1a' },
+  { id: 'calm',          name: 'Calm',           description: 'Parchment · Slate-blue + Sage',   base: '#f5f2ec', primary: '#4a6fa5', secondary: '#5a8a72', text: '#2a2520' },
+  { id: 'high-contrast', name: 'High Contrast',  description: 'True black · Blue + Teal',        base: '#000000', primary: '#3b82f6', secondary: '#14b8a6', text: '#ffffff' },
 ];
 
 // Named palette combos for the Palette tab

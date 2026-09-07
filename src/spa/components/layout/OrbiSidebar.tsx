@@ -10,6 +10,7 @@ import {
   Settings,
   CreditCard,
   Orbit,
+  Palette,
   type LucideIcon,
 } from 'lucide-react';
 import { motion } from 'motion/react';
@@ -26,6 +27,7 @@ const NAV_ITEMS: { icon: LucideIcon; label: string; path: string }[] = [
 
 const FOOTER_ITEMS: { icon: LucideIcon; label: string; path: string }[] = [
   { icon: CreditCard, label: 'Pricing & Plans', path: '/pricing'  },
+  { icon: Palette,    label: 'Design System',   path: '/design'   },
   { icon: Settings,   label: 'Settings',        path: '/settings' },
 ];
 

@@ -264,6 +264,39 @@
   --orbi-sidebar-gradient: #0a0a0a;
 }
 
+/*
+ * Calm — ADHD-optimised
+ *
+ * Design rationale (from ADHD-friendly web design research):
+ *   • Warm parchment base (#f5f2ec) cuts glare vs pure white without the
+ *     eye-strain of dark mode — the closest to paper most users find restful.
+ *   • Steel-slate blue (#4a6fa5) as primary: calming hue, low saturation,
+ *     passes WCAG AA on both the parchment base and white surfaces (≈5:1).
+ *   • Muted sage-teal (#5a8a72) secondary: grounding, nature-adjacent,
+ *     avoids the high-arousal reds/oranges used in the other themes.
+ *   • Near-black warm text (#2a2520) instead of pure #000 to reduce contrast
+ *     harshness while still passing WCAG AA against the background.
+ *   • Feather-light border opacity — visible separation without visual noise.
+ *   • Almost-flat gradient — a single gentle tone shift, nothing that moves
+ *     the eye across the page.
+ */
+[data-orbi-theme="calm"] {
+  --orbi-base:             #f5f2ec;
+  --orbi-surface:          #ffffff;
+  --orbi-surface-2:        #ece9e2;
+  --orbi-primary:          #4a6fa5;
+  --orbi-secondary:        #5a8a72;
+  --orbi-text:             #2a2520;
+  --orbi-text-muted:       rgba(42,37,32,0.52);
+  --orbi-border:           rgba(74,111,165,0.18);
+  --orbi-primary-fg:       #ffffff;
+  --orbi-secondary-fg:     #ffffff;
+  --orbi-gradient:         linear-gradient(170deg, #f0ede4 0%, #f5f2ec 60%, #ede9e0 100%);
+  --orbi-sidebar-gradient: #ffffff;
+  --orbi-glass:            color-mix(in srgb, #f5f2ec 90%, transparent);
+  --orbi-shadow-primary:   0 2px 12px color-mix(in srgb, var(--orbi-primary) 18%, transparent);
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -323,5 +356,71 @@
     font-size: var(--text-base);
     font-weight: var(--font-weight-normal);
     line-height: 1.5;
+  }
+}
+
+/* ── ADHD-friendly global design rules ───────────────────────────────────────
+ *
+ * Applied unconditionally or via media query, independent of theme choice.
+ * Rationale from ADHD / neurodivergent web accessibility research:
+ *
+ *  1. MOTION   — Any animation that isn't driven by explicit user intent can
+ *                break the attention of a person with ADHD mid-task. The
+ *                prefers-reduced-motion block drops every unsolicited
+ *                transition/animation to near-zero while keeping JS-triggered
+ *                state changes (which the user initiated) intact.
+ *
+ *  2. FOCUS    — The browser default :focus outline is invisible in many themes.
+ *                WCAG 2.4.11 (level AA, WCAG 2.2) requires a 3px+ offset ring.
+ *                :focus-visible scopes it to keyboard/AT users so mouse users
+ *                don't see spurious rings on click.
+ *
+ *  3. READING  — Lines longer than ~75 characters are significantly harder to
+ *                track for ADHD readers. The --content-width cap is applied to
+ *                prose elements only; layout containers are left unconstrained.
+ *
+ *  4. SPACING  — Body line-height is raised to 1.65 (article recommends 1.5×
+ *                minimum; 1.65 gives a little extra air without looking loose).
+ *                Paragraph spacing is added so text blocks are scannable at a
+ *                glance rather than forming a grey wall.
+ * ─────────────────────────────────────────────────────────────────────────── */
+
+/* 1. Respect prefers-reduced-motion — cuts ALL unsolicited animation */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration:        0.01ms !important;
+    animation-iteration-count: 1      !important;
+    transition-duration:       0.01ms !important;
+    scroll-behavior:           auto   !important;
+  }
+}
+
+/* 2. Visible keyboard focus rings (WCAG 2.4.11 / 2.4.7) */
+:focus-visible {
+  outline:        3px solid var(--orbi-primary, #4a6fa5);
+  outline-offset: 3px;
+  border-radius:  2px;
+}
+
+/* 3. Reading-width cap for prose — prevents eye-tracking fatigue */
+:root {
+  --content-width: 70ch;
+}
+
+/* 4. Body line-height + paragraph spacing */
+@layer base {
+  body {
+    line-height: 1.65;
+  }
+
+  p {
+    margin-bottom: 0.85em;
+    max-width: var(--content-width);
+  }
+
+  li {
+    line-height: 1.65;
   }
 }

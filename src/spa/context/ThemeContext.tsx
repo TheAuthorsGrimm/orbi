@@ -9,7 +9,7 @@ import {
 import { useTheme as useAstraTheme } from '@figma/astraui';
 import { useAuth } from './AuthContext';
 
-export type OrbiTheme = 'focus' | 'warm' | 'fresh' | 'high-contrast' | 'custom';
+export type OrbiTheme = 'focus' | 'warm' | 'fresh' | 'high-contrast' | 'calm' | 'custom';
 
 export interface CustomTheme {
   primary: string;
@@ -25,7 +25,7 @@ export interface CustomTheme {
 
 const STORAGE_KEY = 'orbi-theme';
 const CUSTOM_STORAGE_KEY = 'orbi-theme-custom';
-const VALID_THEMES: OrbiTheme[] = ['focus', 'warm', 'fresh', 'high-contrast', 'custom'];
+const VALID_THEMES: OrbiTheme[] = ['focus', 'warm', 'fresh', 'high-contrast', 'calm', 'custom'];
 
 interface ThemeContextValue {
   theme: OrbiTheme;
@@ -97,7 +97,7 @@ export function OrbiThemeProvider({ children }: { children: ReactNode }) {
       setAstraTheme(customTheme.mode === 'light' ? 'light' : 'dark');
     } else {
       clearCustomVars();
-      setAstraTheme(theme === 'fresh' ? 'light' : 'dark');
+      setAstraTheme(theme === 'fresh' || theme === 'calm' ? 'light' : 'dark');
     }
   }, [theme, customTheme, setAstraTheme]);
 
