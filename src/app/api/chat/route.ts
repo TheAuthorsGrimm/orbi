@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { asc, eq, sql } from "drizzle-orm";
+import { and, asc, eq, gte, sql } from "drizzle-orm";
 import { z } from "zod";
 import Anthropic from "@anthropic-ai/sdk";
 import { db } from "@/lib/db";
@@ -32,12 +32,34 @@ USER: ${displayName} (plan: ${tier})`;
     : base;
 }
 
+const FREE_DAILY_LIMIT = 5;
+
 export async function POST(req: NextRequest) {
   try {
     const user = await requireUser();
     const parsed = schema.safeParse(await req.json().catch(() => ({})));
     if (!parsed.success) {
       return NextResponse.json({ success: false, error: parsed.error.issues[0].message }, { status: 400 });
+    }
+
+    // Enforce daily message limit for free users
+    if (user.tier === "free") {
+      const todayStart = new Date();
+      todayStart.setHours(0, 0, 0, 0);
+      const [{ count }] = await db
+        .select({ count: sql<number>`cast(count(*) as int)` })
+        .from(chatMessages)
+        .where(and(
+          eq(chatMessages.userId, user.id),
+          eq(chatMessages.role, "user"),
+          gte(chatMessages.createdAt, todayStart),
+        ));
+      if (count >= FREE_DAILY_LIMIT) {
+        return NextResponse.json(
+          { success: false, error: "Daily limit reached", limitReached: true, used: count, limit: FREE_DAILY_LIMIT },
+          { status: 429 },
+        );
+      }
     }
 
     let sessionId = parsed.data.sessionId;

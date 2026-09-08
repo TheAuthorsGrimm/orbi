@@ -82,6 +82,24 @@ export const chatMessages = pgTable(
   }),
 );
 
+export const focusSessions = pgTable(
+  "focus_sessions",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: uuid("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+    taskId: uuid("task_id").references(() => tasks.id, { onDelete: "set null" }),
+    durationMinutes: integer("duration_minutes").notNull().default(25),
+    completedAt: timestamp("completed_at", { withTimezone: true }),
+    interruptionCount: integer("interruption_count").notNull().default(0),
+    energyLevel: integer("energy_level"),
+    notes: text("notes"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => ({
+    userIdx: index("focus_sessions_user_idx").on(t.userId, t.createdAt),
+  }),
+);
+
 // -----------------------------------------------------------
 // Inferred types
 // -----------------------------------------------------------

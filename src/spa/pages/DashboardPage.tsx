@@ -208,7 +208,7 @@ export function DashboardPage() {
                 <Target size={16} style={{ color: 'var(--orbi-primary)' }} />
                 <h2 className="text-label text-text-primary">Focus Orbit</h2>
               </div>
-              <Badge label="4 orbiting" variant="brand" />
+              <Badge label={`${ORBIT_TASKS.length} orbiting`} variant="brand" />
             </div>
 
             <div className="flex-1 flex items-center justify-center relative" style={{ minHeight: 280 }}>

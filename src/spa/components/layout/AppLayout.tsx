@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Navigate, Outlet, useLocation, useNavigate } from 'react-router';
 import { Menu, X, ArrowLeft } from 'lucide-react';
 import { OrbiSidebar } from './OrbiSidebar';
+import { OrbiWidget } from '../orbi/OrbiWidget';
 import { useAuth } from '@/spa/context/AuthContext';
 import { useOrbiProfile } from '../../OrbiProfileContext';
 
@@ -170,6 +171,7 @@ export function AppLayout() {
         )}
 
         <Outlet />
+        <OrbiWidget />
       </main>
     </div>
   );
