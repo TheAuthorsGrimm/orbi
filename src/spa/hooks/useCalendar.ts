@@ -22,5 +22,17 @@ export function useCalendar(year: number, month: number) {
 
   useEffect(() => { load(); }, [load]);
 
-  return { events, loading, reload: load };
+  const createEvent = useCallback(async (data: Partial<CalendarEvent>) => {
+    const res = await calendarApi.create(data);
+    const event = res.data.data!;
+    setEvents(p => [...p, event]);
+    return event;
+  }, []);
+
+  const deleteEvent = useCallback(async (id: string) => {
+    await calendarApi.delete(id);
+    setEvents(p => p.filter(e => e.id !== id));
+  }, []);
+
+  return { events, loading, reload: load, createEvent, deleteEvent };
 }

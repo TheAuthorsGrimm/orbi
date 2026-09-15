@@ -25,8 +25,16 @@ export function useTasks() {
 
   useEffect(() => { load(); }, [load]);
 
-  const addTask = useCallback(async (title: string, priority: TaskPriority, list: 'needs' | 'wants') => {
-    const res = await tasksApi.create({ title, priority, status: 'pending' as TaskStatus });
+  const addTask = useCallback(async (
+    title: string,
+    priority: TaskPriority,
+    list: 'needs' | 'wants',
+    opts?: { dueDate?: string; description?: string },
+  ) => {
+    const payload: Partial<OrbiTask> = { title, priority, status: 'pending' as TaskStatus };
+    if (opts?.description) payload.description = opts.description;
+    if (opts?.dueDate) payload.dueDate = new Date(opts.dueDate);
+    const res = await tasksApi.create(payload);
     const task = res.data.data!;
     if (list === 'needs') setNeeds(p => [task, ...p]);
     else setWants(p => [task, ...p]);

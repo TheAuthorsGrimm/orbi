@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useCalendar } from '../hooks/useCalendar';
 import { Button, Badge } from '@figma/astraui';
-import { ChevronLeft, ChevronRight, Plus, Clock, CalendarDays } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Plus, Clock, CalendarDays, X, Trash2 } from 'lucide-react';
 
 type EventDisplayType = 'task' | 'focus' | 'google' | 'personal' | 'orbi';
 
@@ -45,13 +45,50 @@ const CARD_PURPLE = {
   border: '1px solid color-mix(in srgb, var(--orbi-primary) 25%, transparent)',
 };
 
+interface NewEventForm {
+  title: string;
+  date: string;
+  startTime: string;
+  endTime: string;
+}
+
 export function CalendarPage() {
   const today = new Date();
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [currentMonth, setCurrentMonth] = useState(today.getMonth());
   const [selectedDay, setSelectedDay] = useState(today.getDate());
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [newEvent, setNewEvent] = useState<NewEventForm>({
+    title: '',
+    date: `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`,
+    startTime: '09:00',
+    endTime: '10:00',
+  });
 
-  const { events: apiEvents } = useCalendar(currentYear, currentMonth);
+  const { events: apiEvents, createEvent, deleteEvent } = useCalendar(currentYear, currentMonth);
+
+  const openAddForm = () => {
+    setNewEvent(f => ({
+      ...f,
+      date: `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(selectedDay).padStart(2, '0')}`,
+    }));
+    setShowAddForm(true);
+  };
+
+  const handleSaveEvent = async () => {
+    if (!newEvent.title.trim()) return;
+    setSaving(true);
+    try {
+      const startAt = new Date(`${newEvent.date}T${newEvent.startTime}`).toISOString();
+      const endAt = new Date(`${newEvent.date}T${newEvent.endTime}`).toISOString();
+      await createEvent({ title: newEvent.title.trim(), startAt: new Date(startAt), endAt: new Date(endAt), source: 'orbi' } as Parameters<typeof createEvent>[0]);
+      setShowAddForm(false);
+      setNewEvent({ title: '', date: newEvent.date, startTime: '09:00', endTime: '10:00' });
+    } finally {
+      setSaving(false);
+    }
+  };
 
   // Map API events to display shape
   const EVENTS: DisplayEvent[] = apiEvents.map(e => {
@@ -89,13 +126,86 @@ export function CalendarPage() {
       <div className="flex items-center justify-between">
         <div className="flex flex-col gap-xs">
           <h1 className="text-title text-text-primary">Calendar</h1>
-          <p className="text-label-sm text-text-secondary">May 2026 · Google Calendar synced</p>
+          <p className="text-label-sm text-text-secondary">
+            {MONTHS[currentMonth]} {currentYear}
+          </p>
         </div>
         <div className="flex gap-md items-center">
-          <Badge label="Google Synced" variant="success" />
-          <Button variant="primary" iconStart={<Plus size={16} />} size="small">Add Event</Button>
+          <Badge label="Orbi Calendar" variant="default" />
+          <Button variant="primary" iconStart={<Plus size={16} />} size="small" onClick={openAddForm}>Add Event</Button>
         </div>
       </div>
+
+      {/* Add Event Form Modal */}
+      {showAddForm && (
+        <div
+          className="rounded-corner-lg p-xl flex flex-col gap-lg"
+          style={{
+            background: 'var(--orbi-surface)',
+            border: '1px solid color-mix(in srgb, var(--orbi-primary) 40%, transparent)',
+            boxShadow: '0 4px 24px color-mix(in srgb, var(--orbi-primary) 15%, transparent)',
+          }}
+        >
+          <div className="flex items-center justify-between">
+            <h3 className="text-label text-text-primary">New Event</h3>
+            <button onClick={() => setShowAddForm(false)} className="text-text-tertiary hover:text-text-primary transition-colors">
+              <X size={16} />
+            </button>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-md">
+            <div className="sm:col-span-2 flex flex-col gap-xs">
+              <label className="text-label-sm text-text-secondary">Event title</label>
+              <input
+                autoFocus
+                value={newEvent.title}
+                onChange={e => setNewEvent(f => ({ ...f, title: e.target.value }))}
+                onKeyDown={e => e.key === 'Enter' && handleSaveEvent()}
+                placeholder="What's the event?"
+                className="bg-transparent outline-none text-text-primary placeholder-text-tertiary rounded-corner-md px-md py-sm"
+                style={{ border: '1px solid color-mix(in srgb, var(--orbi-text) 15%, transparent)', fontFamily: 'Atkinson Hyperlegible, sans-serif' }}
+              />
+            </div>
+            <div className="flex flex-col gap-xs">
+              <label className="text-label-sm text-text-secondary">Date</label>
+              <input
+                type="date"
+                value={newEvent.date}
+                onChange={e => setNewEvent(f => ({ ...f, date: e.target.value }))}
+                className="bg-transparent outline-none text-text-primary rounded-corner-md px-md py-sm"
+                style={{ border: '1px solid color-mix(in srgb, var(--orbi-text) 15%, transparent)', colorScheme: 'dark' }}
+              />
+            </div>
+            <div className="flex gap-md">
+              <div className="flex flex-col gap-xs flex-1">
+                <label className="text-label-sm text-text-secondary">Start</label>
+                <input
+                  type="time"
+                  value={newEvent.startTime}
+                  onChange={e => setNewEvent(f => ({ ...f, startTime: e.target.value }))}
+                  className="bg-transparent outline-none text-text-primary rounded-corner-md px-md py-sm"
+                  style={{ border: '1px solid color-mix(in srgb, var(--orbi-text) 15%, transparent)', colorScheme: 'dark' }}
+                />
+              </div>
+              <div className="flex flex-col gap-xs flex-1">
+                <label className="text-label-sm text-text-secondary">End</label>
+                <input
+                  type="time"
+                  value={newEvent.endTime}
+                  onChange={e => setNewEvent(f => ({ ...f, endTime: e.target.value }))}
+                  className="bg-transparent outline-none text-text-primary rounded-corner-md px-md py-sm"
+                  style={{ border: '1px solid color-mix(in srgb, var(--orbi-text) 15%, transparent)', colorScheme: 'dark' }}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="flex gap-md justify-end">
+            <Button variant="neutral" size="small" onClick={() => setShowAddForm(false)}>Cancel</Button>
+            <Button variant="primary" size="small" onClick={handleSaveEvent} disabled={saving || !newEvent.title.trim()}>
+              {saving ? 'Saving…' : 'Save Event'}
+            </Button>
+          </div>
+        </div>
+      )}
 
       <div className="flex flex-col md:flex-row gap-xl">
         {/* ── Mini Calendar ── */}
@@ -189,7 +299,7 @@ export function CalendarPage() {
                       {eventsAtHour.map(event => (
                         <div
                           key={event.id}
-                          className="absolute left-0 right-0 mx-xs rounded-corner-md px-md py-xs cursor-pointer hover:opacity-90 transition-opacity"
+                          className="absolute left-0 right-0 mx-xs rounded-corner-md px-md py-xs cursor-pointer hover:opacity-90 transition-opacity group"
                           style={{
                             top: `${(event.startHour % 1) * 56}px`,
                             height: `${(event.endHour - event.startHour) * 56}px`,
@@ -198,7 +308,18 @@ export function CalendarPage() {
                             color: EVENT_STYLES[event.type].color,
                           }}
                         >
-                          <span className="text-label-sm truncate block">{event.title}</span>
+                          <div className="flex items-center gap-xs">
+                            <span className="text-label-sm truncate flex-1">{event.title}</span>
+                            {event.type !== 'google' && (
+                              <button
+                                onClick={e => { e.stopPropagation(); deleteEvent(event.id); }}
+                                className="opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+                                aria-label="Delete event"
+                              >
+                                <Trash2 size={12} style={{ color: 'rgba(255,255,255,0.7)' }} />
+                              </button>
+                            )}
+                          </div>
                         </div>
                       ))}
                     </div>
@@ -212,7 +333,7 @@ export function CalendarPage() {
             <div className="flex flex-col items-center gap-md py-2xl text-center">
               <Clock size={28} className="text-text-tertiary" />
               <p className="text-label-sm text-text-secondary">No events on this day</p>
-              <Button variant="neutral" size="small" iconStart={<Plus size={16} />}>Add event</Button>
+              <Button variant="neutral" size="small" iconStart={<Plus size={16} />} onClick={openAddForm}>Add event</Button>
             </div>
           )}
         </div>

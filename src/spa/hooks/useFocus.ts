@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { focus as focusApi, tasks as tasksApi } from '@/spa/api-client';
 import type { FocusSession, OrbiTask } from '@/spa/types';
 
@@ -6,6 +6,12 @@ export function useFocus() {
   const [activeSessions, setActiveSessions] = useState<FocusSession[]>([]);
   const [tasks, setTasks] = useState<OrbiTask[]>([]);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    focusApi.list().then(res => {
+      setActiveSessions(res.data.data ?? []);
+    }).catch(() => {});
+  }, []);
 
   const loadTasks = useCallback(async () => {
     const res = await tasksApi.list();

@@ -101,11 +101,14 @@ export const reminders = {
 };
 
 // ------------------------------------------------------------------
-// Calendar (stubbed in v1)
+// Calendar
 // ------------------------------------------------------------------
 export const calendar = {
   events: (start: string, end: string) =>
     http.get<ApiResponse<CalendarEvent[]>>("/calendar/events", { params: { start, end } }),
+  create: (data: Partial<CalendarEvent>) =>
+    http.post<ApiResponse<CalendarEvent>>("/calendar/events", data),
+  delete: (id: string) => http.delete<ApiResponse>(`/calendar/events/${id}`),
 };
 
 // ------------------------------------------------------------------

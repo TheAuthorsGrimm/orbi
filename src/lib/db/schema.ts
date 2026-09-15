@@ -100,6 +100,43 @@ export const focusSessions = pgTable(
   }),
 );
 
+export const reminders = pgTable(
+  "reminders",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: uuid("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+    title: text("title").notNull(),
+    triggerType: varchar("trigger_type", { length: 50 }).notNull().default("time"),
+    triggerTime: varchar("trigger_time", { length: 20 }),
+    isActive: boolean("is_active").notNull().default(true),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => ({
+    userIdx: index("reminders_user_idx").on(t.userId),
+  }),
+);
+
+export const calendarEvents = pgTable(
+  "calendar_events",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: uuid("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+    title: text("title").notNull(),
+    description: text("description"),
+    startAt: timestamp("start_at", { withTimezone: true }).notNull(),
+    endAt: timestamp("end_at", { withTimezone: true }).notNull(),
+    source: varchar("source", { length: 50 }).notNull().default("orbi"),
+    linkedTaskId: uuid("linked_task_id").references(() => tasks.id, { onDelete: "set null" }),
+    color: varchar("color", { length: 20 }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => ({
+    userIdx: index("calendar_events_user_idx").on(t.userId, t.startAt),
+  }),
+);
+
 // -----------------------------------------------------------
 // Inferred types
 // -----------------------------------------------------------

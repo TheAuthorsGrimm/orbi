@@ -104,7 +104,7 @@ function TaskColumn({
   subtitle: string;
   icon: typeof Flame;
   tasks: Task[];
-  onAdd: (title: string, priority: Priority) => void;
+  onAdd: (title: string, priority: Priority, opts?: { dueDate?: string; description?: string }) => void;
   onToggle: (id: string) => void;
   onDelete: (id: string) => void;
   gradient: string;
@@ -114,12 +114,20 @@ function TaskColumn({
 }) {
   const [input, setInput] = useState('');
   const [priority, setPriority] = useState<Priority>('medium');
+  const [dueDate, setDueDate] = useState('');
+  const [description, setDescription] = useState('');
+  const [showDetails, setShowDetails] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleAdd = () => {
     if (!input.trim()) return;
-    onAdd(input.trim(), priority);
+    const opts: { dueDate?: string; description?: string } = {};
+    if (dueDate) opts.dueDate = new Date(dueDate).toISOString();
+    if (description.trim()) opts.description = description.trim();
+    onAdd(input.trim(), priority, Object.keys(opts).length ? opts : undefined);
     setInput('');
+    setDueDate('');
+    setDescription('');
     inputRef.current?.focus();
   };
 
@@ -175,7 +183,7 @@ function TaskColumn({
             <Plus size={16} style={{ color: accent }} />
           </button>
         </div>
-        <div className="flex gap-sm items-center">
+        <div className="flex gap-sm items-center flex-wrap">
           <span className="text-label-sm text-text-tertiary">Priority:</span>
           {PRIORITY_OPTIONS.map(p => (
             <button
@@ -191,7 +199,50 @@ function TaskColumn({
               {p}
             </button>
           ))}
+          <button
+            onClick={() => setShowDetails(v => !v)}
+            className="ml-auto px-sm py-xs rounded-corner-sm text-label-sm transition-all"
+            style={{
+              color: showDetails ? accent : 'color-mix(in srgb, var(--orbi-text) 40%, transparent)',
+              border: `1px solid ${showDetails ? accent + '60' : 'color-mix(in srgb, var(--orbi-text) 10%, transparent)'}`,
+            }}
+          >
+            {showDetails ? 'Hide details ↑' : '+ Details'}
+          </button>
         </div>
+        {showDetails && (
+          <div className="flex flex-col gap-sm pt-sm" style={{ borderTop: '1px solid color-mix(in srgb, var(--orbi-text) 6%, transparent)' }}>
+            <div className="flex items-center gap-md">
+              <label className="text-label-sm text-text-tertiary w-20 flex-shrink-0">Due date</label>
+              <input
+                type="date"
+                value={dueDate}
+                onChange={e => setDueDate(e.target.value)}
+                className="flex-1 bg-transparent outline-none text-text-primary rounded-corner-sm px-sm py-xs"
+                style={{
+                  fontSize: '0.875rem',
+                  border: '1px solid color-mix(in srgb, var(--orbi-text) 15%, transparent)',
+                  colorScheme: 'dark',
+                }}
+              />
+            </div>
+            <div className="flex items-start gap-md">
+              <label className="text-label-sm text-text-tertiary w-20 flex-shrink-0 pt-xs">Notes</label>
+              <textarea
+                value={description}
+                onChange={e => setDescription(e.target.value)}
+                placeholder="Optional notes or context..."
+                rows={2}
+                className="flex-1 bg-transparent outline-none text-text-primary placeholder-text-tertiary rounded-corner-sm px-sm py-xs resize-none"
+                style={{
+                  fontSize: '0.875rem',
+                  border: '1px solid color-mix(in srgb, var(--orbi-text) 15%, transparent)',
+                  fontFamily: 'Atkinson Hyperlegible, sans-serif',
+                }}
+              />
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Task list */}
@@ -235,8 +286,8 @@ export function TasksPage() {
   const needs = rawNeeds.map(toDisplay);
   const wants = rawWants.map(toDisplay);
 
-  const addTask = useCallback((list: 'needs' | 'wants') => async (title: string, priority: Priority) => {
-    await apiAdd(title, priority as TaskPriority, list);
+  const addTask = useCallback((list: 'needs' | 'wants') => async (title: string, priority: Priority, opts?: { dueDate?: string; description?: string }) => {
+    await apiAdd(title, priority as TaskPriority, list, opts);
     triggerReward('task_added');
   }, [apiAdd, triggerReward]);
 
