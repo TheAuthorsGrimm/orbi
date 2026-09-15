@@ -13,7 +13,18 @@ export function LoginPage() {
   const [password, setPassword] = useState('');
   const [showPw, setShowPw]     = useState(false);
   const [remember, setRemember] = useState(false);
-  const [error, setError]       = useState('');
+  const [error, setError]       = useState(() => {
+    if (typeof window !== 'undefined') {
+      const hash = window.location.hash; // e.g. #/login?sso_error=...
+      const qIdx = hash.indexOf('?');
+      if (qIdx !== -1) {
+        const params = new URLSearchParams(hash.slice(qIdx + 1));
+        const ssoErr = params.get('sso_error');
+        if (ssoErr) return decodeURIComponent(ssoErr);
+      }
+    }
+    return '';
+  });
   const [emailErr, setEmailErr] = useState('');
   const [pwErr, setPwErr]       = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -105,9 +116,13 @@ export function LoginPage() {
             New to Orbi? <Link to="/register">Create an account →</Link>
           </p>
 
-          {/* SSO — wired up when OAuth is ready */}
           <div className="lp-sso-row">
-            <button type="button" className="lp-sso-btn" aria-label="Sign in with Google">
+            <button
+              type="button"
+              className="lp-sso-btn"
+              aria-label="Sign in with Google"
+              onClick={() => { window.location.href = '/api/auth/google'; }}
+            >
               <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 01-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/>
                 <path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z" fill="#34A853"/>
@@ -116,7 +131,14 @@ export function LoginPage() {
               </svg>
               Continue with Google
             </button>
-            <button type="button" className="lp-sso-btn" aria-label="Sign in with Microsoft">
+            <button
+              type="button"
+              className="lp-sso-btn"
+              aria-label="Sign in with Microsoft (coming soon)"
+              title="Microsoft sign-in coming soon"
+              style={{ opacity: 0.5, cursor: 'not-allowed' }}
+              onClick={() => setError('Microsoft sign-in is coming soon. Please use email or Google for now.')}
+            >
               <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <rect x="0" y="0" width="8.5" height="8.5" fill="#f25022"/>
                 <rect x="9.5" y="0" width="8.5" height="8.5" fill="#7fba00"/>
