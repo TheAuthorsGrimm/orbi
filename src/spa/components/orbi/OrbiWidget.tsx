@@ -21,12 +21,6 @@ export function OrbiWidget() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Don't render on hidden paths
-  if (HIDDEN_PATHS.has(location.pathname)) return null;
-
-  const isFree = (user?.tier ?? OrbiTier.FREE) === OrbiTier.FREE;
-  const messagesLeft = Math.max(0, FREE_DAILY_LIMIT - messagesUsedToday);
-
   // Scroll to bottom when new messages arrive
   useEffect(() => {
     if (open) {
@@ -40,6 +34,12 @@ export function OrbiWidget() {
       setTimeout(() => inputRef.current?.focus(), 150);
     }
   }, [open]);
+
+  // Don't render on hidden paths (must come after all hooks)
+  if (HIDDEN_PATHS.has(location.pathname)) return null;
+
+  const isFree = (user?.tier ?? OrbiTier.FREE) === OrbiTier.FREE;
+  const messagesLeft = Math.max(0, FREE_DAILY_LIMIT - messagesUsedToday);
 
   const handleSend = async () => {
     if (!input.trim() || sending || limitReached) return;
