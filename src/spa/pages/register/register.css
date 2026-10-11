@@ -218,3 +218,10 @@
   border: 1px solid var(--orbi-border);
 }
 .rg-btn-neutral:hover { border-color: var(--orbi-primary); }
+
+/* Public disclaimer under the sign-up card */
+.rg-disclaimer {
+  margin-top: 16px !important;
+  padding-inline: 16px;
+  color: var(--orbi-text-muted, inherit);
+}

@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { OrbiCharacter } from './OrbiCharacter';
+import { Disclaimer } from '../../components/Disclaimer';
 import './register.css';
 
 interface StepShellProps {
@@ -52,6 +53,8 @@ export function StepShell({ step, totalSteps, orbiMessage, children }: StepShell
             </motion.div>
           </AnimatePresence>
         </div>
+
+        <Disclaimer className="rg-disclaimer" />
       </div>
     </div>
   );

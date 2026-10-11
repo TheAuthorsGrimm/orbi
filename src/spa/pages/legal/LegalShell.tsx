@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { Link } from 'react-router';
 import { Sparkles, AlertTriangle, ArrowLeft } from 'lucide-react';
 import { AstraLogo } from '@figma/astraui';
+import { Disclaimer } from '../../components/Disclaimer';
 
 interface LegalShellProps {
   title: string;
@@ -123,6 +124,7 @@ export function LegalShell({ title, lastUpdated, children }: LegalShellProps) {
             Orbi · by GrimmForged AI Solutions
           </span>
         </div>
+        <Disclaimer className="text-text-secondary" />
       </div>
     </main>
   );

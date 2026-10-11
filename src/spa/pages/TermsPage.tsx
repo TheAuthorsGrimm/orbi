@@ -1,7 +1,7 @@
 import { Link } from 'react-router';
 import { LegalShell, Section } from './legal/LegalShell';
 
-const LAST_UPDATED = '2026-06-17';
+const LAST_UPDATED = '2026-10-11';
 
 export function TermsPage() {
   return (
@@ -81,9 +81,12 @@ export function TermsPage() {
           Some Orbi features use large language models (currently Anthropic Claude) to
           generate suggestions, break down tasks, and converse with you in the Agent and
           Full tiers. AI-generated content can be inaccurate, incomplete, or out of date.
-          <strong> Orbi is not a substitute for professional medical, mental health, legal,
-          financial, or therapeutic advice.</strong> ADHD is a medical condition; please
-          consult a qualified clinician for diagnosis, treatment, or medication decisions.
+          <strong> Orbi is a planning and productivity tool. It is not a medical device or
+          health service, and GrimmForged is not a doctor, therapist or certified health
+          professional. Orbi does not diagnose, treat or give medical advice, and it is not
+          a substitute for professional medical, mental health, legal, financial, or
+          therapeutic advice.</strong> Please consult a qualified professional for
+          diagnosis, treatment, or medication decisions.
         </p>
         <p>
           You should not rely on Orbi for critical decisions, emergencies, or any situation

@@ -1,7 +1,7 @@
 import { Link } from 'react-router';
 import { LegalShell, Section } from './legal/LegalShell';
 
-const LAST_UPDATED = '2026-06-17';
+const LAST_UPDATED = '2026-10-11';
 
 export function PrivacyPage() {
   return (
@@ -11,6 +11,13 @@ export function PrivacyPage() {
         productivity service. This Privacy Policy explains what personal information we
         collect, how we use it, who we share it with, and the rights you have under
         Canadian privacy law (PIPEDA) and other applicable laws.
+      </p>
+      <p>
+        <strong>Orbi is a planning and productivity tool.</strong> It is not a medical device
+        or health service, and GrimmForged is not a doctor, therapist or certified health
+        professional. Orbi does not diagnose, treat or give medical advice. Because you may
+        write about your own health or daily life in your tasks and chats, please share only
+        what you are comfortable with.
       </p>
 
       <Section id="what-we-collect" title="1. Information we collect">
@@ -76,9 +83,11 @@ export function PrivacyPage() {
           </li>
           <li>
             <strong>Anthropic, PBC</strong> (United States) — provides the Claude language
-            model used in AI chat and task-breakdown features. Conversations are sent to
-            Anthropic only for the duration of the request and are not used to train their
-            models when accessed through their API.
+            model used in Orbi's AI chat and task features. To write replies, your messages
+            and the task details Orbi needs are sent to Anthropic. On paid plans, Orbi can
+            also create tasks, steps, focus sessions and reminders in your account, only
+            after you agree. See Anthropic's own terms for how it handles data sent through
+            its API.
           </li>
         </ul>
         <p>
@@ -123,9 +132,8 @@ export function PrivacyPage() {
 
       <Section id="security" title="7. How we protect your data">
         <p>
-          We follow industry best practices to protect your information: TLS encryption in
-          transit, encryption at rest in the database, hashed passwords (bcrypt with a
-          per-user salt), and least-privilege access for our team. No system is perfectly
+          We take reasonable steps to protect your information: TLS encryption in transit
+          and hashed passwords (bcrypt with a per-user salt). No system is perfectly
           secure, but we take reasonable measures to reduce risk and will notify affected
           users without undue delay if a breach is detected.
         </p>

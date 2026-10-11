@@ -418,3 +418,12 @@
 
   .lp-ghost { font-size: 7rem; top: -14px; }
 }
+
+/* Public disclaimer under the footer links */
+.lp-disclaimer {
+  max-width: 1100px;
+  margin: 12px auto 0;
+  padding: 0 clamp(20px, 5vw, 52px);
+  color: var(--orbi-text-muted);
+  text-align: left !important;
+}

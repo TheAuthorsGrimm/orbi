@@ -1,6 +1,7 @@
 import { Button, Badge } from '@figma/astraui';
 import { CheckCircle2, Sparkles, Bot, Zap } from 'lucide-react';
 import { motion } from 'motion/react';
+import { Disclaimer } from '../components/Disclaimer';
 
 const TIERS = [
   {
@@ -166,8 +167,9 @@ export function PricingPage() {
           {[
             { q: 'Can I cancel anytime?', a: 'Yes. Cancel from your account settings. No dark patterns, no guilt trips. You keep your data.' },
             { q: 'Is there a free trial for paid tiers?', a: 'The free plan is permanent. If you upgrade, you have 7 days to request a refund if it\'s not working for you.' },
-            { q: 'Who is Orbi for?', a: 'Primarily people with ADHD, but anyone who struggles with executive dysfunction, task paralysis, or motivation will benefit.' },
-            { q: 'Is my data private?', a: 'Your task data and AI conversations are private and not used to train models. Payments processed securely via Stripe.' },
+            { q: 'Who is Orbi for?', a: 'People with ADHD and anyone who wants a planner assistant to help break tasks into steps and stay organized.' },
+            { q: 'Is Orbi medical advice?', a: 'No. Orbi is a planning and productivity tool, not a medical device or health service. It does not diagnose, treat or give medical advice.' },
+            { q: 'Where does my data go?', a: 'Your account and tasks are stored with our database provider. To write replies, Orbi sends your messages and the task details it needs to an AI service. Payments are processed by Stripe. See our Privacy page for details.' },
           ].map(item => (
             <div key={item.q} className="flex flex-col gap-xs" style={{ paddingBottom: '1rem', borderBottom: '1px solid color-mix(in srgb, var(--orbi-text) 5%, transparent)' }}>
               <span className="text-label text-text-primary">{item.q}</span>
@@ -178,8 +180,9 @@ export function PricingPage() {
       </div>
 
       <p className="text-label-sm text-text-tertiary text-center">
-        Payments processed securely via Stripe in Canadian dollars (CAD) · Built with ❤️ and hyperfocus by GrimmForged
+        Payments processed by Stripe in Canadian dollars (CAD) · By GrimmForged
       </p>
+      <Disclaimer className="text-text-tertiary max-w-2xl mx-auto" />
     </div>
   );
 }

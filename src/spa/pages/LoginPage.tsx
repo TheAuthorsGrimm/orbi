@@ -2,6 +2,7 @@ import { useEffect, useState, type FormEvent } from 'react';
 import { useNavigate, Link } from 'react-router';
 import { useAuth } from '@/spa/context/AuthContext';
 import { useOrbiProfile } from '../OrbiProfileContext';
+import { Disclaimer } from '../components/Disclaimer';
 import './LoginPage.css';
 
 export function LoginPage() {
@@ -212,7 +213,7 @@ export function LoginPage() {
 
           <div className="lp-security">
             <div className="lp-security-dot" aria-hidden="true" />
-            <span>End-to-end encrypted · Your data stays yours</span>
+            <span>Encrypted connection (HTTPS)</span>
           </div>
         </div>
 
@@ -226,6 +227,7 @@ export function LoginPage() {
           </ul>
           <span className="lp-footer-sig">Less, but better.</span>
         </div>
+        <Disclaimer className="lp-disclaimer" />
       </footer>
 
     </div>

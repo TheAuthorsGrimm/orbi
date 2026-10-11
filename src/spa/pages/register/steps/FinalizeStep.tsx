@@ -1,8 +1,7 @@
 import { Button } from '@figma/astraui';
 import { ArrowLeft, Sparkles, Loader2 } from 'lucide-react';
 import { motion } from 'motion/react';
-import { StepShell } from '../StepShell';
-import type { SignupData } from '../types';
+import { StepShell } from '../StepShell';import type { SignupData } from '../types';
 import { TIERS } from '../types';
 
 interface FinalizeStepProps {
