@@ -84,10 +84,8 @@ export function PrivacyPage() {
           <li>
             <strong>Anthropic, PBC</strong> (United States) — provides the Claude language
             model used in Orbi's AI chat and task features. To write replies, your messages
-            and the task details Orbi needs are sent to Anthropic. On paid plans, Orbi can
-            also create tasks, steps, focus sessions and reminders in your account, only
-            after you agree. See Anthropic's own terms for how it handles data sent through
-            its API.
+            are sent to Anthropic. See Anthropic's own terms for how it handles data sent
+            through its API.
           </li>
         </ul>
         <p>
